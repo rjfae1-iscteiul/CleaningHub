@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import Header from "./components/common/header";
+import styled from "styled-components"
+import { BrowserRouter, Route } from "react-router-dom";
+import About from "./pages/AboutPage";
+import Home from "./pages/HomePage";
 
-function App() {
+const Wrapper = styled.div`
+  display: flex;
+  flex-flow: row;
+`;
+
+const AppBody = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  flex: 1 auto;
+  position: absolute;
+  top: 8vh;
+  min-height: 92vh;
+  overflow-x: hidden;
+`;
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <BrowserRouter>
+        <Header />
+          <AppBody>
+            <Route path="/" exact component={Home}/>
+            <Route path="/AboutUs" exact component={About}/>
+         </AppBody>
+      </BrowserRouter>
+    </Wrapper>
   );
 }
 
-export default App;
