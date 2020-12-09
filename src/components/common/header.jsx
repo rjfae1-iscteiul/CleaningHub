@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 
 const S = {
   Headerwrapper: styled(Appbar)`
-    background-color: #50bfd8 !important;
+    background-color: #50BFD8 !important;
   `,
 
   ButtonTitle: styled(Button)`
@@ -24,6 +24,7 @@ const S = {
     font-family: quicksand !important;
     font-weight: 400 !important;
     font-size: 1.5rem !important;
+    letter-spacing: 0.02em !important;
     color: white !important;
     &:hover {
       background-color: transparent !important;
@@ -107,7 +108,7 @@ export default function Header() {
     }
   }
   return (
-    <S.Headerwrapper position={"static"}>
+    <S.Headerwrapper position={"fixed"}>
       <Toolbar variant={"dense"}>
         <S.Logo src={Icon} alt="" />
         <S.ButtonTitle

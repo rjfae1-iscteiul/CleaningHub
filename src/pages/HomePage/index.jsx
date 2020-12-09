@@ -1,10 +1,17 @@
 import React from "react";
-import styled from "styled-components";
-import DivHome from "../../components/HomePage";
+import BannerHome from "../../components/Banner";
+import BannerSafety from "../../components/SafetyBanner";
+import BannerOptions from "../../components/OptionBanner";
+import FooterBanner from "../../components/Footer";
 
 
 export default function Home() {
-    return (
-        <DivHome />
-    )
+  return (
+    <div>
+      <BannerHome />
+      <BannerSafety />
+      <BannerOptions />
+      <FooterBanner />
+    </div>
+  );
 }
