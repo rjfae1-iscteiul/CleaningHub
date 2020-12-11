@@ -184,7 +184,12 @@ export default function Header() {
         >
           Segurança
         </S.ButtonStyle>
-        <S.ButtonStyle disableRipple="true"> Suporte</S.ButtonStyle>
+        <S.ButtonStyle
+           component={Link}
+           to="/Support"
+        >
+          Suporte
+        </S.ButtonStyle>
         <S.LoginButton
           disableElevation
           variant="contained"
