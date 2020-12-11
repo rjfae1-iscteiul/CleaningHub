@@ -3,6 +3,7 @@ import styled from "styled-components";
 import SafetyImage from "../resources/Safety_Banner.jpg";
 import Button from "@material-ui/core/Button";
 import Icon from "@material-ui/icons/HelpOutline";
+import { Link } from "react-router-dom";
 
 const S = {
   StyledImage: styled.img`
@@ -66,7 +67,8 @@ export default function BannerSafety() {
           acordo com as normas e regras divulgadas pela DGS. Fique a par de
           todas as nossas medidas ao aceder abaixo.
         </S.StyledBody>
-        <S.StyledButton variant="contained" elevation={10} size={"medium"} endIcon={<Icon />}>
+        <S.StyledButton variant="contained" elevation={10} size={"medium"} endIcon={<Icon />} component={Link}
+        to="/Safety">
           Mais Informações
         </S.StyledButton>
       </div>
