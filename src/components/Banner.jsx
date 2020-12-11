@@ -62,6 +62,8 @@ const S = {
     background: #fff;
     padding: 0 1vw;
   `,
+
+  
 };
 
 export default function BannerHome() {

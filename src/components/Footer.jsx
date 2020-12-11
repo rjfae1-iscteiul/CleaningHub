@@ -31,8 +31,8 @@ const S = {
 export default function FooterBanner() {
   return (
     <div>
-      <S.StyledTitle>Não percas mais tempo e regista-te agora</S.StyledTitle>
-      <S.StyledButton variant="contained" size="medium" endIcon={<CreateIcon />}>Regista-te aqui</S.StyledButton>
+      <S.StyledTitle>Não perca mais tempo e registe-se agora</S.StyledTitle>
+      <S.StyledButton variant="contained" size="medium" endIcon={<CreateIcon />}>Registe-se aqui</S.StyledButton>
     </div>
   );
 }
