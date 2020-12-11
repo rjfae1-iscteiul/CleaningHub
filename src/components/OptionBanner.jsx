@@ -4,6 +4,7 @@ import CompanyIcon from "@material-ui/icons/Business";
 import OffersIcon from "@material-ui/icons/LocalOffer";
 import Button from "@material-ui/core/Button";
 import WorksIcon from "@material-ui/icons/Smartphone";
+import { Link } from "react-router-dom";
 
 const S = {
   StyledIcon: styled(CompanyIcon)`
@@ -155,6 +156,8 @@ export default function BannerOptions() {
         variant="small"
         disableTouchRipple="true"
         disableRipple="true"
+        component={Link}
+        to="/AboutUs"
       >
         Mais Informações
       </S.StyledButton>
@@ -169,6 +172,8 @@ export default function BannerOptions() {
         variant="small"
         disableTouchRipple="true"
         disableRipple="true"
+        component={Link}
+        to="/Offers"
       >
         Mais Informações
       </S.StyledButtonMiddle>
@@ -182,6 +187,8 @@ export default function BannerOptions() {
         variant="small"
         disableTouchRipple="true"
         disableRipple="true"
+        component={Link}
+        to="/Timeline"
       >
         Mais Informações
       </S.StyledButtonLast>
