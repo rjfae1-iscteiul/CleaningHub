@@ -23,6 +23,7 @@ const S = {
     left: 10%;
     width: 35vw;
     border: 0.3vh solid #38c1d3;
+    background-color:#38c1d3;
     border-radius: 20vh;
   `,
 
@@ -63,6 +64,7 @@ const S = {
     right: 10%;
     width: 35vw;
     border: 0.3vh solid #38c1d3;
+    background-color:#38c1d3;
     border-radius: 20vh;
   `,
 

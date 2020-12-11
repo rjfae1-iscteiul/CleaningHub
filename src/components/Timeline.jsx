@@ -31,6 +31,7 @@ const S = {
     height: 14vh;
     margin: auto 1vw;
     border: 0.15vw solid black;
+    background-color:black;
     border-radius: 20vh;
   `,
 
@@ -76,6 +77,7 @@ const S = {
     margin: auto 1vw;
     border: 0.15vw solid black;
     border-radius: 20vh;
+    background-color:black;
   `,
 
   StyledButton2: styled(Button)`
@@ -121,6 +123,7 @@ const S = {
     margin: auto 1vw;
     border: 0.15vw solid black;
     border-radius: 20vh;
+    background-color:black;
   `,
 
   StyledButton3: styled(Button)`
@@ -166,6 +169,7 @@ const S = {
     margin: auto 1vw;
     border: 0.15vw solid black;
     border-radius: 20vh;
+    background-color:black;
   `,
 
   StyledButton4: styled(Button)`
