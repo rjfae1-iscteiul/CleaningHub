@@ -6,6 +6,7 @@ import About from "./pages/AboutPage";
 import Home from "./pages/HomePage";
 import Offers from "./pages/OurOffers";
 import Timeline from "./pages/HowItWorks";
+import Safety from "./pages/SafetyPage";
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="/AboutUs" exact component={About}/>
             <Route path="/Offers" exact component={Offers}/>
             <Route path="/Timeline" exact component={Timeline}/>
+            <Route path="/Safety" exact component={Safety}/>
          </AppBody>
       </BrowserRouter>
     </Wrapper>
