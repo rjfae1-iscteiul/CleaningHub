@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import FirstImg from "../resources/Flexible.jpeg";
 import SecondImg from "../resources/Reliable.jpeg";
