@@ -29,7 +29,7 @@ const S = {
 
   StyledFirstBanner: styled.text`
     position: absolute;
-    top: 20%;
+    top: 23%;
     left: 34%;
     width: 32vw;
     color: #38c1d3;
@@ -45,24 +45,25 @@ const S = {
     font-weight: 400;
     font-size: 1.3vw;
     position: absolute;
-    top: 38%;
-    left: 50%;
-    width: 40%;
-    color: black;
+    top: 30%;
+    left: 45%;
+    width: 45%;
+    height: 30vh;
+    line-height: 30vh;
   `,
 
   StyledFirstPic: styled.img`
     position: absolute;
-    top: 26%;
+    top: 30%;
     left: 10%;
-    width: 30vw;
-    height: auto;
+    max-width: 30%;
+    max-height: 30vh;
     border-radius: 5%;
   `,
 
   StyledSecondBanner: styled.text`
     position: absolute;
-    top: 62%;
+    top: 50%;
     left: 46.5%;
     width: 7vw;
     color: #38c1d3;
@@ -79,18 +80,19 @@ const S = {
     font-size: 1.3vw;
     text-align: right;
     position: absolute;
-    top: 80%;
+    top: 55%;
     left: 10%;
-    width: 40%;
-    color: black;
+    width: 45%;
+    height: 30vh;
+    line-height: 30vh;
   `,
 
   StyledSecondPic: styled.img`
     position: absolute;
-    top: 68%;
+    top: 55%;
     left: 60%;
-    width: 30vw;
-    height: auto;
+    max-width: 30%;
+    max-height: 30vh;
     border-radius: 5%;
   `,
 
@@ -99,19 +101,26 @@ const S = {
     font-weight: 400;
     font-size: 1.3vw;
     position: absolute;
-    top: 118%;
-    left: 50%;
-    width: 40%;
-    color: black;
+    top: 75%;
+    left: 45%;
+    width: 45%;
+    height: 30vh;
+    line-height: 30vh;
   `,
 
   StyledLastPic: styled.img`
     position: absolute;
-    top: 110%;
+    top: 75%;
     left: 10%;
-    width: 30vw;
-    height: auto;
+    max-width: 30%;
+    max-height: 30vh;
     border-radius: 5%;
+  `,
+
+  StyledP: styled.text`
+    line-height: 1.5;
+    display: inline-block;
+    vertical-align: middle;
   `,
 };
 
@@ -125,25 +134,25 @@ export default function DivSafety() {
       todos os clientes e prestadores de serviço se sintam seguros em relação à realização de limpezas.
       </S.StyledDescription>
       <S.StyledFirstBanner>Funcionalidades de suporte à segurança</S.StyledFirstBanner>
-      <S.StyledFirstText>
+      <S.StyledFirstPic src={CleaningKit} alt="" />
+      <S.StyledFirstText><S.StyledP>
         Disponibilizamos contacto de suporte em caso de emergência.
         Garantimos a melhor experiência possível ajustando a segurança às suas vontades e restrições. 
-      </S.StyledFirstText>
-      <S.StyledFirstPic src={CleaningKit} alt="" />
+      </S.StyledP></S.StyledFirstText>
       <S.StyledSecondBanner>Covid-19</S.StyledSecondBanner>
-      <S.StyledSecondText>
+      <S.StyledSecondPic src={Covid1} alt="" />
+      <S.StyledSecondText><S.StyledP>
         Garantimos o cumprimento de todas as normas aconselhadas para assegurar e
         manter a saúde/segurança de todos os utilizadores da nossa plataforma.
-      </S.StyledSecondText>
-      <S.StyledSecondPic src={Covid1} alt="" />
-      <S.StyledLastText>
+      </S.StyledP></S.StyledSecondText>
+      <S.StyledLastPic src={Covid2} alt="" />
+      <S.StyledLastText><S.StyledP>
         Perante a pandemia, apelamos aos prestadores de serviço da nossa plataforma que respeitem
         as medidas de higienização e proteção individual que são conhecidas por todos nós e que
         podem ser encontradas no site da Direção Geral de Saúde.
         <br/>O uso de álcool gel é obrigatório bem como o uso da máscara e de
         luvas desde a sua entrada até à sua saída da habitação.
-      </S.StyledLastText>
-      <S.StyledLastPic src={Covid2} alt="" />
+      </S.StyledP></S.StyledLastText>
     </div>
   );
 }
