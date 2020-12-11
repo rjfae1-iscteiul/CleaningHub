@@ -1,0 +1,288 @@
+import React from "react";
+import styled from "styled-components";
+import DotIcon from "@material-ui/icons/FiberManualRecord";
+import Button from "@material-ui/core/Button";
+
+const S = {
+  StyledTitle: styled.text`
+    position: absolute;
+    top: 8%;
+    left: 10%;
+    font-family: quicksand;
+    font-weight: 700;
+    font-size: 1.8vw;
+    letter-spacing: 0.15vw;
+    color: #38c1d3;
+  `,
+
+  StyledIcon1: styled(DotIcon)`
+    position: absolute;
+    width: 4vw;
+    height: 4vh;
+    color: #dfde00;
+    top: 23.5vh;
+    left: 49.5vw;
+  `,
+
+  VerticalDivider: styled.hr`
+    position: absolute;
+    top: 17%;
+    left: 49.17%;
+    height: 15vh;
+    margin: auto 1vw;
+    border: 0.15vw solid black;
+    border-radius: 20vh;
+  `,
+
+  StyledButton: styled(Button)`
+    position: absolute !important;
+    top: 14%;
+    left: 55%;
+    background-color: #50bfd8 !important;
+    color: white !important;
+    font-family: quicksand !important;
+    font-weight: 500 !important;
+    font-size: 1.3vw !important;
+    letter-spacing: 0.2vw !important;
+    border-radius: 20vh !important;
+    padding-left: 2vw !important;
+    padding-right: 2vw !important;
+  `,
+
+  StyledText: styled.text`
+    position: absolute;
+    top: 19%;
+    left: 55%;
+    width: 25vw;
+    font-family: quicksand;
+    font-weight: 400;
+    font-size: 1.2vw;
+  `,
+
+  StyledIcon2: styled(DotIcon)`
+    position: absolute;
+    width: 4vw;
+    height: 4vh;
+    color: #dfde00;
+    top: 42vh;
+    left: 49.5vw;
+  `,
+
+  VerticalDivider2: styled.hr`
+    position: absolute;
+    top: 29%;
+    left: 49.17%;
+    height: 36vh;
+    margin: auto 1vw;
+    border: 0.15vw solid black;
+    border-radius: 20vh;
+  `,
+
+  StyledButton2: styled(Button)`
+    position: absolute !important;
+    top: 26.5%;
+    right: 55%;
+    background-color: #50bfd8 !important;
+    color: white !important;
+    font-family: quicksand !important;
+    font-weight: 500 !important;
+    font-size: 1.3vw !important;
+    letter-spacing: 0.2vw !important;
+    border-radius: 20vh !important;
+    padding-left: 2vw !important;
+    padding-right: 2vw !important;
+  `,
+
+  StyledText2: styled.text`
+    position: absolute;
+    top: 31.5%;
+    right: 55%;
+    width: 25vw;
+    font-family: quicksand;
+    font-weight: 400;
+    font-size: 1.2vw;
+    text-align: right;
+  `,
+
+  StyledIcon3: styled(DotIcon)`
+    position: absolute;
+    width: 4vw;
+    height: 4vh;
+    color: #dfde00;
+    top: 81.5vh;
+    left: 49.5vw;
+  `,
+
+  VerticalDivider3: styled.hr`
+    position: absolute;
+    top: 54.5%;
+    left: 49.17%;
+    height: 15vh;
+    margin: auto 1vw;
+    border: 0.15vw solid black;
+    border-radius: 20vh;
+  `,
+
+  StyledButton3: styled(Button)`
+    position: absolute !important;
+    top: 51.7%;
+    left: 55%;
+    background-color: #50bfd8 !important;
+    color: white !important;
+    font-family: quicksand !important;
+    font-weight: 500 !important;
+    font-size: 1.3vw !important;
+    letter-spacing: 0.2vw !important;
+    border-radius: 20vh !important;
+    padding-left: 2vw !important;
+    padding-right: 2vw !important;
+  `,
+
+  StyledText3: styled.text`
+    position: absolute;
+    top: 56.7%;
+    left: 55%;
+    width: 25vw;
+    font-family: quicksand;
+    font-weight: 400;
+    font-size: 1.2vw;
+    text-align: left;
+  `,
+
+  StyledIcon4: styled(DotIcon)`
+    position: absolute;
+    width: 4vw;
+    height: 4vh;
+    color: #dfde00;
+    top: 100vh;
+    left: 49.5vw;
+  `,
+
+  VerticalDivider4: styled.hr`
+    position: absolute;
+    top: 66.5%;
+    left: 49.17%;
+    height: 14vh;
+    margin: auto 1vw;
+    border: 0.15vw solid black;
+    border-radius: 20vh;
+  `,
+
+  StyledButton4: styled(Button)`
+    position: absolute !important;
+    top: 64%;
+    right: 55%;
+    background-color: #50bfd8 !important;
+    color: white !important;
+    font-family: quicksand !important;
+    font-weight: 500 !important;
+    font-size: 1.3vw !important;
+    letter-spacing: 0.2vw !important;
+    border-radius: 20vh !important;
+    padding-left: 2vw !important;
+    padding-right: 2vw !important;
+  `,
+
+  StyledText4: styled.text`
+    position: absolute;
+    top: 69%;
+    right: 55%;
+    width: 25vw;
+    font-family: quicksand;
+    font-weight: 400;
+    font-size: 1.2vw;
+    text-align: right;
+  `,
+
+  StyledIcon5: styled(DotIcon)`
+    position: absolute;
+    width: 4vw;
+    height: 4vh;
+    color: #dfde00;
+    top: 117.7vh;
+    left: 49.5vw;
+  `,
+  
+  StyledButton5: styled(Button)`
+    position: absolute !important;
+    top: 75%;
+    left: 55%;
+    background-color: #50bfd8 !important;
+    color: white !important;
+    font-family: quicksand !important;
+    font-weight: 500 !important;
+    font-size: 1.3vw !important;
+    letter-spacing: 0.2vw !important;
+    border-radius: 20vh !important;
+    padding-left: 2vw !important;
+    padding-right: 2vw !important;
+  `,
+
+  StyledText5: styled.text`
+    position: absolute;
+    top: 80%;
+    left: 55%;
+    width: 25vw;
+    font-family: quicksand;
+    font-weight: 400;
+    font-size: 1.2vw;
+    text-align: left;
+  `,
+};
+
+export default function divTimeline() {
+  return (
+    <div>
+      <S.StyledTitle>Como Funciona</S.StyledTitle>
+      <S.StyledButton variant="contained" size="small" disableRipple="true">
+        1º Passo
+      </S.StyledButton>
+      <S.StyledText>
+        O utilizador cria uma conta na aplicação dependendo se deseja ser um
+        prestador de serviço ou um cliente.
+      </S.StyledText>
+      <S.StyledIcon1 src={<DotIcon />} alt=""></S.StyledIcon1>
+      <S.VerticalDivider></S.VerticalDivider>
+      <S.StyledIcon2 src={<DotIcon />} alt=""></S.StyledIcon2>
+      <S.VerticalDivider2></S.VerticalDivider2>
+      <S.StyledButton2 variant="contained" size="small" disableRipple="true">
+        2º Passo
+      </S.StyledButton2>
+      <S.StyledText2>
+        Após a criação da conta, o cliente coloca filtros na aplicação (ex:
+        localização, rating) de modo a que esta lhe mostre uma lista de
+        prestadores de serviço interessantes para si. <p></p>Os vários
+        prestadores de serviço irão receber notificações com os detalhes do
+        serviço (ex: fotografias da(s) divisão(ões) a serem limpas, através de
+        uma mensagem enviada pela plataforma automaticamente. Poderão aceitar ou
+        rejeitar consoante a sua disponibilidade.{" "}
+      </S.StyledText2>
+      <S.StyledIcon3></S.StyledIcon3>
+      <S.VerticalDivider3></S.VerticalDivider3>
+      <S.StyledButton3 variant="contained" size="small" disableRipple="true">
+        3º Passo
+      </S.StyledButton3>
+      <S.StyledText3>
+        Depois do prestador de serviço aceitar a limpeza, é feita a
+        correspondência entre os dois utilizadores e o serviço será realizado.
+      </S.StyledText3>
+      <S.StyledIcon4></S.StyledIcon4>
+      <S.VerticalDivider4></S.VerticalDivider4>
+      <S.StyledButton4 variant="contained" size="small" disableRipple="true">
+        4º Passo
+      </S.StyledButton4>
+      <S.StyledText4>
+        Após a realização do serviço, o prestador coloca na aplicação que o
+        serviço foi concluido e o pagamento será feito.
+      </S.StyledText4>
+      <S.StyledIcon5></S.StyledIcon5>
+      <S.StyledButton5 variant="contained" size="small" disableRipple="true">
+        5º Passo
+      </S.StyledButton5>
+      <S.StyledText5>
+        O cliente deverá atribuir uma classificação ao prestador de serviço numa
+        escala de 0-10 e poderá deixar um comentário.
+      </S.StyledText5>
+    </div>
+  );
+}

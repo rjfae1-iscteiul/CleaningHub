@@ -24,6 +24,7 @@ const S = {
     font-family: quicksand !important;
     font-weight: 400 !important;
     font-size: 1.5rem !important;
+    letter-spacing: 0.02em !important;
     color: white !important;
     &:hover {
       background-color: transparent !important;
@@ -47,7 +48,7 @@ const S = {
   `,
 
   PaperStyled: styled(Paper)`
-    margin-top: 0.25rem;
+    margin-top: 0.31rem;
   `,
 
   MenuStyle: styled(MenuItem)`
@@ -107,11 +108,12 @@ export default function Header() {
     }
   }
   return (
-    <S.Headerwrapper position={"static"}>
+    <S.Headerwrapper position={"fixed"}>
       <Toolbar variant={"dense"}>
         <S.Logo src={Icon} alt="" />
         <S.ButtonTitle
           disableElevation
+          disableRipple="true"
           variant="text"
           size="small"
           component={Link}
@@ -123,6 +125,7 @@ export default function Header() {
           ref={anchorRef}
           aria-controls={open ? "menu-list-grow" : undefined}
           aria-haspopup="true"
+          disableRipple="true"
           onClick={handleToggle}
         >
           Empresa
@@ -142,7 +145,7 @@ export default function Header() {
               }}
               {...TransitionProps}
             >
-              <S.PaperStyled elevation={5} square={true}>
+              <S.PaperStyled elevation={"10"} square={true}>
                 <ClickAwayListener onClickAway={handleClose}>
                   <MenuList
                     autoFocusItem={open}
@@ -157,11 +160,16 @@ export default function Header() {
                       Quem somos
                     </S.MenuStyle>
                     <Divider variant="middle" />
-                    <S.MenuStyle onClick={handleClose}>
+                    <S.MenuStyle
+                      onClick={handleClose}
+                      component={Link}
+                      to="/Offers"
+                    >
                       As Nossas Ofertas
                     </S.MenuStyle>
                     <Divider variant="middle" />
-                    <S.MenuStyle onClick={handleClose}>
+                    <S.MenuStyle onClick={handleClose} component={Link}
+                      to="/Timeline">
                       Como Funciona
                     </S.MenuStyle>
                   </MenuList>
@@ -170,20 +178,20 @@ export default function Header() {
             </Grow>
           )}
         </Popper>
-        <S.ButtonStyle>Segurança</S.ButtonStyle>
-        <S.ButtonStyle>Suporte</S.ButtonStyle>
-          <S.LoginButton
-            disableElevation
-            variant="contained"
-            size="small"
-            startIcon={<Profile />}
-          >
-            LOGIN
-          </S.LoginButton>
-          <S.VerticalDivider />
-          <S.RegistarButton disableElevation variant="contained" size="small">
-            Registar
-          </S.RegistarButton>
+        <S.ButtonStyle disableRipple="true">Segurança</S.ButtonStyle>
+        <S.ButtonStyle disableRipple="true"> Suporte</S.ButtonStyle>
+        <S.LoginButton
+          disableElevation
+          variant="contained"
+          size="small"
+          startIcon={<Profile />}
+        >
+          LOGIN
+        </S.LoginButton>
+        <S.VerticalDivider />
+        <S.RegistarButton disableElevation variant="contained" size="small">
+          Registar
+        </S.RegistarButton>
       </Toolbar>
     </S.Headerwrapper>
   );

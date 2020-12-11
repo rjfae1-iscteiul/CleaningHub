@@ -4,6 +4,8 @@ import styled from "styled-components"
 import { BrowserRouter, Route } from "react-router-dom";
 import About from "./pages/AboutPage";
 import Home from "./pages/HomePage";
+import Offers from "./pages/OurOffers";
+import Timeline from "./pages/HowItWorks";
 
 const Wrapper = styled.div`
   display: flex;
@@ -16,8 +18,7 @@ const AppBody = styled.div`
   flex-flow: row;
   flex: 1 auto;
   position: absolute;
-  top: 8vh;
-  min-height: 92vh;
+  min-height: 155vh;
   overflow-x: hidden;
 `;
 
@@ -29,6 +30,8 @@ export default function App() {
           <AppBody>
             <Route path="/" exact component={Home}/>
             <Route path="/AboutUs" exact component={About}/>
+            <Route path="/Offers" exact component={Offers}/>
+            <Route path="/Timeline" exact component={Timeline}/>
          </AppBody>
       </BrowserRouter>
     </Wrapper>
