@@ -18,7 +18,7 @@ const AppBody = styled.div`
   flex-flow: row;
   flex: 1 auto;
   position: absolute;
-  min-height: 155vh;
+  min-height: 180vh;
   overflow-x: hidden;
 `;
 
