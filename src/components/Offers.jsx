@@ -3,7 +3,7 @@ import styled from "styled-components";
 import FirstImg from "../resources/Flexible.jpeg";
 import SecondImg from "../resources/Reliable.jpeg";
 import LastImg from "../resources/Everywhere.jpeg";
-import Offer from "../resources/WorkerOffer.jpeg";
+import Offer from "../resources/Offer.jpg"
 import Hours from "../resources/Hours.jpeg";
 import Button from "@material-ui/core/Button";
 
@@ -138,7 +138,7 @@ const S = {
     top: 58%;
     left: 10%;
     width: 30vw;
-    height: 43.5vh;
+    height: auto;
   `,
 
   StyledHours: styled.img`
