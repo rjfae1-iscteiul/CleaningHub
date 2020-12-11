@@ -18,19 +18,20 @@ const S = {
   StyledIcon1: styled(DotIcon)`
     position: absolute;
     width: 4vw;
-    height: 4vh;
+    height: auto;
     color: #dfde00;
-    top: 23.5vh;
-    left: 49.5vw;
+    top: 15%;
+    left: 49.5%;
   `,
 
   VerticalDivider: styled.hr`
     position: absolute;
-    top: 17%;
-    left: 49.17%;
-    height: 15vh;
+    top: 17.5%;
+    left: 49.25%;
+    height: 14vh;
     margin: auto 1vw;
     border: 0.15vw solid black;
+    background-color:black;
     border-radius: 20vh;
   `,
 
@@ -62,25 +63,26 @@ const S = {
   StyledIcon2: styled(DotIcon)`
     position: absolute;
     width: 4vw;
-    height: 4vh;
+    height: auto;
     color: #dfde00;
-    top: 42vh;
-    left: 49.5vw;
+    top: 26%;
+    left: 49.5%;
   `,
 
   VerticalDivider2: styled.hr`
     position: absolute;
-    top: 29%;
-    left: 49.17%;
-    height: 36vh;
+    top: 28.5%;
+    left: 49.25%;
+    height: 43vh;
     margin: auto 1vw;
     border: 0.15vw solid black;
     border-radius: 20vh;
+    background-color:black;
   `,
 
   StyledButton2: styled(Button)`
     position: absolute !important;
-    top: 26.5%;
+    top: 26%;
     right: 55%;
     background-color: #50bfd8 !important;
     color: white !important;
@@ -95,7 +97,7 @@ const S = {
 
   StyledText2: styled.text`
     position: absolute;
-    top: 31.5%;
+    top: 31%;
     right: 55%;
     width: 25vw;
     font-family: quicksand;
@@ -107,25 +109,26 @@ const S = {
   StyledIcon3: styled(DotIcon)`
     position: absolute;
     width: 4vw;
-    height: 4vh;
+    height: auto;
     color: #dfde00;
-    top: 81.5vh;
-    left: 49.5vw;
+    top: 53%;
+    left: 49.5%;
   `,
 
   VerticalDivider3: styled.hr`
     position: absolute;
-    top: 54.5%;
-    left: 49.17%;
+    top: 55.5%;
+    left: 49.25%;
     height: 15vh;
     margin: auto 1vw;
     border: 0.15vw solid black;
     border-radius: 20vh;
+    background-color:black;
   `,
 
   StyledButton3: styled(Button)`
     position: absolute !important;
-    top: 51.7%;
+    top: 52%;
     left: 55%;
     background-color: #50bfd8 !important;
     color: white !important;
@@ -140,7 +143,7 @@ const S = {
 
   StyledText3: styled.text`
     position: absolute;
-    top: 56.7%;
+    top: 57%;
     left: 55%;
     width: 25vw;
     font-family: quicksand;
@@ -152,20 +155,21 @@ const S = {
   StyledIcon4: styled(DotIcon)`
     position: absolute;
     width: 4vw;
-    height: 4vh;
+    height: auto;
     color: #dfde00;
-    top: 100vh;
-    left: 49.5vw;
+    top: 64.5%;
+    left: 49.5%;
   `,
 
   VerticalDivider4: styled.hr`
     position: absolute;
-    top: 66.5%;
-    left: 49.17%;
+    top: 67%;
+    left: 49.25%;
     height: 14vh;
     margin: auto 1vw;
     border: 0.15vw solid black;
     border-radius: 20vh;
+    background-color:black;
   `,
 
   StyledButton4: styled(Button)`
@@ -197,10 +201,10 @@ const S = {
   StyledIcon5: styled(DotIcon)`
     position: absolute;
     width: 4vw;
-    height: 4vh;
+    height: auto;
     color: #dfde00;
-    top: 117.7vh;
-    left: 49.5vw;
+    top: 75.5%;
+    left: 49.5%;
   `,
   
   StyledButton5: styled(Button)`

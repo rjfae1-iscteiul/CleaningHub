@@ -23,6 +23,7 @@ const S = {
     left: 10%;
     width: 35vw;
     border: 0.3vh solid #38c1d3;
+    background-color:#38c1d3;
     border-radius: 20vh;
   `,
 
@@ -63,6 +64,7 @@ const S = {
     right: 10%;
     width: 35vw;
     border: 0.3vh solid #38c1d3;
+    background-color:#38c1d3;
     border-radius: 20vh;
   `,
 
@@ -86,21 +88,21 @@ const S = {
 
   StyledSplash: styled.img`
     position: absolute;
-    top: 58%;
+    top: 63.5%;
     width: 100%;
     height: 64.9vh;
   `,
 
   StyledLogo: styled.img`
     position: absolute;
-    top: 65%;
+    top: 67.5%;
     left: 10%;
     width: 30vw;
     height: auto;
   `,
   StyledConsigo: styled.text`
     position: absolute;
-    top: 67%;
+    top: 68.5%;
     left: 55%;
     right:10%;
     font-family: quicksand;

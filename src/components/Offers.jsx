@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import FirstImg from "../resources/Flexible.jpeg";
 import SecondImg from "../resources/Reliable.jpeg";
 import LastImg from "../resources/Everywhere.jpeg";
-import Offer from "../resources/WorkerOffer.jpeg";
+import Offer from "../resources/Offer.jpg"
 import Hours from "../resources/Hours.jpeg";
 import Button from "@material-ui/core/Button";
 
@@ -39,7 +39,7 @@ const S = {
 
   StyledFirstAdj: styled.text`
     position: absolute;
-    top: 31%;
+    top: 33%;
     left: 17%;
     font-family: quicksand;
     font-weight: 500;
@@ -49,7 +49,7 @@ const S = {
 
   StyledFirstText: styled.text`
     position: absolute;
-    top: 34%;
+    top: 36%;
     left: 15%;
     width: 15vw;
     font-family: quicksand;
@@ -69,7 +69,7 @@ const S = {
 
   StyledSecondAdj: styled.text`
     position: absolute;
-    top: 31%;
+    top: 33%;
     left: 46.5%;
     font-family: quicksand;
     font-weight: 500;
@@ -79,7 +79,7 @@ const S = {
 
   StyledSecondText: styled.text`
     position: absolute;
-    top: 34%;
+    top: 36%;
     left: 42.5%;
     width: 15vw;
     font-family: quicksand;
@@ -100,7 +100,7 @@ const S = {
 
   StyledLastAdj: styled.text`
     position: absolute;
-    top: 31%;
+    top: 33%;
     left: 73.5%;
     font-family: quicksand;
     font-weight: 500;
@@ -110,7 +110,7 @@ const S = {
 
   StyledLastText: styled.text`
     position: absolute;
-    top: 34%;
+    top: 36%;
     left: 70%;
     width: 15vw;
     font-family: quicksand;
@@ -135,18 +135,18 @@ const S = {
 
   StyledOffer: styled.img`
     position: absolute;
-    top: 60%;
+    top: 58%;
     left: 10%;
     width: 30vw;
-    height: 35vh;
+    height: auto;
   `,
 
   StyledHours: styled.img`
     position: absolute;
-    top: 60%;
+    top: 58%;
     left: 60%;
     width: 30vw;
-    height: 35vh;
+    height: auto;
   `,
 
   StyledFirstDesc: styled.text`
