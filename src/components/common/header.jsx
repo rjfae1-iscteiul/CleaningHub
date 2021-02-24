@@ -195,6 +195,7 @@ export default function Header() {
           variant="contained"
           size="small"
           startIcon={<Profile />}
+          component={Link}
           to="/Login"
         >
           LOGIN
@@ -204,6 +205,7 @@ export default function Header() {
           disableElevation 
           variant="contained" 
           size="small"
+          component={Link}
           to="/Register">
           Registar
         </S.RegistarButton>
