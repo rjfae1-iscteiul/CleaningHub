@@ -195,11 +195,16 @@ export default function Header() {
           variant="contained"
           size="small"
           startIcon={<Profile />}
+          to="/Login"
         >
           LOGIN
         </S.LoginButton>
         <S.VerticalDivider />
-        <S.RegistarButton disableElevation variant="contained" size="small">
+        <S.RegistarButton 
+          disableElevation 
+          variant="contained" 
+          size="small"
+          to="/Register">
           Registar
         </S.RegistarButton>
       </Toolbar>
