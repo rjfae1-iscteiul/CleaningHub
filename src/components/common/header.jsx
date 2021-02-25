@@ -190,6 +190,12 @@ export default function Header() {
         >
           Suporte
         </S.ButtonStyle>
+        <S.ButtonStyle
+           component={Link}
+           to="/Services"
+        >
+          Serviços
+        </S.ButtonStyle>
         <S.LoginButton
           disableElevation
           variant="contained"

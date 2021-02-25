@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-export default function Home() {
+export default function Register() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
