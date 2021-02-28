@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import Register from "../../components/Register";
+import Services from "../../components/Services";
 import Header from "../../components/common/header"
-
 export default function Home() {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -10,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <Header></Header>
-      <Register></Register>
+      <Services></Services>
     </div>
   );
 }

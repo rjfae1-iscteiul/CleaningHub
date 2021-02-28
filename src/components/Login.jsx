@@ -1,4 +1,5 @@
 import React from "react"
+import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 
 class Login extends React.Component 
 {
@@ -6,32 +7,35 @@ class Login extends React.Component
         super()
         this.state = 
         {
+          email: "",
+          password: ""
+
         }
     }
 
     render() 
     {
         return (
-                <div className="Login">
-                  <Form onSubmit={handleSubmit}>
+                <div style={{paddingTop:100}} className="Login">
+                  <Form>
+
+                  {/* <Form onSubmit={handleSubmit}> */}
                     <Form.Group size="lg" controlId="email">
                       <Form.Label>Email</Form.Label>
                       <Form.Control
                         autoFocus
                         type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        // onChange={(e) => setEmail(e.target.value)}
                       />
                     </Form.Group>
                     <Form.Group size="lg" controlId="password">
                       <Form.Label>Password</Form.Label>
                       <Form.Control
                         type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        // onChange={(e) => setPassword(e.target.value)}
                       />
                     </Form.Group>
-                    <Button block size="lg" type="submit" disabled={!validateForm()}>
+                    <Button block size="lg" type="submit">
                       Login
                     </Button>
                   </Form>

@@ -8,9 +8,11 @@ import Offers from "./pages/OurOffers";
 import Timeline from "./pages/HowItWorks";
 import Safety from "./pages/SafetyPage";
 import Support from "./pages/SupportPage";
-import Services from "./pages/Services";
+import Services from "./pages/ServicesPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import firebase from 'firebase';
+import 'firebase/firestore';
 
 const Wrapper = styled.div`
   display: flex;
