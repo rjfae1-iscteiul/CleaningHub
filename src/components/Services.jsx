@@ -16,6 +16,7 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import firebase from 'firebase';
 import '../App.css'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class Services extends React.Component 
 {
@@ -36,10 +37,9 @@ class Services extends React.Component
     // <ModalContractService></ModalContractService>
   }
 */
+  componentWillMount() {
 
-  componentDidMount() 
-  {
-    const config = 
+    var config = 
     {
         apiKey: "AIzaSyB2t8aMWPcQFGCKCy-TzAW_WsA-vm37VrQ",
         authDomain: "cleaninghub-23a2c.firebaseapp.com",
@@ -51,8 +51,18 @@ class Services extends React.Component
         measurementId: "G-MMCZ5W595Q"
     };
     
-    firebase.initializeApp(config);
-    
+    if (!firebase.apps.length) 
+    {
+      firebase.initializeApp({});
+    } 
+    else 
+    {
+      firebase.app();
+    }
+  }
+
+  componentDidMount() 
+  {   
     const db = firebase.firestore();
 
     const array = [];
@@ -126,7 +136,7 @@ class Services extends React.Component
                 {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
               </IconButton>
             </TableCell>
-            <TableCell>{row.name}</TableCell>
+            <TableCell>{row.primeiroNome} - {row.segundoNome}</TableCell>
             <TableCell>{row.averageRating}</TableCell>
             <TableCell>{row.distance}</TableCell>
             <TableCell>{row.priceWithoutProducts}</TableCell>

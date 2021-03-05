@@ -1,6 +1,8 @@
 import firebase from 'firebase';
 
-const config = 
+export default () => 
+{
+    var config = 
 {
     apiKey: "AIzaSyB2t8aMWPcQFGCKCy-TzAW_WsA-vm37VrQ",
     authDomain: "cleaninghub-23a2c.firebaseapp.com",
@@ -14,4 +16,4 @@ const config =
 
 firebase.initializeApp(config);
 
-export default firebase;
+}
