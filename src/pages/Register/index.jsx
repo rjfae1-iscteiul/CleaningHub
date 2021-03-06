@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Register from "../../components/Register";
+import Register_jquery from "../../components/Register_jquery";
 import Header from "../../components/common/header"
 
 export default function Home() {
@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div>
       <Header></Header>
-      <Register></Register>
+      <Register_jquery></Register_jquery>
     </div>
   );
 }

@@ -25,7 +25,9 @@ class Register extends React.Component {
       sndPassword: "",
       IBAN: "",
       priceServiceWithProduct: "",
-      priceServiceWithoutProduct: ""
+      priceServiceWithoutProduct: "",
+      rating: 0,
+      distance: 0
     }
 
     this.registerClick = this.registerClick.bind(this);
@@ -94,7 +96,9 @@ class Register extends React.Component {
             codigoPostal: this.state.codigoPostal,
             localidade: this.state.localidade,
             contactoTelefonico: this.state.contactoTelefonico,
-            email: this.state.email
+            email: this.state.email,
+            rating: this.state.rating,
+            distance: this.state.distance
           })
             .then(() => {
               alert("Document successfully written!");
