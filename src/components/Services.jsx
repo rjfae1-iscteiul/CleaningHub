@@ -17,6 +17,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import firebase from 'firebase';
 import '../App.css'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 
 class Services extends React.Component 
 {
@@ -53,7 +54,7 @@ class Services extends React.Component
     
     if (!firebase.apps.length) 
     {
-      firebase.initializeApp({});
+      firebase.initializeApp(config);
     } 
     else 
     {
@@ -96,6 +97,8 @@ class Services extends React.Component
         },
       },
     });
+
+
 
     {/*
       function createData(name, averageRating, distance, priceWithoutProducts, priceWithProducts) 
@@ -152,7 +155,7 @@ class Services extends React.Component
                   </Typography>
                   <Table size="small" aria-label="purchases">
                     <TableHead>
-                      <TableRow >
+                      <TableRow>
                         <TableCell>Date</TableCell>
                         <TableCell>Serviço</TableCell>
                         <TableCell>Rating</TableCell>
@@ -205,13 +208,19 @@ class Services extends React.Component
     */
 
   const showHideClassName = this.state.showModal ? "modal display-block" : "modal display-none";
-
+      const mainDiv = {
+        paddingTop: "50px",
+        paddingLeft: "260px",
+        fontFamily: "Calibri",
+        fontWeight: "bold"
+      }
   return (
-    <div style={{paddingTop:100}}>
+    
+    <div style={mainDiv}>
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
         <TableHead>
-          <TableRow>
+          <TableRow>npm install --save datatables.net-dt
             <TableCell />
             <TableCell>Nome</TableCell>
             <TableCell>Rating</TableCell>

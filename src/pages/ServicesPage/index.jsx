@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Services from "../../components/Services";
+import Services_jquery from "../../components/Services_jquery";
 import Header from "../../components/common/header"
 export default function Home() {
   useEffect(() => {
@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <Header></Header>
-      <Services></Services>
+      <Services_jquery></Services_jquery>
     </div>
   );
 }
