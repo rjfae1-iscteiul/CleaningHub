@@ -11,6 +11,7 @@ import Support from "./pages/SupportPage";
 import Services from "./pages/ServicesPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import EditProfile from "./pages/EditProfile";
 import firebase from 'firebase';
 import 'firebase/firestore';
 
@@ -44,6 +45,7 @@ export default function App() {
             <Route path="/Services" exact component={Services}/>
             <Route path="/Login" exact component={Login} />
             <Route path="/Register" exact component={Register} />
+            <Route path="/EditProfile" exact component={EditProfile} />
          </AppBody>
       </BrowserRouter>
     </Wrapper>
