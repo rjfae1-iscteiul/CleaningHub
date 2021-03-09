@@ -181,7 +181,6 @@ class MyServices_Prestador extends React.Component {
 
         const styleDiv = {
             paddingTop: "100px",
-            paddingLeft: "40px",
             fontFamily: "Calibri"
         }
 
