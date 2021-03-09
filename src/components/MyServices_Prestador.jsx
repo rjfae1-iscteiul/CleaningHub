@@ -83,6 +83,7 @@ class MyServices_Prestador extends React.Component {
 
         function AtualizarEstadoDoDocumento() 
         {
+            /*
             var washingtonRef = db.collection("cities").doc("DC");
 
             // Set the "capital" field of the city 'DC'
@@ -96,6 +97,7 @@ class MyServices_Prestador extends React.Component {
                 // The document probably doesn't exist.
                 console.error("Error updating document: ", error);
             });
+            */
         }
 
         function PreencherLinhasPrestadores(table) {
