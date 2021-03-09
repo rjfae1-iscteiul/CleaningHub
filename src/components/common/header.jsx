@@ -196,6 +196,12 @@ export default function Header() {
         >
           Serviços
         </S.ButtonStyle>
+        <S.ButtonStyle
+           component={Link}
+           to="/MyServices_Prestador"
+        >
+          Serv Pres
+        </S.ButtonStyle>
         <S.LoginButton
           disableElevation
           variant="contained"

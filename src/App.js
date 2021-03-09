@@ -9,10 +9,9 @@ import Timeline from "./pages/HowItWorks";
 import Safety from "./pages/SafetyPage";
 import Support from "./pages/SupportPage";
 import Services from "./pages/ServicesPage";
+import MyServices_Prestador from "./pages/MyServices_PrestadorPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import firebase from 'firebase';
-import 'firebase/firestore';
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,6 +41,7 @@ export default function App() {
             <Route path="/Safety" exact component={Safety}/>
             <Route path="/Support" exact component={Support}/>
             <Route path="/Services" exact component={Services}/>
+            <Route path="/MyServices_Prestador" exact component={MyServices_Prestador}/>
             <Route path="/Login" exact component={Login} />
             <Route path="/Register" exact component={Register} />
          </AppBody>

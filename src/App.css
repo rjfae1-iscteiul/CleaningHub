@@ -81,3 +81,11 @@ Label
 {
   font-weight: bold;
 }
+
+td.details-control {
+  background: url('./images/icon_plus.png') no-repeat center center;
+  cursor: pointer;
+}
+tr.shown td.details-control {
+  background: url('./images/icon_less.png') no-repeat center center;
+}
