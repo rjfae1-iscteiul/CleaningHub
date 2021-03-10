@@ -4,6 +4,7 @@ import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootst
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import 'bootstrap';
+import emailjs from 'emailjs-com';
 
 class Register extends React.Component {
   constructor() {
@@ -16,15 +17,29 @@ class Register extends React.Component {
   componentDidMount() {
 
     $(document).ready(function () {
-      $('#chbColaborador').click(function () {
+      $('#chbPrestador').click(function () {
         $('#modalMoreDataPrestador').modal('show');
       });
 
+      $('#saveDataPrestador').click(function () 
+      {
+        if(Prestador_CheckInformation())
+        {
+          $('#modalMoreDataPrestador').modal('hide');
+        } 
+        else 
+        {
+          alert('Todos os campos (excepto o IBAN) são de preenchimento obrigatório');
+        }
+      });
+
+
+      
       $('#btnRegister').click(function () {
 
         const db = ReturnInstanceFirebase();
 
-        if (Colaborador_CheckInformation()) 
+        if (Colaborador_CheckInformation() && VerifyCheckboxEmptys()) 
         {
           if (!VerifyPassword()) 
           {
@@ -32,13 +47,15 @@ class Register extends React.Component {
           }
           else 
           { 
-              if($('#chbPrestador').attr('checked')) 
+              if($('#chbPrestador').prop("checked")) 
               {
                 db.collection("Prestadores")
                 .where("email", "==", $('#idTxbEmail').val())
                 .get()
                 .then(querySnapshot => 
                 {
+                  alert(querySnapshot.size);
+
                   if(querySnapshot.size == 0) 
                   {
                     AddPrestadorInCollectionFirebase();
@@ -61,11 +78,15 @@ class Register extends React.Component {
                 .get()
                 .then(querySnapshot => 
                 {
+                  alert(querySnapshot.size);
+
                   if(querySnapshot.size == 0) 
                   {
                     AddUtilizadorInCollectionFirebase();
   
                     CreateUserInAuthFirebase();  
+
+                    SendEmailRegister($('#idTxbPrimeiroNome').val(), $('#idTxbEmail').val());
 
                     alert("Utilizador criado");
                   } else {
@@ -96,7 +117,7 @@ class Register extends React.Component {
     }
 
     function Prestador_CheckInformation() {
-      if ($('#idTxbNIF').val() == "" || $('#idTxbPriceWithoutProducts').val() == "" || $('#idTxbPriceWithProducts').val() == "") {
+      if ($('#chbPrestador').attr('checked') && $('#idTxbNIF').val() == "" || $('#idTxbPriceWithoutProducts').val() == "" || $('#idTxbPriceWithProducts').val() == "") {
         return false;
       }
       else {
@@ -104,9 +125,40 @@ class Register extends React.Component {
       }
     }
 
+    function VerifyCheckboxEmptys() 
+    {
+      if( ($('#chbPrestador').prop('checked') || $('#chbUtilizador').prop('checked')) && ($('#chbMasculino').prop('checked') || $('#chbFeminino').prop('checked')))
+      {
+        return true;
+      } 
+      else 
+      {
+        return false;
+      }
+    }
+
     function VerifyPassword() 
     {
       return $('#idTxbPassword').val() == $('#idTxbRewritePassword').val();
+    }
+
+    function SendEmailRegister(var_to_name, var_to_email) 
+    {
+      emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
+
+      var templateParams = 
+      {
+        to_name: var_to_name,
+        to: var_to_email,
+        message: 'Bem-Vindo! E-mail de teste'
+      };
+      
+      emailjs.send('serviceId_CleaningHub', 'template_registerUser', templateParams)
+          .then(function(response) {
+            alert('SUCCESS!', response.status, response.text);
+          }, function(error) {
+            alert('FAILED...', error);
+          });
     }
 
     function ReturnInstanceFirebase() {
@@ -258,11 +310,11 @@ class Register extends React.Component {
 
               <div class="form-group" style={styleCheckbox}>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="groupChbGenero" id="chbColaborador"></input>
+                  <input class="form-check-input" type="radio" name="groupChbGenero" id="chbMasculino"></input>
                   <label>Masculino</label>
                 </div>
                 <div class="form-check">
-                  <input class="form-check-input" type="radio" name="groupChbGenero" id="chbUtilizador"></input>
+                  <input class="form-check-input" type="radio" name="groupChbGenero" id="chbFeminino"></input>
                   <label>Feminino</label>
                 </div>
               </div>
@@ -366,7 +418,7 @@ class Register extends React.Component {
 
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" id="saveDataPrestador" data-dismiss="modal">Guardar</button>
+                    <button type="button" class="btn btn-success" id="saveDataPrestador">Guardar</button>
                   </div>
                 </div>
               </div>

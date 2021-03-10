@@ -8,6 +8,7 @@ import "datatables.net-dt/css/jquery.dataTables.min.css"
 import $ from 'jquery';
 import 'bootstrap';
 import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
+import emailjs from 'emailjs-com';
 
 class Services_jquery extends React.Component {
     constructor(props) {
@@ -36,6 +37,8 @@ class Services_jquery extends React.Component {
                         "defaultContent": '<i class="fas fa-plus-circle"></i>'
                     },
                     { "data": "primeiroNome" },
+                    { "data": "nacionalidade" },
+                    { "data": "localidade" },
                     { "data": "rating" },
                     { "data": "distance" },
                     { "data": "priceWithoutProducts" },
@@ -107,26 +110,70 @@ class Services_jquery extends React.Component {
                 const db = ReturnInstanceFirebase();
 
                 db.collection("PedidosServico").doc(randString).set({
+                    numeroServico: randString,
                     prestadorId: $('#idPrestador').val(),
-                    tipoServico: $('#serviceType').val(),
+                    tipoServico: $('#serviceType option:selected').text(),
                     numeroHoras: $('#hours').val(),
                     precoTotal: $('#price').val(),
-                    tipoPagamento: $('#paymentMethod').val(),
+                    tipoPagamento: $('#paymentMethod option:selected').text(),
                     IBAN: $('#ibanNumber').val(),
                     observacoes: $('#observations').val(),
                     contactMBWay: $('#phoneNumber').val(),
                     cc_Numero: $('#ccCardNumber').val(),
                     cc_Validade: $('#ccValidade').val(),
                     cc_Codigo: $('#ccCodigo').val(),
+                    dataPedido: GetTimeNowStringFormat(),
+                    dataHoraInicio: $('#dataHoraInicio').val(),
+                    dataHoraFim: $('#dataHoraFim').val(),
+                    estado: ''
                 })
-                    .then(() => {
-                        alert("Pedido de serviço finalizado!");
-                    })
-                    .catch((error) => {
-                        alert("Error writing document: ", error);
-                    });
+                .then(() => {
+
+                    // SendEmailRequestService()
+                    alert("Pedido de serviço finalizado!");
+                })
+                .catch((error) => {
+                    alert("Error writing document: ", error);
+                });
             });
         });
+
+        function GetTimeNowStringFormat() 
+        {
+            var m = new Date();
+            return m.getUTCFullYear() +"-"+ (m.getUTCMonth()+1) +"-"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
+        }
+
+        function SendEmailRequestService(var_to_name, var_to_email, codPrestador, noPrestador, coPrestador, codCliente, noCliente, coCliente, obs, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) 
+        {
+          emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
+    
+          var templateParams = 
+          {
+            to_name: var_to_name,
+            to: var_to_email,
+            codigoPrestador: codPrestador,
+            nomePrestador: noPrestador,
+            contactoPrestador: coPrestador,
+            codigoCliente: codCliente,
+            nomeCliente: noCliente,
+            contactoCliente: coCliente,
+            observacoes: obs,
+            tipoServico: tipoSer,
+            numeroHoras: numHoras,
+            preco: preco,
+            dataHoraInicio: dahoInicio,
+            dataHoraFim: dahoFim,
+            tipoPagamento: tipoPag
+          };
+
+          emailjs.send('serviceId_CleaningHub', 'template_registerUser', templateParams)
+              .then(function(response) {
+                alert('SUCCESS!', response.status, response.text);
+              }, function(error) {
+                alert('FAILED...', error);
+              });
+        }
 
         function ReturnInstanceFirebase() {
             var config =
@@ -155,13 +202,15 @@ class Services_jquery extends React.Component {
 
             const array = [];
 
-            db.collection("Colaboradores")
+            db.collection("Prestadores")
                 .get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
                         table.row.add({
                             "": "",
                             "primeiroNome": CheckIsNull(doc.data().primeiroNome),
+                            "nacionalidade": CheckIsNull(doc.data().nacionalidade),
+                            "localidade": CheckIsNull(doc.data().localidade),
                             "rating": CheckIsNull(doc.data().rating),
                             "distance": CheckIsNull(doc.data().distance),
                             "priceWithoutProducts": CheckIsNull(doc.data().priceWithoutProducts),
@@ -215,12 +264,20 @@ class Services_jquery extends React.Component {
 
         const styleDiv = {
             paddingTop: "100px",
-            paddingLeft: "350px",
+            paddingLeft: "225px",
             fontFamily: "Calibri"
         }
 
         const modalService = {
             paddingTop: "40px"
+        }
+
+        const tbody = {
+            fontSize: "smaller"
+        }
+
+        const thead = {
+            fontSize: "smaller"
         }
 
         return (
@@ -229,17 +286,21 @@ class Services_jquery extends React.Component {
                 <div className="container">
 
                     <table id="example">
-                        <thead>
+                        <thead style={thead}>
                             <tr>
                                 <th></th>
                                 <th>Nome</th>
+                                <th>Nacionalidade</th>
+                                <th>Localidade</th>
                                 <th>Rating</th>
                                 <th>Distância</th>
-                                <th>Preço S/ produtos</th>
-                                <th>Preço C/ produtos</th>
+                                <th>Preço&nbsp;S/&nbsp;produtos</th>
+                                <th>Preço&nbsp;C/&nbsp;produtos</th>
                                 <th></th>
                             </tr>
                         </thead>
+                        <tbody style={tbody}>
+                        </tbody>
 
                     </table>
 
@@ -291,20 +352,20 @@ class Services_jquery extends React.Component {
                                     <div class="col">
                                         <div class="form-group">
                                             <label>Inicio</label>
-                                            <input type="datetime-local" class="form-control" rows="2" id="observations"></input>
+                                            <input type="datetime-local" class="form-control" rows="2" id="dataHoraInicio"></input>
                                         </div>
                                     </div>
                                     <div class="col">
                                         <div class="form-group">
                                             <label>Fim</label>
-                                            <input type="datetime-local" class="form-control" rows="2" id="observations"></input>
+                                            <input type="datetime-local" class="form-control" rows="2" id="dataHoraFim"></input>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label>Tipo de pagamento</label>
-                                    <select class="form-control" id="paymentMethod" aria-label="Default select example">
+                                    <select class="form-control" id="paymentMethod">
                                         <option value="Selecionar">Selecionar</option>
                                         <option value="TB">Transferência bancária</option>
                                         <option value="MBW">MB Way</option>
