@@ -5,13 +5,30 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import 'bootstrap';
 
-class Register extends React.Component {
-  constructor() {
-    super()
-    this.state =
-    {
+class EditProfile extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+        isDisabled: false
+      }
     }
-  }
+
+    handleSubmitClicked() {
+        this.setState({
+          isDisabled: true
+        });
+
+        setTimeout(
+            function() {
+              this.enableComponents()
+            }.bind(this),3000);
+    }
+
+    enableComponents() {
+        this.setState({
+          isDisabled: false
+        });
+      }
 
   render() {
 
@@ -44,26 +61,28 @@ class Register extends React.Component {
       <div style={styleDiv} className="EditProfile">
           
         <form>
+
         <div class="row">
-            <div class="col-md-12 modal_body_map">
-              <div class="location-map" id="location-map">
-                <div style="width: 600px; height: 400px;" id="map_canvas"></div>
-              </div>
-            </div>
-          </div>
+
+        </div>
+
           <div class="form-row">
             <div class="col">
+
               <div class="form-group">
                 <label>Primeiro Nome</label>
                 <input type="text" class="form-control" id="idTxbPrimeiroNome" ></input>
               </div>
-                </div>
+              
+            </div>
+
             <div class="col">
               <div class="form-group">
                 <label>Segundo Nome</label>
                 <input type="text" class="form-control" id="idTxbSegundoNome" ></input>
               </div>
             </div>
+
           </div>
 
           <div class="form-group">
@@ -151,4 +170,4 @@ class Register extends React.Component {
   }
 }
 
-export default Register
+export default EditProfile

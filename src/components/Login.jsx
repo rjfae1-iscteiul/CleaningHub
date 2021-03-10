@@ -53,7 +53,7 @@ class Login extends React.Component
                       />
                     </Form.Group>
                    
-			          	  <p><a href="#">Forgot your password?</a></p>
+			          	  <p><a href="#">Forgot password?</a></p>
                     <Button block size="lg" type="submit">
                       Login
                     </Button>
