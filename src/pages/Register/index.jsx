@@ -8,7 +8,8 @@ export default function Home() {
   }, []);
   
   return (
-    <div>
+    
+      <div style={{backgroundColor: "#00CCFF"}}>
       <Header></Header>
       <Register></Register>
     </div>

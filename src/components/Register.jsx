@@ -25,7 +25,9 @@ class Register extends React.Component {
       sndPassword: "",
       IBAN: "",
       priceServiceWithProduct: "",
-      priceServiceWithoutProduct: ""
+      priceServiceWithoutProduct: "",
+      rating: 0,
+      distance: 0
     }
 
     this.registerClick = this.registerClick.bind(this);
@@ -94,7 +96,9 @@ class Register extends React.Component {
             codigoPostal: this.state.codigoPostal,
             localidade: this.state.localidade,
             contactoTelefonico: this.state.contactoTelefonico,
-            email: this.state.email
+            email: this.state.email,
+            rating: this.state.rating,
+            distance: this.state.distance
           })
             .then(() => {
               alert("Document successfully written!");
@@ -133,7 +137,10 @@ class Register extends React.Component {
       paddingTop: "50px",
       textAlign: "center",
       fontFamily: "Calibri",
-      paddingLeft: "400px"
+      paddingLeft: "500px",
+      paddingRight: "500px",
+      color: "#FF8C00", 
+      backgroundColor: "#00CCFF"
     };
 
     const styleTexBox = {
@@ -145,12 +152,21 @@ class Register extends React.Component {
       fontWeight: "bold"
     }
 
+    const styleForm = {
+      backgroundColor: "#FFFFFF",
+      paddingTop: "50px",
+      paddingLeft: "40px",
+      paddingRight: "40px"
+    }
+
     return (
 
       <div style={styleDiv} className="Register">
+        <div style={styleForm}>
 
+        
         <Form>
-
+          
           <div class="form-row">
             <div class="col">
               <Form.Group>
@@ -340,6 +356,7 @@ class Register extends React.Component {
           </Button>
           <label>{this.state.message}</label>
         </Form>
+      </div>
       </div>
     )
   }
