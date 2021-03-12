@@ -12,6 +12,10 @@ import Services from "./pages/ServicesPage";
 import MyServices_Prestador from "./pages/MyServices_PrestadorPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import EditProfile from "./pages/EditProfile";
+import firebase from 'firebase';
+import 'firebase/firestore';
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -44,6 +48,7 @@ export default function App() {
             <Route path="/MyServices_Prestador" exact component={MyServices_Prestador}/>
             <Route path="/Login" exact component={Login} />
             <Route path="/Register" exact component={Register} />
+            <Route path="/EditProfile" exact component={EditProfile} />
          </AppBody>
       </BrowserRouter>
     </Wrapper>
