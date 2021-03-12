@@ -8,8 +8,6 @@ import "datatables.net-dt/css/jquery.dataTables.min.css"
 import $ from 'jquery';
 import 'bootstrap';
 import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
-import { Loader } from "@googlemaps/js-api-loader";
-import Map from 'google-maps-react';
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
