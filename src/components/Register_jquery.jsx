@@ -21,47 +21,38 @@ class Register extends React.Component {
         $('#modalMoreDataPrestador').modal('show');
       });
 
-      $('#saveDataPrestador').click(function () 
-      {
-        if(Prestador_CheckInformation())
-        {
+      $('#saveDataPrestador').click(function () {
+        if (Prestador_CheckInformation()) {
           $('#modalMoreDataPrestador').modal('hide');
-        } 
-        else 
-        {
+        }
+        else {
           alert('Todos os campos (excepto o IBAN) são de preenchimento obrigatório');
         }
       });
 
 
-      
+
       $('#btnRegister').click(function () {
 
         const db = ReturnInstanceFirebase();
 
-        if (Colaborador_CheckInformation() && VerifyCheckboxEmptys()) 
-        {
-          if (!VerifyPassword()) 
-          {
+        if (Colaborador_CheckInformation() && VerifyCheckboxEmptys()) {
+          if (!VerifyPassword()) {
             alert("A password não se encontra igual nas duas opções.");
           }
-          else 
-          { 
-              if($('#chbPrestador').prop("checked")) 
-              {
-                db.collection("Prestadores")
+          else {
+            if ($('#chbPrestador').prop("checked")) {
+              db.collection("Prestadores")
                 .where("email", "==", $('#idTxbEmail').val())
                 .get()
-                .then(querySnapshot => 
-                {
+                .then(querySnapshot => {
                   alert(querySnapshot.size);
 
-                  if(querySnapshot.size == 0) 
-                  {
+                  if (querySnapshot.size == 0) {
                     AddPrestadorInCollectionFirebase();
-  
+
                     CreateUserInAuthFirebase();
-  
+
                     alert("Utilizador criado.");
                   } else {
                     alert("Utilizador já existe.");
@@ -70,21 +61,18 @@ class Register extends React.Component {
                 .catch((error) => {
                   alert("Erro: " + error);
                 });
-              } 
-              else 
-              {
-                db.collection("Utilizadores")
+            }
+            else {
+              db.collection("Utilizadores")
                 .where("email", "==", $('#idTxbEmail').val())
                 .get()
-                .then(querySnapshot => 
-                {
+                .then(querySnapshot => {
                   alert(querySnapshot.size);
 
-                  if(querySnapshot.size == 0) 
-                  {
+                  if (querySnapshot.size == 0) {
                     AddUtilizadorInCollectionFirebase();
-  
-                    CreateUserInAuthFirebase();  
+
+                    CreateUserInAuthFirebase();
 
                     SendEmailRegister($('#idTxbPrimeiroNome').val(), $('#idTxbEmail').val());
 
@@ -96,7 +84,7 @@ class Register extends React.Component {
                 .catch((error) => {
                   alert("Erro: " + error);
                 });
-              }
+            }
           }
         }
         else {
@@ -125,40 +113,35 @@ class Register extends React.Component {
       }
     }
 
-    function VerifyCheckboxEmptys() 
-    {
-      if( ($('#chbPrestador').prop('checked') || $('#chbUtilizador').prop('checked')) && ($('#chbMasculino').prop('checked') || $('#chbFeminino').prop('checked')))
-      {
+    function VerifyCheckboxEmptys() {
+      if (($('#chbPrestador').prop('checked') || $('#chbUtilizador').prop('checked')) && ($('#chbMasculino').prop('checked') || $('#chbFeminino').prop('checked'))) {
         return true;
-      } 
-      else 
-      {
+      }
+      else {
         return false;
       }
     }
 
-    function VerifyPassword() 
-    {
+    function VerifyPassword() {
       return $('#idTxbPassword').val() == $('#idTxbRewritePassword').val();
     }
 
-    function SendEmailRegister(var_to_name, var_to_email) 
-    {
+    function SendEmailRegister(var_to_name, var_to_email) {
       emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
 
-      var templateParams = 
+      var templateParams =
       {
         to_name: var_to_name,
         to: var_to_email,
         message: 'Bem-Vindo! E-mail de teste'
       };
-      
+
       emailjs.send('serviceId_CleaningHub', 'template_registerUser', templateParams)
-          .then(function(response) {
-            alert('SUCCESS!', response.status, response.text);
-          }, function(error) {
-            alert('FAILED...', error);
-          });
+        .then(function (response) {
+          alert('SUCCESS!', response.status, response.text);
+        }, function (error) {
+          alert('FAILED...', error);
+        });
     }
 
     function ReturnInstanceFirebase() {
@@ -199,6 +182,7 @@ class Register extends React.Component {
       const db = ReturnInstanceFirebase();
 
       db.collection("Utilizadores").doc(randString).set({
+        utilizadorId: randString,
         primeiroNome: $('#idTxbPrimeiroNome').val(),
         segundoNome: $('#idTxbSegundoNome').val(),
         nacionalidade: $('#idTxbNacionalidade').val(),
@@ -207,7 +191,8 @@ class Register extends React.Component {
         codigoPostal: $('#idTxbCodigoPostal').val(),
         localidade: $('#idTxbLocalidade').val(),
         contactoTelefonico: $('#idTxbContatoTelefonico').val(),
-        email: $('#idTxbEmail').val()
+        email: $('#idTxbEmail').val(),
+        dataRegisto: GetTimeNowStringFormat()
       })
         .then(() => {
           alert("Document successfully written!");
@@ -217,13 +202,18 @@ class Register extends React.Component {
         });
     }
 
-    function AddPrestadorInCollectionFirebase() 
-    {
+    function GetTimeNowStringFormat() {
+      var m = new Date();
+      return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
+    }
+
+    function AddPrestadorInCollectionFirebase() {
       let randString = Math.random().toString(36).substring(7);
 
       const db = ReturnInstanceFirebase();
 
       db.collection("Prestadores").doc(randString).set({
+        prestadorId: randString,
         primeiroNome: $('#idTxbPrimeiroNome').val(),
         segundoNome: $('#idTxbSegundoNome').val(),
         nacionalidade: $('#idTxbNacionalidade').val(),
@@ -237,6 +227,7 @@ class Register extends React.Component {
         iban: $('#idTxbIBAN').val(),
         priceWithoutProducts: $('#idTxbPriceWithoutProducts').val(),
         priceWithProducts: $('#idTxbPriceWithProducts').val(),
+        dataRegisto: GetTimeNowStringFormat()
       })
         .then(() => {
           alert("Document successfully written!");

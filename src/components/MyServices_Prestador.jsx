@@ -12,7 +12,23 @@ import { Loader } from "@googlemaps/js-api-loader";
 import Map from 'google-maps-react';
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
+import { Helmet } from "react-helmet";
+import GoogleMapReact from 'google-map-react';
+const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
+const Marker = (props) => {
+    const { color, name, id } = props;
+    return (
+        <div>
+            <div
+                className="pin bounce"
+                style={{ backgroundColor: color, cursor: 'pointer' }}
+                title={name}
+            />
+            <div className="pulse" />
+        </div>
+    );
+};
 
 class MyServices_Prestador extends React.Component {
     constructor(props) {
@@ -22,13 +38,6 @@ class MyServices_Prestador extends React.Component {
         }
     }
 
-    /*
-    contractClick() 
-    {
-      this.setState({showModal: true})
-      // <ModalContractService></ModalContractService>
-    }
-  */
     componentDidMount() {
 
         $(document).ready(function () {
@@ -75,36 +84,31 @@ class MyServices_Prestador extends React.Component {
             return firebase.firestore();
         }
 
-        function GetTimeNowStringFormat() 
-        {
+        function GetTimeNowStringFormat() {
             var m = new Date();
-            return m.getUTCFullYear() +"-"+ (m.getUTCMonth()+1) +"-"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
+            return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
         }
 
-        function AtualizarEstadoDoDocumento() 
+        function AtualizarEstadoDoDocumento(serviceId, newStatus) 
         {
-            /*
-            var washingtonRef = db.collection("cities").doc("DC");
+            const db = ReturnInstanceFirebase();
 
-            // Set the "capital" field of the city 'DC'
-            return washingtonRef.update({
-                capital: true
+            var servicoReference = db.collection("PedidosServico").doc(serviceId);
+
+            return servicoReference.update({
+                "estado": newStatus
             })
             .then(() => {
-                console.log("Document successfully updated!");
+                alert("Document successfully updated!");
             })
             .catch((error) => {
-                // The document probably doesn't exist.
-                console.error("Error updating document: ", error);
+                alert("Error update: " + error);
             });
-            */
         }
 
         function PreencherLinhasPrestadores(table) {
 
             const db = ReturnInstanceFirebase();
-
-            const array = [];
 
             db.collection("PedidosServico")
                 .get()
@@ -112,35 +116,41 @@ class MyServices_Prestador extends React.Component {
                     querySnapshot.forEach((doc) => {
                         table.row.add({
                             "numeroServico": CheckIsNull(doc.data().numeroServico),
-                            "nomeCliente": CheckIsNull(doc.data().primeiroNome),
-                            "contactoCliente": CheckIsNull(doc.data().rating),
+                            "nomeCliente": "Ricardo Jorge Ferreira",
+                            "contactoCliente": "910 000 000",
                             "observacoes": CheckIsNull(doc.data().observacoes),
                             "dataDoPedido": CheckIsNull(doc.data().dataPedido),
                             "dataHoraInicio": CheckIsNull(doc.data().dataHoraInicio).replace('T', '&nbsp;'),
                             "dataHoraFim": CheckIsNull(doc.data().dataHoraFim).replace('T', '&nbsp;'),
                             "tipoServico": CheckIsNull(doc.data().tipoServico),
                             "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
-                            "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '">' +
+                            "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estado) +'>' +
                                 '<option checked>Selecionar</option>' +
                                 '<option>Remarcado</option>' +
                                 '<option>Cancelado P/ prestador</option>' +
                                 '<option>Cancelado P/ utilizador</option>' +
                                 '<option>Terminado</option>' +
                                 '</select>',
-                            "obterCoordenadas": '<button type="button" name="btnObterCoordenadas_' + doc.data().primeiroNome + '" class="btn btn-light">Google&nbsp;Maps</button>'
+                            "obterCoordenadas": '<button type="button" name="btnObterCoordenadas_' + doc.data().utilizadorId + '" class="btn btn-light">Google&nbsp;Maps</button>'
                         }).draw();
                     });
 
                     $('button[name^="btnObterCoordenadas_"').click(function (e) {
+
+                        var nameButton = e.target.name;
+
+                        var utilizadorId = nameButton.split('_')[1];
+
                         $('#modalGoogleMaps').modal('show');
+
+                        GetUtilizadorDirections(utilizadorId);
                     });
 
                     $('select[id^="actionService_"').change(function (e) {
                         var numeroServico = e.target.id.split('_')[1];
                         var accao = e.target.value;
 
-                        if(accao == 'Remarcado') 
-                        {
+                        if (accao == 'Remarcado') {
                             $('#divActionNovaDataHora').show();
                         } else {
                             $('#divActionNovaDataHora').hide();
@@ -154,25 +164,51 @@ class MyServices_Prestador extends React.Component {
                     $('#confirmAction').click(function (e) {
                         var numeroServico = '#actionService_' + $('#lblNumeroService').text();
 
-                        if($('#lblActionService').html() == 'Remarcado' && $('#novaDataHora').val() == '') 
-                        {
+                        if ($('#lblActionService').html() == 'Remarcado' && $('#novaDataHora').val() == '') {
                             alert('Preencha a nova data do serviço');
-                        } 
-                        else 
-                        {
-                        $(numeroServico).attr("disabled", true);
-                        $('#modalConfirmAction').modal('hide');
+                        }
+                        else {
+                            $(numeroServico).attr("disabled", true);
+                            AtualizarEstadoDoDocumento(numeroServico.split('_')[1], $('#lblActionService').html());
+                            $('#modalConfirmAction').modal('hide');
                         }
                     });
-
-                    // console.log(this.state.row[0].PrimeiroNome);
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
                 });
         }
 
-        function CheckIsNull(value) {
+        function GetUtilizadorDirections(utilizadorId) 
+        {
+            const db = ReturnInstanceFirebase();
+
+            db.collection("Utilizadores")
+                .where("utilizadorId", "==", utilizadorId)
+                .get()
+                .then((querySnapshot) => {
+
+                    querySnapshot.forEach((doc) => 
+                    {
+                        if(querySnapshot.size == 1) 
+                        {
+                            $('#modalGoogleMapsLocalidade').html(doc.data().localidade);
+                            $('#modalGoogleMapsRua').html(doc.data().rua);
+                            $('#modalGoogleMapsCodigoPostal').html(doc.data().codigoPostal);
+                            $('#modalGoogleMapsDistance').html();
+
+                        }
+                    })
+                });
+        }
+
+        function ReadOnly(status) 
+        {
+            return status != "" ? "readonly" : "";
+        }
+
+        function CheckIsNull(value) 
+        {
             return value != null ? value : "";
         }
     }
@@ -206,92 +242,125 @@ class MyServices_Prestador extends React.Component {
 
         return (
             <html>
+                <head>
+                    <Helmet>
+                    </Helmet>
+                </head>
+                <body>
 
-                <div className="MainDiv" style={styleDiv}>
+                    <div className="MainDiv" style={styleDiv}>
 
-                    <div className="container">
+                        <div className="container">
 
-                        <table id="tableInfo">
-                            <thead style={thead}>
-                                <tr>
-                                    <th>Número&nbsp;Serviço</th>
-                                    <th>Nome&nbsp;Cliente</th>
-                                    <th>Contacto&nbsp;Cliente</th>
-                                    <th>Observações</th>
-                                    <th>Pedido</th>
-                                    <th>Inicio</th>
-                                    <th>Fim</th>
-                                    <th>Tipo&nbsp;de&nbsp;Serviço</th>
-                                    <th>Tipo&nbsp;de&nbsp;Pagamento</th>
-                                    <th>Ações&nbsp;do&nbsp;Serviço</th>
-                                    <th>Obter&nbsp;coordenadas</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody style={tbody}>
+                            <table id="tableInfo">
+                                <thead style={thead}>
+                                    <tr>
+                                        <th>Número&nbsp;Serviço</th>
+                                        <th>Nome&nbsp;Cliente</th>
+                                        <th>Contacto&nbsp;Cliente</th>
+                                        <th>Observações</th>
+                                        <th>Pedido</th>
+                                        <th>Inicio</th>
+                                        <th>Fim</th>
+                                        <th>Tipo&nbsp;de&nbsp;Serviço</th>
+                                        <th>Tipo&nbsp;de&nbsp;Pagamento</th>
+                                        <th>Ações&nbsp;do&nbsp;Serviço</th>
+                                        <th>Obter&nbsp;coordenadas</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody style={tbody}>
 
-                            </tbody>
+                                </tbody>
 
-                        </table>
+                            </table>
 
-                    </div>
+                        </div>
 
-                    {/* Google Maps */}
-                    <div class="modal fade" id="modalGoogleMaps" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Coordenadas Google Maps</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
+                        {/* Google Maps */}
+                        <div class="modal fade" id="modalGoogleMaps" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
 
-                                    <label></label>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <div class="modal-body">
+
+                                        <div style={{ height: '50vh', width: '100%' }}>
+
+                                            <GoogleMapReact
+                                                bootstrapURLKeys={{ key: "AIzaSyBnyvkAnkVp4RHFuqvNzlkLDMCEL6fRu1w" }}
+                                                defaultCenter={{
+                                                    lat: 59.95,
+                                                    lng: 30.33
+                                                }}
+                                                defaultZoom={11}
+                                            >
+
+                                            <Marker
+                                                lat={59.95}
+                                                lng={30.33}
+                                                name="My Marker"
+                                                color="gray"
+                                            />
+
+                                            </GoogleMapReact>
+                                        </div>
+                                        <br/>
+                                        <label>Localidade:&nbsp;</label>
+                                        <label id="modalGoogleMapsLocalidade" style={{fontWeight:"normal"}}></label>
+                                        <br/>
+                                        <label>Rua:&nbsp;</label>
+                                        <label id="modalGoogleMapsRua" style={{fontWeight:"normal"}}></label>
+                                        <br/>
+                                        <label>Código-postal:&nbsp;</label>
+                                        <label id="modalGoogleMapsCodigoPostal" style={{fontWeight:"normal"}}></label>
+                                        <br/>
+                                        <label>Distância:&nbsp;</label>
+                                        <label id="modalGoogleMapsDistance" style={{fontWeight:"normal"}}></label>
+                                        <br/>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div >
+                        </div >
 
-                    {/* Action Service */}
-                    <div class="modal fade" id="modalConfirmAction" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Ação sobre serviço</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <label>Ação:&nbsp;</label>
-                                    <label id="lblActionService" style={labelWithoutBold}></label>
-                                    <br />
-                                    <label>Número de serviço:&nbsp;</label>
-                                    <label id="lblNumeroService" style={labelWithoutBold}></label>
-                                    <br />
-                                    <br />
-
-                                    <div class="form-group" id="divActionNovaDataHora" style={{display:"none"}}>
-                                        <label>Nova data:&nbsp;</label>
-                                        <input type="datetime-local" class="form-control" id="novaDataHora"></input>
+                        {/* Action Service */}
+                        <div class="modal fade" id="modalConfirmAction" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Ação sobre serviço</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <br />
-                                    <label>Pretende avançar?</label>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        <button type="button" class="btn btn-success" id="confirmAction">Confirmar</button>
+                                    <div class="modal-body">
+                                        <label>Ação:&nbsp;</label>
+                                        <label id="lblActionService" style={labelWithoutBold}></label>
+                                        <br />
+                                        <label>Número de serviço:&nbsp;</label>
+                                        <label id="lblNumeroService" style={labelWithoutBold}></label>
+                                        <br />
+                                        <br />
+
+                                        <div class="form-group" id="divActionNovaDataHora" style={{ display: "none" }}>
+                                            <label>Nova data:&nbsp;</label>
+                                            <input type="datetime-local" class="form-control" id="novaDataHora"></input>
+                                        </div>
+                                        <br />
+                                        <label>Pretende avançar?</label>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-success" id="confirmAction">Confirmar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div >
                     </div >
-                </div >
-
+                </body>
             </html>
         )
     }

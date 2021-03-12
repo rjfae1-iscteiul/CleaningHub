@@ -36,21 +36,26 @@ class Services_jquery extends React.Component {
                         "data": null,
                         "defaultContent": '<i class="fas fa-plus-circle"></i>'
                     },
-                    { "data": "primeiroNome" },
+                    { "data": "prestadorNome" },
+                    { "data": "prestadorCodigo" },
+                    {
+                        "data": "prestadorDataRegisto",
+                        visible: false
+                    },
+                    {
+                        "data": "prestadorDataNascimento",
+                        visible: false
+                    },
                     { "data": "nacionalidade" },
                     { "data": "localidade" },
                     { "data": "rating" },
                     { "data": "distance" },
                     { "data": "priceWithoutProducts" },
                     { "data": "priceWithProducts" },
-                    { "data": "button" }
-                    /*
                     {
-                        "orderable": false,
-                        "data": null,
-                        "defaultContent": '<button type="button" name="btnContratar" class="btn btn-light">Contratar</button>'
+                        "data": "button",
+                        "orderable": false
                     }
-                    */
                 ],
                 "order": [[1, 'asc']]
             });
@@ -61,14 +66,8 @@ class Services_jquery extends React.Component {
                 var tr = $(this).closest('tr');
                 var row = table.row(tr);
 
-                if (row.child.isShown()) {
-                    row.child.hide();
-                    tr.removeClass('shown');
-                }
-                else {
-                    row.child(format(row.data())).show();
-                    tr.addClass('shown');
-                }
+                $('#modalMoreInformation').modal('show');
+                GetExpandTableWithOtherServices(row.data().prestadorCodigo, row.data().prestadorNome, row.data().prestadorDataRegisto);
             });
 
             $('#paymentMethod').change(function () {
@@ -105,74 +104,114 @@ class Services_jquery extends React.Component {
             });
 
             $('#confirmRequest').click(function () {
-                let randString = Math.random().toString(36).substring(7);
 
                 const db = ReturnInstanceFirebase();
 
-                db.collection("PedidosServico").doc(randString).set({
-                    numeroServico: randString,
-                    prestadorId: $('#idPrestador').val(),
-                    tipoServico: $('#serviceType option:selected').text(),
-                    numeroHoras: $('#hours').val(),
-                    precoTotal: $('#price').val(),
-                    tipoPagamento: $('#paymentMethod option:selected').text(),
-                    IBAN: $('#ibanNumber').val(),
-                    observacoes: $('#observations').val(),
-                    contactMBWay: $('#phoneNumber').val(),
-                    cc_Numero: $('#ccCardNumber').val(),
-                    cc_Validade: $('#ccValidade').val(),
-                    cc_Codigo: $('#ccCodigo').val(),
-                    dataPedido: GetTimeNowStringFormat(),
-                    dataHoraInicio: $('#dataHoraInicio').val(),
-                    dataHoraFim: $('#dataHoraFim').val(),
-                    estado: ''
-                })
+                db.collection("Utilizadores")
+                    .where("utilizadorId", "==", "g9tgom")
+                    .get()
+                    .then((querySnapshotUtilizadores) => 
+                    {
+                        querySnapshotUtilizadores.forEach((docUtilizadores) => 
+                        {
+                            db.collection("Prestadores")
+                            .where("prestadorId", "==", $('#idPrestador').val().split(' ')[0])
+                            .get()
+                            .then((querySnapshotPrestadores) => 
+                            {
+                                querySnapshotPrestadores.forEach((docPrestadores) => 
+                                {
+                                    InsertRequestAndSendEmail(docUtilizadores, docPrestadores);
+                                })
+                            });
+                        })
+                    });
+                });
+        });
+
+        function InsertRequestAndSendEmail(docUtilizadores, docPrestadores) {
+            let randString = Math.random().toString(36).substring(7);
+
+            const db = ReturnInstanceFirebase();
+
+            db.collection("PedidosServico").doc(randString).set({
+                numeroServico: randString,
+                prestadorId: $('#idPrestador').val().split(' ')[0],
+                tipoServico: $('#serviceType option:selected').text(),
+                numeroHoras: $('#hours').val(),
+                precoTotal: $('#price').val(),
+                tipoPagamento: $('#paymentMethod option:selected').text(),
+                IBAN: $('#ibanNumber').val(),
+                observacoes: $('#observations').val(),
+                contactMBWay: $('#phoneNumber').val(),
+                cc_Numero: $('#ccCardNumber').val(),
+                cc_Validade: $('#ccValidade').val(),
+                cc_Codigo: $('#ccCodigo').val(),
+                dataPedido: GetTimeNowStringFormat(),
+                dataHoraInicio: $('#dataHoraInicio').val(),
+                dataHoraFim: $('#dataHoraFim').val(),
+                estado: '',
+                utilizadorId: "g9tgom"
+            })
                 .then(() => {
 
-                    // SendEmailRequestService()
+                    SendEmailRequestService(
+                        "Ricardo Jorge Ferreira",
+                        "rjfae1@iscte-iul.pt",
+                        docPrestadores.data().prestadorId,
+                        docPrestadores.data().primeiroNome + " " + docPrestadores.data().segundoNome,
+                        docPrestadores.data().contactoTelefonico,
+                        docUtilizadores.data().utilizadorId,
+                        docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
+                        docUtilizadores.data().contactoTelefonico,
+                        $('#observations').val(),
+                        $('#serviceType option:selected').text(),
+                        $('#hours').val(),
+                        $('#price').val(),
+                        $('#dataHoraInicio').val(),
+                        $('#dataHoraFim').val(),
+                        $('#paymentMethod option:selected').text()
+                    )
                     alert("Pedido de serviço finalizado!");
                 })
                 .catch((error) => {
                     alert("Error writing document: ", error);
                 });
-            });
-        });
-
-        function GetTimeNowStringFormat() 
-        {
-            var m = new Date();
-            return m.getUTCFullYear() +"-"+ (m.getUTCMonth()+1) +"-"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
         }
 
-        function SendEmailRequestService(var_to_name, var_to_email, codPrestador, noPrestador, coPrestador, codCliente, noCliente, coCliente, obs, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) 
-        {
-          emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
-    
-          var templateParams = 
-          {
-            to_name: var_to_name,
-            to: var_to_email,
-            codigoPrestador: codPrestador,
-            nomePrestador: noPrestador,
-            contactoPrestador: coPrestador,
-            codigoCliente: codCliente,
-            nomeCliente: noCliente,
-            contactoCliente: coCliente,
-            observacoes: obs,
-            tipoServico: tipoSer,
-            numeroHoras: numHoras,
-            preco: preco,
-            dataHoraInicio: dahoInicio,
-            dataHoraFim: dahoFim,
-            tipoPagamento: tipoPag
-          };
+        function GetTimeNowStringFormat() {
+            var m = new Date();
+            return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
+        }
 
-          emailjs.send('serviceId_CleaningHub', 'template_registerUser', templateParams)
-              .then(function(response) {
-                alert('SUCCESS!', response.status, response.text);
-              }, function(error) {
-                alert('FAILED...', error);
-              });
+        function SendEmailRequestService(var_to_name, var_to_email, codPrestador, noPrestador, coPrestador, codCliente, noCliente, coCliente, obs, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
+            emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
+
+            var templateParams =
+            {
+                to_name: var_to_name,
+                to: var_to_email,
+                codigoPrestador: codPrestador,
+                nomePrestador: noPrestador,
+                contactoPrestador: coPrestador,
+                codigoCliente: codCliente,
+                nomeCliente: noCliente,
+                contactoCliente: coCliente,
+                observacoes: obs,
+                tipoServico: tipoSer,
+                numeroHoras: numHoras,
+                preco: preco,
+                dataHoraInicio: dahoInicio,
+                dataHoraFim: dahoFim,
+                tipoPagamento: tipoPag
+            };
+
+            emailjs.send('serviceId_CleaningHub', 'template_requestService', templateParams)
+                .then(function (response) {
+                    alert('SUCCESS!', response.status, response.text);
+                }, function (error) {
+                    alert('FAILED...', error);
+                });
         }
 
         function ReturnInstanceFirebase() {
@@ -197,10 +236,30 @@ class Services_jquery extends React.Component {
             return firebase.firestore();
         }
 
-        function PreencherLinhasPrestadores(table) {
+        function GetExpandTableWithOtherServices(prestadorId, prestadorName, prestadorDataRegisto) {
             const db = ReturnInstanceFirebase();
 
-            const array = [];
+            db.collection("PedidosServico")
+                .where("prestadorId", "==", prestadorId)
+                .get()
+                .then((querySnapshot) => {
+
+                    var somaPrecoTotal = 0;
+
+                    querySnapshot.forEach((doc) => {
+                        somaPrecoTotal += doc.data().precoTotal;
+                    })
+
+                    $('#cardPrestadorNome').html(prestadorName);
+                    $('#cardRegistadoDesde').html("Registado desde:&nbsp;" + prestadorDataRegisto);
+                    $('#cardTotalServicos').html("Total de serviços:&nbsp;" + querySnapshot.size);
+                    $('#cardPrecoMedio').html("Preço médio:&nbsp;" + (somaPrecoTotal / querySnapshot.size) + "€");
+
+                });
+        }
+
+        function PreencherLinhasPrestadores(table) {
+            const db = ReturnInstanceFirebase();
 
             db.collection("Prestadores")
                 .get()
@@ -208,14 +267,17 @@ class Services_jquery extends React.Component {
                     querySnapshot.forEach((doc) => {
                         table.row.add({
                             "": "",
-                            "primeiroNome": CheckIsNull(doc.data().primeiroNome),
+                            "prestadorNome": CheckIsNull(doc.data().primeiroNome),
+                            "prestadorCodigo": CheckIsNull(doc.data().prestadorId),
+                            "prestadorDataRegisto": CheckIsNull(doc.data().dataRegisto),
+                            "prestadorDataNascimento": CheckIsNull(doc.data().dataNascimento),
                             "nacionalidade": CheckIsNull(doc.data().nacionalidade),
                             "localidade": CheckIsNull(doc.data().localidade),
                             "rating": CheckIsNull(doc.data().rating),
                             "distance": CheckIsNull(doc.data().distance),
-                            "priceWithoutProducts": CheckIsNull(doc.data().priceWithoutProducts),
-                            "priceWithProducts": CheckIsNull(doc.data().priceWithProducts),
-                            "button": '<button type="button" name="btnContratar_' + doc.data().primeiroNome + '" class="btn btn-light">Contratar</button>'
+                            "priceWithoutProducts": CheckIsNull(doc.data().priceWithoutProducts) + "€",
+                            "priceWithProducts": CheckIsNull(doc.data().priceWithProducts) + "€",
+                            "button": '<button type="button" name="btnContratar_' + doc.data().prestadorId + '_' + doc.data().primeiroNome + '" class="btn btn-light">Contratar</button>'
                         }).draw();
                     });
 
@@ -223,9 +285,10 @@ class Services_jquery extends React.Component {
 
                         var nameButton = e.target.name;
 
-                        var prestadorName = nameButton.split('_')[1];
+                        var prestadorId = nameButton.split('_')[1];
+                        var prestadorName = nameButton.split('_')[2];
 
-                        $('#idPrestador').val(prestadorName);
+                        $('#idPrestador').val(prestadorId + " - " + prestadorName);
 
                         $('#exampleModal').modal('show');
                     });
@@ -238,25 +301,6 @@ class Services_jquery extends React.Component {
 
         function CheckIsNull(value) {
             return value != null ? value : "";
-        }
-
-        function format(d) {
-            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-                '<thead>' +
-                '<th>Data</th>' +
-                '<th>Serviço</th>' +
-                '<th>Rating</th>' +
-                '<th>Valor</th>' +
-                '</thead>' +
-                '<tbody>' +
-                '<tr>' +
-                '<td>Te</td>' +
-                '<td>TE</td>' +
-                '<td>TE</td>' +
-                '<td>TE</td>' +
-                '</tr>' +
-                '</tbody>' +
-                '</table>';
         }
     }
 
@@ -289,7 +333,10 @@ class Services_jquery extends React.Component {
                         <thead style={thead}>
                             <tr>
                                 <th></th>
-                                <th>Nome</th>
+                                <th>Prestador</th>
+                                <th>Código&nbsp;Prestador</th>
+                                <th style={{ display: "none" }}>Registo&nbsp;Prestador</th>
+                                <th style={{ display: "none" }}>Nascimento&nbsp;Prestador</th>
                                 <th>Nacionalidade</th>
                                 <th>Localidade</th>
                                 <th>Rating</th>
@@ -407,6 +454,26 @@ class Services_jquery extends React.Component {
                         </div>
                     </div>
                 </div >
+
+                <div class="modal" id="modalMoreInformation" style={modalService} tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="card" style={{ width: "22rem" }}>
+                            <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" alt="Card image cap"></img>
+                            <div class="card-body">
+                                <h5 class="card-title" id="cardPrestadorNome" style={{ fontWeight: "bold" }}></h5>
+
+                                <div class="card" style={{ width: "19rem" }}>
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item" id="cardRegistadoDesde"></li>
+                                        <li class="list-group-item" id="cardTotalServicos"></li>
+                                        <li class="list-group-item" id="cardPrecoMedio"></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div >
         )
     }
