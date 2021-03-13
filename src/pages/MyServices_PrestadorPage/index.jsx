@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Register_jquery from "../../components/Register_jquery";
+import MyServices_Prestador from "../../components/MyServices_Prestador";
 import Header from "../../components/common/header"
 
 export default function Home() {
@@ -8,10 +8,9 @@ export default function Home() {
   }, []);
   
   return (
-    
-      <div style={{backgroundColor: "#00CCFF"}}>
+    <div>
       <Header></Header>
-      <Register_jquery></Register_jquery>
+      <MyServices_Prestador></MyServices_Prestador>
     </div>
   );
 }
