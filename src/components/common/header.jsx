@@ -202,6 +202,18 @@ export default function Header() {
         >
           Serv Pres
         </S.ButtonStyle>
+        <S.ButtonStyle
+           component={Link}
+           to="/MyServices_Utilizador"
+        >
+          Serv Util
+        </S.ButtonStyle>
+        <S.ButtonStyle
+           component={Link}
+           to="/Dashboard_CH"
+        >
+          Dashboard
+        </S.ButtonStyle>
         <S.LoginButton
           disableElevation
           variant="contained"

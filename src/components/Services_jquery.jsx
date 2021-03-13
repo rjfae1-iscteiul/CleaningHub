@@ -150,7 +150,8 @@ class Services_jquery extends React.Component {
                 dataPedido: GetTimeNowStringFormat(),
                 dataHoraInicio: $('#dataHoraInicio').val(),
                 dataHoraFim: $('#dataHoraFim').val(),
-                estado: '',
+                estadoUtilizador: '',
+                estadoPresador: '',
                 utilizadorId: "g9tgom"
             })
                 .then(() => {
@@ -353,7 +354,7 @@ class Services_jquery extends React.Component {
 
                 </div>
                 <div class="modal fade" id="exampleModal" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Pedido de serviço</h5>

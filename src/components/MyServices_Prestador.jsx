@@ -94,7 +94,7 @@ class MyServices_Prestador extends React.Component {
             var servicoReference = db.collection("PedidosServico").doc(serviceId);
 
             return servicoReference.update({
-                "estado": newStatus
+                "estadoPrestador": newStatus
             })
             .then(() => {
                 alert("Document successfully updated!");
