@@ -225,14 +225,6 @@ class MyServices_Prestador extends React.Component {
             fontFamily: "Calibri"
         }
 
-        const modalService = {
-            paddingTop: "40px"
-        }
-
-        const map = {
-            height: "100%"
-        }
-
         const tbody = {
             fontSize: "smaller"
         }
@@ -284,7 +276,7 @@ class MyServices_Prestador extends React.Component {
                         </div>
 
                         {/* Google Maps */}
-                        <div class="modal fade" id="modalGoogleMaps" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalGoogleMaps" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
 
@@ -333,7 +325,7 @@ class MyServices_Prestador extends React.Component {
                         </div >
 
                         {/* Action Service */}
-                        <div class="modal fade" id="modalConfirmAction" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalConfirmAction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">

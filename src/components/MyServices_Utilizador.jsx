@@ -238,14 +238,6 @@ class MyServices_Utilizador extends React.Component {
             fontFamily: "Calibri"
         }
 
-        const modalService = {
-            paddingTop: "100px"
-        }
-
-        const modalServiceInvoice = {
-            paddingTop: "80px"
-        }
-
         const map = {
             height: "100%"
         }
@@ -301,7 +293,7 @@ class MyServices_Utilizador extends React.Component {
                         </div>
 
                         {/* Action Service */}
-                        <div class="modal fade" id="modalConfirmAction" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalConfirmAction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -335,7 +327,7 @@ class MyServices_Utilizador extends React.Component {
                         </div >
 
                         {/* Survey */}
-                        <div class="modal fade" id="modalSurveySatisfaction" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalSurveySatisfaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
 
@@ -440,7 +432,7 @@ class MyServices_Utilizador extends React.Component {
                         </div>
 
                         {/* Invoices */}
-                        <div class="modal fade" id="modalInvoices" style={modalServiceInvoice} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalInvoices" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
 

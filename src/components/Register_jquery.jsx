@@ -241,27 +241,13 @@ class Register extends React.Component {
   render() {
 
     const styleDiv = {
-      paddingTop: "50px",
       textAlign: "center",
       fontFamily: "Calibri",
-      paddingLeft: "400px"
     };
 
     const styleCheckbox = {
       textAlign: "left"
     };
-    const styleTexBox = {
-      height: "24px",
-      fontFamily: "Calibri"
-    }
-    const styleLabel = {
-      fontFamily: "Calibri",
-      fontWeight: "bold"
-    }
-
-    const modalService = {
-      paddingTop: "40px"
-    }
 
     return (
 
@@ -368,7 +354,7 @@ class Register extends React.Component {
 
           <button type="button" class="btn btn-primary" id="btnRegister">Registar</button>
 
-          <div class="modal fade" id="modalMoreDataPrestador" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="modalMoreDataPrestador" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
