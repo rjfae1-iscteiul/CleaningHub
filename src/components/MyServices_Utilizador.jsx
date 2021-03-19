@@ -41,6 +41,12 @@ class MyServices_Utilizador extends React.Component {
             });
 
             PreencherLinhasPrestadores(table);
+            
+            $("#example_paginate").css("font-size", "small");
+            $(".dataTables_filter").css("font-size", "small");
+            $(".dataTables_length").css("font-size", "small");
+            $(".dataTables_info").css("font-size", "small");
+            $(".sc-bQdQlF").css("justify-content", "center");
 
             $('#dropDownQuestion1').change(function (e) {
                 $('#dropDownQuestion1').val() < 3 ? $('#divTextAreaQuestion1').show() : $('#divTextAreaQuestion1').hide();
@@ -249,7 +255,8 @@ class MyServices_Utilizador extends React.Component {
         }
 
         const thead = {
-            fontSize: "smaller"
+            fontSize: "smaller",
+            backgroundColor: "aliceblue"
         }
 
         const labelWithoutBold = {

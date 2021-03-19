@@ -7,7 +7,7 @@ export default function Home() {
   }, []);
   
   return (
-    <div>
+    <div >
       <Header></Header>
       <Services_jquery></Services_jquery>
     </div>

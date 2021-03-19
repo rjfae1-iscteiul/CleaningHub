@@ -59,6 +59,12 @@ class MyServices_Prestador extends React.Component {
             });
 
             PreencherLinhasPrestadores(table);
+
+            $("#example_paginate").css("font-size", "small");
+            $(".dataTables_filter").css("font-size", "small");
+            $(".dataTables_length").css("font-size", "small");
+            $(".dataTables_info").css("font-size", "small");
+            $(".sc-bQdQlF").css("justify-content", "center");
         });
 
         function ReturnInstanceFirebase() {
@@ -232,7 +238,8 @@ class MyServices_Prestador extends React.Component {
         }
 
         const thead = {
-            fontSize: "smaller"
+            fontSize: "smaller",
+            backgroundColor: "aliceblue"
         }
 
         const labelWithoutBold = {

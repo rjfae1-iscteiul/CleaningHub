@@ -277,3 +277,11 @@ tr.shown td.details-control {
   width: 1200px;
   margin: auto;
 }
+
+table.dataTable thead .sorting_asc {
+  background-image: none
+}
+
+table.dataTable thead .sorting {
+  background-image: none
+}
