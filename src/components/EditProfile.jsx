@@ -4,12 +4,14 @@ import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootst
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import 'bootstrap';
+import Dialog from './Dialog/dialog';
 
 class EditProfile extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-        isDisabled: false
+        isDisabled: false,
+        showDialog: false,
       }
     }
 
@@ -247,7 +249,6 @@ class EditProfile extends React.Component {
 
 
       <div style={styleDiv} className="EditProfile">
-          
         <form>
 
         <div class="row">
@@ -303,17 +304,26 @@ class EditProfile extends React.Component {
           </div>
 
           <div class="form-row">
+            
             <div class="col">  
                 <div>
-                    <button type="button" class="btn btn-primary" id="btnEditar">Mudar Password</button>
+                     <button type="button" class="btn btn-primary" id="btnEditar"  onClick={() => this.setState({showDialog: true})}>Mudar Password</button>
                 </div>
             </div>
             <div class="col">
                 <div>
-                    <button type="button" class="btn btn-primary" id="btnEditar">Guardar</button>
+                    <button type="button" class="btn btn-primary" id="btnEditar1"  >Guardar</button>
                 </div>
             </div>
            </div> 
+          
+           {this.state.showDialog && 
+          <div className="pt-5">
+            <Dialog showModal={this.state.showDialog}></Dialog>
+            </div>
+          }
+          
+         
 
 
           <div class="modal fade" id="modalMoreDataPrestador" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -353,6 +363,45 @@ class EditProfile extends React.Component {
             </div>
           </div >
         </form>
+        
+        {this.state.showDialog && 
+        <div class="modal fade" id="modalMoreDataPrestador" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Mudar Password</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <div class="form-group">
+                <label>Current Password</label>
+                <input type="password" class="form-control" id="idTxbPassword" ></input>
+              </div>
+
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" class="form-control" id="idTxbPassword" ></input>
+              </div>
+
+              <div class="form-group" style={styleCheckbox}>
+                <div class="form-check">
+                <input class="form-check-input" type="radio" name="groupChbGenero" id="chbColaborador"></input>
+                <label>Masculino</label>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-success" id="saveDataPrestador" data-dismiss="modal">Guardar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+  }
       </div >
     )
   }
