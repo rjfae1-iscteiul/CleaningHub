@@ -12,6 +12,7 @@ import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
 import GoogleMapReact from 'google-map-react';
+
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const Marker = (props) => {
