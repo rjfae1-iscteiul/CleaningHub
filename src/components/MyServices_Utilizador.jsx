@@ -9,6 +9,7 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
+import emailjs from 'emailjs-com';
 
 class MyServices_Utilizador extends React.Component {
     constructor(props) {
@@ -62,6 +63,11 @@ class MyServices_Utilizador extends React.Component {
                 $('#modalSurveySatisfaction').modal('hide');
             });
 
+            $('#btnSaveFile').click(function (e) 
+            {
+                   
+            });
+
         });
 
         function ReturnInstanceFirebase() {
@@ -91,15 +97,14 @@ class MyServices_Utilizador extends React.Component {
             return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
         }
 
-        function InserirAvaliacao(serviceId, prestId) 
-        {
+        function InserirAvaliacao(serviceId, prestId) {
             let randString = Math.random().toString(36).substring(7);
 
             const db = ReturnInstanceFirebase();
 
             db.collection("AvaliacaoServico")
-              .doc(randString)
-              .set({
+                .doc(randString)
+                .set({
                     utilizadorId: "g9tgom",
                     prestadorId: prestId,
                     servicoId: serviceId,
@@ -152,7 +157,14 @@ class MyServices_Utilizador extends React.Component {
 
                     $('button[id^="btnAvaliarServico"]').click(function (e) {
 
-                        $('#modalSurveySatisfaction').modal('show');
+                        $('#modalInvoices').modal('show');
+                        $('#inv_Cli_Nome').html('Ricardo Jorge Ferreira');
+                        $('#inv_Cli_Rua').html('Rua da Estrela');
+                        $('#inv_Cli_CodigoPostal').html('1700-245');
+                        $('#inv_Localidade').html('Oeiras');
+                        $('#inv_Cli_NIF').html('NIF: 291 123 121');
+
+                        // $('#modalSurveySatisfaction').modal('show');
                     });
 
                     $('select[id^="actionService_"').change(function (e) {
@@ -176,8 +188,7 @@ class MyServices_Utilizador extends React.Component {
                         if ($('#lblActionService').html() == 'Remarcado' && $('#novaDataHora').val() == '') {
                             alert('Preencha a nova data do serviço');
                         }
-                        else 
-                        {
+                        else {
                             $(numeroServico).attr("disabled", true);
                             AtualizarEstadoDoDocumento(numeroServico.split('_')[1], $('#lblActionService').html());
                             $('#modalConfirmAction').modal('hide');
@@ -189,8 +200,7 @@ class MyServices_Utilizador extends React.Component {
                 });
         }
 
-        function AtualizarEstadoDoDocumento(serviceId, newStatus) 
-        {
+        function AtualizarEstadoDoDocumento(serviceId, newStatus) {
             const db = ReturnInstanceFirebase();
 
             var servicoReference = db.collection("PedidosServico").doc(serviceId);
@@ -198,12 +208,12 @@ class MyServices_Utilizador extends React.Component {
             return servicoReference.update({
                 "estadoUtilizador": newStatus
             })
-            .then(() => {
-                alert("Document successfully updated!");
-            })
-            .catch((error) => {
-                alert("Error update: " + error);
-            });
+                .then(() => {
+                    alert("Document successfully updated!");
+                })
+                .catch((error) => {
+                    alert("Error update: " + error);
+                });
         }
 
         function ReadOnly(status) {
@@ -224,6 +234,10 @@ class MyServices_Utilizador extends React.Component {
 
         const modalService = {
             paddingTop: "100px"
+        }
+
+        const modalServiceInvoice = {
+            paddingTop: "80px"
         }
 
         const map = {
@@ -413,6 +427,98 @@ class MyServices_Utilizador extends React.Component {
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" id="btnSubmitSurvey">Submeter avaliação</button>
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Invoices */}
+                        <div class="modal fade" id="modalInvoices" style={modalServiceInvoice} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+
+
+                                        <div id="invoice" class="invoice-box" style={{ fontFamily: "Calibri" }}>
+                                            <table>
+                                                <tr class="top">
+                                                    <td colspan="2">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="title">
+                                                                    <img src="src\resources\Logo_Completo.png" alt="Company logo" style={{ width: "100%", maxWidth: "300px" }} />
+                                                                </td>
+
+                                                                <td>
+                                                                    Fatura Nº: dy3me3s<br />
+									Emitida: março 27, 2021<br />
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="information">
+                                                    <td colspan="2">
+                                                        <table>
+                                                            <tr>
+                                                                <td style={{ fontFamily: "Calibri" }}>
+                                                                    CleaningHub, S.A.<br />
+									                                ISCTE - Av. das Forças Armadas<br />
+                                                                    1649-026, Lisboa<br />
+                                                                    NIF: 500 00 0000
+                                                                </td>
+
+                                                                <td >
+                                                                    <span id="inv_Cli_Nome" ></span><br />
+                                                                    <span id="inv_Cli_Rua"></span><br />
+                                                                    <span id="inv_Cli_CodigoPostal"></span>, <span id="inv_Localidade"></span><br />
+                                                                    <span id="inv_Cli_NIF"></span><br />
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="heading">
+                                                    <td>Método de pagamento</td>
+
+                                                    <td></td>
+                                                </tr>
+
+                                                <tr class="details">
+                                                    <td>Transferência bancária</td>
+
+                                                    <td>IBAN: PT50 0000 0321 0324 00023 0000 1</td>
+                                                </tr>
+
+                                                <tr class="heading">
+                                                    <td>Serviço</td>
+
+                                                    <td>Preço</td>
+                                                </tr>
+
+                                                <tr class="item last">
+                                                    <td>Serviço de limpeza de escadas de prédio (12/04/2021 - 09:00/13:00)</td>
+
+                                                    <td>20€ / hora</td>
+                                                </tr>
+
+                                                <tr class="total">
+                                                    <td></td>
+
+                                                    <td>Total: 80€</td>
+                                                </tr>
+                                            </table>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="btnSendEmailWithInvoice">Enviar por e-mail</button>
+                                            <button type="button" class="btn btn-primary" id="btnSaveFile">Gravar em PDF</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
