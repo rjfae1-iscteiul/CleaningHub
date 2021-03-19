@@ -10,6 +10,7 @@ import 'bootstrap';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
 import emailjs from 'emailjs-com';
+import Logo_Completo from "../resources/Logo_Completo.png";
 
 class MyServices_Utilizador extends React.Component {
     constructor(props) {
@@ -35,13 +36,20 @@ class MyServices_Utilizador extends React.Component {
                     { "data": "tipoServico" },
                     { "data": "tipoPagamento" },
                     { "data": "acoes" },
-                    { "data": "avaliarServico" }
+                    { "data": "avaliarServico" },
+                    { "data": "faturaServico" }
                 ],
+                "oLanguage": {
+                    "sSearch": ""
+                },
                 "order": [[1, 'asc']]
             });
 
+            $('div.dataTables_filter input').addClass('form-control');
+            $("div.dataTables_filter input").attr("placeholder", "Procurar");
+
             PreencherLinhasPrestadores(table);
-            
+
             $("#example_paginate").css("font-size", "small");
             $(".dataTables_filter").css("font-size", "small");
             $(".dataTables_length").css("font-size", "small");
@@ -69,9 +77,8 @@ class MyServices_Utilizador extends React.Component {
                 $('#modalSurveySatisfaction').modal('hide');
             });
 
-            $('#btnSaveFile').click(function (e) 
-            {
-                   
+            $('#btnSaveFile').click(function (e) {
+                window.print();
             });
 
         });
@@ -157,20 +164,22 @@ class MyServices_Utilizador extends React.Component {
                                 '<option>Cancelado P/ utilizador</option>' +
                                 '<option>Terminado</option>' +
                                 '</select>',
-                            "avaliarServico": '<button type="button" id="btnAvaliarServico_' + doc.data().numeroServico + '_' + doc.data().prestadorId + '" class="btn btn-light">Avaliar</button>'
+                            "avaliarServico": '<button type="button" id="btnAvaliarServico_' + doc.data().numeroServico + '_' + doc.data().prestadorId + '" class="btn btn-light">Avaliar</button>',
+                            "faturaServico": '<button type="button" id="btnFaturaServico_' + doc.data().numeroServico + '" class="btn btn-light">Fatura</button>'
                         }).draw();
                     });
 
                     $('button[id^="btnAvaliarServico"]').click(function (e) {
+                        $('#modalSurveySatisfaction').modal('show');
+                    });
+
+                    $('button[id^="btnFaturaServico"]').click(function (e) {
+                        var numeroServico = e.target.id.split('_')[1];
+
+                        DadosParaFatura(numeroServico);
 
                         $('#modalInvoices').modal('show');
-                        $('#inv_Cli_Nome').html('Ricardo Jorge Ferreira');
-                        $('#inv_Cli_Rua').html('Rua da Estrela');
-                        $('#inv_Cli_CodigoPostal').html('1700-245');
-                        $('#inv_Localidade').html('Oeiras');
-                        $('#inv_Cli_NIF').html('NIF: 291 123 121');
 
-                        // $('#modalSurveySatisfaction').modal('show');
                     });
 
                     $('select[id^="actionService_"').change(function (e) {
@@ -229,17 +238,67 @@ class MyServices_Utilizador extends React.Component {
         function CheckIsNull(value) {
             return value != null ? value : "";
         }
+
+        function DadosParaFatura(serviceId) {
+            const db = ReturnInstanceFirebase();
+
+            $('#modalInvoices').modal('show');
+
+            db.collection("PedidosServico")
+                .where("numeroServico", "==", serviceId)
+                .get()
+                .then((querySnapshotPedServicos) => 
+                {
+                    querySnapshotPedServicos.forEach((docPedServicos) => 
+                    {
+                        $('#inv_MetodoPagamento').html(docPedServicos.data().tipoPagamento);
+
+                        switch(docPedServicos.data().tipoPagamento) 
+                        {
+                            case "Transferência bancária":
+                                $('#inv_InfoPagamento').html(docPedServicos.data().IBAN);
+                                break;
+                            case "MBWay":
+                                $('#inv_InfoPagamento').html(docPedServicos.data().contactMBWay);
+                                break;
+                            default:
+                                $('#inv_InfoPagamento').html('<span style="font-weight:bold">Número: </span>' + docPedServicos.data().cc_Numero + ' <br/> <span style="font-weight:bold">Validade: </span>' + docPedServicos.data().cc_Validade + ' <br/> <span style="font-weight:bold">Código: </span>' + docPedServicos.data().cc_Codigo);
+                                break;
+                        }
+
+                        $('#inv_Code').html(docPedServicos.data().numeroServico);
+                        $('#inv_Date').html(docPedServicos.data().dataPedido);
+                        $('#inv_PrecoHora').html('20€');
+                        $('#inv_PrecoTotal').html(docPedServicos.data().precoTotal + '€');
+                        $('#inv_TipoServico').html(docPedServicos.data().tipoServico);
+                        $('#inv_DataHoraInicio').html(docPedServicos.data().dataHoraInicio);
+                        $('#inv_DataHoraFim').html(docPedServicos.data().dataHoraFim);
+
+                        db.collection("Utilizadores")
+                        .where("utilizadorId", "==", docPedServicos.data().utilizadorId)
+                        .get()
+                        .then((querySnapshotUtilizadores) => 
+                        {
+                            querySnapshotUtilizadores.forEach((docUti) => 
+                            {
+                                $('#inv_Cli_Nome').html(docUti.data().primeiroNome + ' ' + docUti.data().segundoNome);
+                                $('#inv_Cli_Rua').html(docUti.data().rua);
+                                $('#inv_Cli_CodigoPostal').html(docUti.data().codigoPostal);
+                                $('#inv_Localidade').html(docUti.data().localidade);
+                                $('#inv_Cli_NIF').html('NIF: ' + docUti.data().NIF);
+                            })
+                        });
+
+                    })
+                });
+        }
+
     }
 
     render() {
 
         const styleDiv = {
-            paddingTop: "100px",
             fontFamily: "Calibri"
-        }
-
-        const map = {
-            height: "100%"
         }
 
         const tbody = {
@@ -265,7 +324,7 @@ class MyServices_Utilizador extends React.Component {
 
                     <div className="MainDiv" style={styleDiv}>
 
-                        <div className="container">
+                        <div className="container" style={{ maxWidth: "100%" }}>
 
                             <table id="tableInfo">
                                 <thead style={thead}>
@@ -281,7 +340,7 @@ class MyServices_Utilizador extends React.Component {
                                         <th>Tipo&nbsp;de&nbsp;Pagamento</th>
                                         <th>Ações&nbsp;do&nbsp;Serviço</th>
                                         <th>Avaliar&nbsp;Serviço</th>
-                                        <th></th>
+                                        <th>Fatura</th>
                                     </tr>
                                 </thead>
                                 <tbody style={tbody}>
@@ -438,7 +497,6 @@ class MyServices_Utilizador extends React.Component {
 
                                     <div class="modal-body">
 
-
                                         <div id="invoice" class="invoice-box" style={{ fontFamily: "Calibri" }}>
                                             <table>
                                                 <tr class="top">
@@ -446,12 +504,12 @@ class MyServices_Utilizador extends React.Component {
                                                         <table>
                                                             <tr>
                                                                 <td class="title">
-                                                                    <img src="src\resources\Logo_Completo.png" alt="Company logo" style={{ width: "100%", maxWidth: "300px" }} />
+                                                                    <img src={Logo_Completo} alt="Company logo" style={{ width: "100%", maxWidth: "300px" }} />
                                                                 </td>
 
                                                                 <td>
-                                                                    Fatura Nº: dy3me3s<br />
-									Emitida: março 27, 2021<br />
+                                                                    Fatura Nº: <span id="inv_Code"></span><br />
+									                                Emitida: <span id="inv_Date"></span><br />
                                                                 </td>
                                                             </tr>
                                                         </table>
@@ -487,9 +545,9 @@ class MyServices_Utilizador extends React.Component {
                                                 </tr>
 
                                                 <tr class="details">
-                                                    <td>Transferência bancária</td>
+                                                    <td><span id="inv_MetodoPagamento"></span></td>
 
-                                                    <td>IBAN: PT50 0000 0321 0324 00023 0000 1</td>
+                                                    <td><span id="inv_InfoPagamento"></span></td>
                                                 </tr>
 
                                                 <tr class="heading">
@@ -499,22 +557,21 @@ class MyServices_Utilizador extends React.Component {
                                                 </tr>
 
                                                 <tr class="item last">
-                                                    <td>Serviço de limpeza de escadas de prédio (12/04/2021 - 09:00/13:00)</td>
+                                                    <td><span id="inv_TipoServico"></span> (<span id="inv_DataHoraInicio"></span> - <span id="inv_DataHoraFim"></span>)</td>
 
-                                                    <td>20€ / hora</td>
+                                                    <td><span id="inv_PrecoHora"></span> / hora</td>
                                                 </tr>
 
                                                 <tr class="total">
                                                     <td></td>
 
-                                                    <td>Total: 80€</td>
+                                                    <td>Total: <span id="inv_PrecoTotal"></span></td>
                                                 </tr>
                                             </table>
 
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" id="btnSendEmailWithInvoice">Enviar por e-mail</button>
                                             <button type="button" class="btn btn-primary" id="btnSaveFile">Gravar em PDF</button>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                         </div>

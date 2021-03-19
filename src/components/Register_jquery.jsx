@@ -30,8 +30,6 @@ class Register extends React.Component {
         }
       });
 
-
-
       $('#btnRegister').click(function () {
 
         const db = ReturnInstanceFirebase();

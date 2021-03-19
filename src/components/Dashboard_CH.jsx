@@ -21,6 +21,8 @@ class Dashboard_CH extends React.Component {
             EstadosServicos();
             AvalicoesServicos();
             TaxasServicos();
+            $(".sc-bQdQlF").css("justify-content", "end");
+
         });
 
         function ReturnInstanceFirebase() {

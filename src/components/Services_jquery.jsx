@@ -60,8 +60,14 @@ class Services_jquery extends React.Component {
                         "orderable": false
                     }
                 ],
+                "oLanguage": {
+                    "sSearch": ""
+                },
                 "order": [[1, 'asc']]
             });
+
+            $('div.dataTables_filter input').addClass('form-control');
+            $("div.dataTables_filter input").attr("placeholder", "Procurar");
 
             PreencherLinhasPrestadores(table);
 

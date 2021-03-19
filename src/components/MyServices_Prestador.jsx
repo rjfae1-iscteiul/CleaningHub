@@ -55,8 +55,14 @@ class MyServices_Prestador extends React.Component {
                     { "data": "acoes" },
                     { "data": "obterCoordenadas" }
                 ],
+                "oLanguage": {
+                    "sSearch": ""
+                },
                 "order": [[1, 'asc']]
             });
+
+            $('div.dataTables_filter input').addClass('form-control');
+            $("div.dataTables_filter input").attr("placeholder", "Procurar");
 
             PreencherLinhasPrestadores(table);
 
@@ -65,6 +71,8 @@ class MyServices_Prestador extends React.Component {
             $(".dataTables_length").css("font-size", "small");
             $(".dataTables_info").css("font-size", "small");
             $(".sc-bQdQlF").css("justify-content", "center");
+            $(".sc-bQdQlF").css("width", "85%");
+
         });
 
         function ReturnInstanceFirebase() {
@@ -221,7 +229,6 @@ class MyServices_Prestador extends React.Component {
     render() {
 
         const styleDiv = {
-            paddingTop: "100px",
             fontFamily: "Calibri"
         }
 
@@ -248,7 +255,7 @@ class MyServices_Prestador extends React.Component {
 
                     <div className="MainDiv" style={styleDiv}>
 
-                        <div className="container">
+                        <div className="container" style={{maxWidth:"100%"}}>
 
                             <table id="tableInfo">
                                 <thead style={thead}>
