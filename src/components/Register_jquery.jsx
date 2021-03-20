@@ -1,10 +1,25 @@
 import React from "react"
 import firebase from 'firebase';
+import styled from "styled-components";
 import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import 'bootstrap';
 import emailjs from 'emailjs-com';
+import {Helmet} from 'react-helmet';
+import Logo_Completo from "../resources/Logo_Completo.png";
+
+
+const S = {
+  StyledFirstPic: styled.img`
+      position: absolute;
+      top: 5%;
+      left: 37%;
+      max-width: 18%;
+      max-height: 30vh;
+      border-radius: 5%;
+    `,
+  };
 
 class Register extends React.Component {
   constructor() {
@@ -244,7 +259,7 @@ class Register extends React.Component {
       paddingTop: "50px",
       textAlign: "center",
       fontFamily: "Calibri",
-      paddingLeft: "400px"
+      paddingLeft: "500px"
     };
 
     const styleCheckbox = {
@@ -263,22 +278,32 @@ class Register extends React.Component {
       paddingTop: "40px"
     }
 
+    const styleRow = {
+      paddingTop: "275px"
+    }
     return (
 
 
       <div style={styleDiv} className="Register">
-
-
+        <Helmet>
+                <style>{'body { background-color: #7CD4EA; }'}</style>
+            </Helmet>
+        
+           
         <form>
-
-          <div class="form-row">
-            <div class="col">
-
+        <Form.Group size="lg" controlId="ssssssss">
+          <S.StyledFirstPic src={Logo_Completo} alt="" />
+          <div class="form-row" style={styleRow}>          
+            <div class="col">   
+                      
               <div class="form-group" style={styleCheckbox}>
+                
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="groupChbTipo" id="chbPrestador"></input>
                   <label>Prestador</label>
+                  
                 </div>
+                
                 <div class="form-check">
                   <input class="form-check-input" type="radio" name="groupChbTipo" id="chbUtilizador"></input>
                   <label>Utilizador</label>
@@ -321,6 +346,7 @@ class Register extends React.Component {
               </div>
             </div>
           </div>
+          </Form.Group>
 
           <div class="form-group">
             <label>Rua</label>
@@ -366,7 +392,10 @@ class Register extends React.Component {
             </div>
           </div>
 
-          <button type="button" class="btn btn-primary" id="btnRegister">Registar</button>
+          {/* <button type="button" class="btn btn-primary" id="btnRegister">Registar</button> */}
+          <Button type="submit" style={{background: '#BACA12', color: '#000'}}>
+                      Registar
+                    </Button>
 
           <div class="modal fade" id="modalMoreDataPrestador" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

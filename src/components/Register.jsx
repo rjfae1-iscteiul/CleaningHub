@@ -137,7 +137,8 @@ class Register extends React.Component {
       paddingTop: "50px",
       textAlign: "center",
       fontFamily: "Calibri",
-      paddingLeft: "400px"
+      paddingLeft: "400px",
+      
     };
 
     const styleTexBox = {
