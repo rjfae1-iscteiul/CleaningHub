@@ -21,6 +21,8 @@ class Dashboard_CH extends React.Component {
             EstadosServicos();
             AvalicoesServicos();
             TaxasServicos();
+            $(".sc-bQdQlF").css("justify-content", "end");
+
         });
 
         function ReturnInstanceFirebase() {
@@ -382,7 +384,7 @@ class Dashboard_CH extends React.Component {
                                             </ul>
                                         </div>
                                     </td>
-                                    <td style={{paddingBottom:"3em"}}>
+                                    <td style={{paddingRight:"1em",paddingBottom:"3em"}}>
                                         <div class="card" style={{ width: "25rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
                                                 Indicadores prestadores
@@ -397,8 +399,6 @@ class Dashboard_CH extends React.Component {
                                             </ul>
                                         </div>
                                     </td>
-                                </tr>
-                                <tr>
                                 <td>
                                         <div class="card" style={{ width: "25rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
@@ -412,6 +412,8 @@ class Dashboard_CH extends React.Component {
                                             </ul>
                                         </div>
                                     </td>
+                                    </tr>
+                                    <tr>
                                     <td>
                                         <div class="card" style={{ width: "25rem" }}>
                                             <div class="card-header" id="cardIdIndicadoresFinanceiros" style={{ fontWeight: "bold" }}>

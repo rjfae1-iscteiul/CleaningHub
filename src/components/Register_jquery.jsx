@@ -45,8 +45,6 @@ class Register extends React.Component {
         }
       });
 
-
-
       $('#btnRegister').click(function () {
 
         const db = ReturnInstanceFirebase();
@@ -256,7 +254,6 @@ class Register extends React.Component {
   render() {
 
     const styleDiv = {
-      paddingTop: "50px",
       textAlign: "center",
       fontFamily: "Calibri",
       paddingLeft: "500px"
@@ -265,18 +262,6 @@ class Register extends React.Component {
     const styleCheckbox = {
       textAlign: "left"
     };
-    const styleTexBox = {
-      height: "24px",
-      fontFamily: "Calibri"
-    }
-    const styleLabel = {
-      fontFamily: "Calibri",
-      fontWeight: "bold"
-    }
-
-    const modalService = {
-      paddingTop: "40px"
-    }
 
     const styleRow = {
       paddingTop: "275px"
@@ -397,7 +382,7 @@ class Register extends React.Component {
                       Registar
                     </Button>
 
-          <div class="modal fade" id="modalMoreDataPrestador" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="modalMoreDataPrestador" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
