@@ -145,6 +145,23 @@ class Services_jquery extends React.Component {
                 });
         });
 
+        function GetUserImageToCloudStorage(prestadorId) 
+        {
+            var storage = firebase.storage();
+        
+            var storageRef = storage.ref();
+
+            var starsRef = storageRef.child('UserImages/' + prestadorId + '.jpg');
+
+            starsRef.getDownloadURL().then(function(url) 
+            {
+                var img = document.getElementById('imageCard');
+                img.src = url;
+              }).catch(function(error) {              
+                alert('erro: ' + error);
+              });
+        }
+
         function InsertRequestAndSendEmail(docUtilizadores, docPrestadores) {
             let randString = Math.random().toString(36).substring(7);
 
@@ -253,7 +270,11 @@ class Services_jquery extends React.Component {
             return firebase.firestore();
         }
 
-        function GetExpandTableWithOtherServices(prestadorId, prestadorName, prestadorDataRegisto) {
+        function GetExpandTableWithOtherServices(prestadorId, prestadorName, prestadorDataRegisto) 
+        {
+        
+            GetUserImageToCloudStorage(prestadorId);
+
             const db = ReturnInstanceFirebase();
 
             db.collection("PedidosServico")
@@ -471,7 +492,7 @@ class Services_jquery extends React.Component {
                 <div class="modal" id="modalMoreInformation" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="card" style={{ width: "22rem" }}>
-                            <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" alt="Card image cap"></img>
+                            <img class="card-img-top" id="imageCard"></img>
                             <div class="card-body">
                                 <h5 class="card-title" id="cardPrestadorNome" style={{ fontWeight: "bold" }}></h5>
 
