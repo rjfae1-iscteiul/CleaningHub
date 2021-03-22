@@ -9,6 +9,8 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
+import emailjs from 'emailjs-com';
+import Logo_Completo from "../resources/Logo_Completo.png";
 
 class MyServices_Utilizador extends React.Component {
     constructor(props) {
@@ -34,12 +36,25 @@ class MyServices_Utilizador extends React.Component {
                     { "data": "tipoServico" },
                     { "data": "tipoPagamento" },
                     { "data": "acoes" },
-                    { "data": "avaliarServico" }
+                    { "data": "avaliarServico" },
+                    { "data": "faturaServico" }
                 ],
+                "oLanguage": {
+                    "sSearch": ""
+                },
                 "order": [[1, 'asc']]
             });
 
+            $('div.dataTables_filter input').addClass('form-control');
+            $("div.dataTables_filter input").attr("placeholder", "Procurar");
+
             PreencherLinhasPrestadores(table);
+
+            $("#example_paginate").css("font-size", "small");
+            $(".dataTables_filter").css("font-size", "small");
+            $(".dataTables_length").css("font-size", "small");
+            $(".dataTables_info").css("font-size", "small");
+            $(".sc-bQdQlF").css("justify-content", "center");
 
             $('#dropDownQuestion1').change(function (e) {
                 $('#dropDownQuestion1').val() < 3 ? $('#divTextAreaQuestion1').show() : $('#divTextAreaQuestion1').hide();
@@ -60,6 +75,10 @@ class MyServices_Utilizador extends React.Component {
             $('#btnSubmitSurvey').click(function (e) {
                 InserirAvaliacao();
                 $('#modalSurveySatisfaction').modal('hide');
+            });
+
+            $('#btnSaveFile').click(function (e) {
+                window.print();
             });
 
         });
@@ -91,15 +110,14 @@ class MyServices_Utilizador extends React.Component {
             return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
         }
 
-        function InserirAvaliacao(serviceId, prestId) 
-        {
+        function InserirAvaliacao(serviceId, prestId) {
             let randString = Math.random().toString(36).substring(7);
 
             const db = ReturnInstanceFirebase();
 
             db.collection("AvaliacaoServico")
-              .doc(randString)
-              .set({
+                .doc(randString)
+                .set({
                     utilizadorId: "g9tgom",
                     prestadorId: prestId,
                     servicoId: serviceId,
@@ -146,13 +164,22 @@ class MyServices_Utilizador extends React.Component {
                                 '<option>Cancelado P/ utilizador</option>' +
                                 '<option>Terminado</option>' +
                                 '</select>',
-                            "avaliarServico": '<button type="button" id="btnAvaliarServico_' + doc.data().numeroServico + '_' + doc.data().prestadorId + '" class="btn btn-light">Avaliar</button>'
+                            "avaliarServico": '<button type="button" id="btnAvaliarServico_' + doc.data().numeroServico + '_' + doc.data().prestadorId + '" class="btn btn-light">Avaliar</button>',
+                            "faturaServico": '<button type="button" id="btnFaturaServico_' + doc.data().numeroServico + '" class="btn btn-light">Fatura</button>'
                         }).draw();
                     });
 
                     $('button[id^="btnAvaliarServico"]').click(function (e) {
-
                         $('#modalSurveySatisfaction').modal('show');
+                    });
+
+                    $('button[id^="btnFaturaServico"]').click(function (e) {
+                        var numeroServico = e.target.id.split('_')[1];
+
+                        DadosParaFatura(numeroServico);
+
+                        $('#modalInvoices').modal('show');
+
                     });
 
                     $('select[id^="actionService_"').change(function (e) {
@@ -176,8 +203,7 @@ class MyServices_Utilizador extends React.Component {
                         if ($('#lblActionService').html() == 'Remarcado' && $('#novaDataHora').val() == '') {
                             alert('Preencha a nova data do serviço');
                         }
-                        else 
-                        {
+                        else {
                             $(numeroServico).attr("disabled", true);
                             AtualizarEstadoDoDocumento(numeroServico.split('_')[1], $('#lblActionService').html());
                             $('#modalConfirmAction').modal('hide');
@@ -189,8 +215,7 @@ class MyServices_Utilizador extends React.Component {
                 });
         }
 
-        function AtualizarEstadoDoDocumento(serviceId, newStatus) 
-        {
+        function AtualizarEstadoDoDocumento(serviceId, newStatus) {
             const db = ReturnInstanceFirebase();
 
             var servicoReference = db.collection("PedidosServico").doc(serviceId);
@@ -198,12 +223,12 @@ class MyServices_Utilizador extends React.Component {
             return servicoReference.update({
                 "estadoUtilizador": newStatus
             })
-            .then(() => {
-                alert("Document successfully updated!");
-            })
-            .catch((error) => {
-                alert("Error update: " + error);
-            });
+                .then(() => {
+                    alert("Document successfully updated!");
+                })
+                .catch((error) => {
+                    alert("Error update: " + error);
+                });
         }
 
         function ReadOnly(status) {
@@ -213,21 +238,67 @@ class MyServices_Utilizador extends React.Component {
         function CheckIsNull(value) {
             return value != null ? value : "";
         }
+
+        function DadosParaFatura(serviceId) {
+            const db = ReturnInstanceFirebase();
+
+            $('#modalInvoices').modal('show');
+
+            db.collection("PedidosServico")
+                .where("numeroServico", "==", serviceId)
+                .get()
+                .then((querySnapshotPedServicos) => 
+                {
+                    querySnapshotPedServicos.forEach((docPedServicos) => 
+                    {
+                        $('#inv_MetodoPagamento').html(docPedServicos.data().tipoPagamento);
+
+                        switch(docPedServicos.data().tipoPagamento) 
+                        {
+                            case "Transferência bancária":
+                                $('#inv_InfoPagamento').html(docPedServicos.data().IBAN);
+                                break;
+                            case "MBWay":
+                                $('#inv_InfoPagamento').html(docPedServicos.data().contactMBWay);
+                                break;
+                            default:
+                                $('#inv_InfoPagamento').html('<span style="font-weight:bold">Número: </span>' + docPedServicos.data().cc_Numero + ' <br/> <span style="font-weight:bold">Validade: </span>' + docPedServicos.data().cc_Validade + ' <br/> <span style="font-weight:bold">Código: </span>' + docPedServicos.data().cc_Codigo);
+                                break;
+                        }
+
+                        $('#inv_Code').html(docPedServicos.data().numeroServico);
+                        $('#inv_Date').html(docPedServicos.data().dataPedido);
+                        $('#inv_PrecoHora').html('20€');
+                        $('#inv_PrecoTotal').html(docPedServicos.data().precoTotal + '€');
+                        $('#inv_TipoServico').html(docPedServicos.data().tipoServico);
+                        $('#inv_DataHoraInicio').html(docPedServicos.data().dataHoraInicio);
+                        $('#inv_DataHoraFim').html(docPedServicos.data().dataHoraFim);
+
+                        db.collection("Utilizadores")
+                        .where("utilizadorId", "==", docPedServicos.data().utilizadorId)
+                        .get()
+                        .then((querySnapshotUtilizadores) => 
+                        {
+                            querySnapshotUtilizadores.forEach((docUti) => 
+                            {
+                                $('#inv_Cli_Nome').html(docUti.data().primeiroNome + ' ' + docUti.data().segundoNome);
+                                $('#inv_Cli_Rua').html(docUti.data().rua);
+                                $('#inv_Cli_CodigoPostal').html(docUti.data().codigoPostal);
+                                $('#inv_Localidade').html(docUti.data().localidade);
+                                $('#inv_Cli_NIF').html('NIF: ' + docUti.data().NIF);
+                            })
+                        });
+
+                    })
+                });
+        }
+
     }
 
     render() {
 
         const styleDiv = {
-            paddingTop: "100px",
             fontFamily: "Calibri"
-        }
-
-        const modalService = {
-            paddingTop: "100px"
-        }
-
-        const map = {
-            height: "100%"
         }
 
         const tbody = {
@@ -235,7 +306,8 @@ class MyServices_Utilizador extends React.Component {
         }
 
         const thead = {
-            fontSize: "smaller"
+            fontSize: "smaller",
+            backgroundColor: "aliceblue"
         }
 
         const labelWithoutBold = {
@@ -252,7 +324,7 @@ class MyServices_Utilizador extends React.Component {
 
                     <div className="MainDiv" style={styleDiv}>
 
-                        <div className="container">
+                        <div className="container" style={{ maxWidth: "100%" }}>
 
                             <table id="tableInfo">
                                 <thead style={thead}>
@@ -268,7 +340,7 @@ class MyServices_Utilizador extends React.Component {
                                         <th>Tipo&nbsp;de&nbsp;Pagamento</th>
                                         <th>Ações&nbsp;do&nbsp;Serviço</th>
                                         <th>Avaliar&nbsp;Serviço</th>
-                                        <th></th>
+                                        <th>Fatura</th>
                                     </tr>
                                 </thead>
                                 <tbody style={tbody}>
@@ -280,7 +352,7 @@ class MyServices_Utilizador extends React.Component {
                         </div>
 
                         {/* Action Service */}
-                        <div class="modal fade" id="modalConfirmAction" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalConfirmAction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -314,7 +386,7 @@ class MyServices_Utilizador extends React.Component {
                         </div >
 
                         {/* Survey */}
-                        <div class="modal fade" id="modalSurveySatisfaction" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalSurveySatisfaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
 
@@ -413,6 +485,96 @@ class MyServices_Utilizador extends React.Component {
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary" id="btnSubmitSurvey">Submeter avaliação</button>
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Invoices */}
+                        <div class="modal fade" id="modalInvoices" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+
+                                    <div class="modal-body">
+
+                                        <div id="invoice" class="invoice-box" style={{ fontFamily: "Calibri" }}>
+                                            <table>
+                                                <tr class="top">
+                                                    <td colspan="2">
+                                                        <table>
+                                                            <tr>
+                                                                <td class="title">
+                                                                    <img src={Logo_Completo} alt="Company logo" style={{ width: "100%", maxWidth: "300px" }} />
+                                                                </td>
+
+                                                                <td>
+                                                                    Fatura Nº: <span id="inv_Code"></span><br />
+									                                Emitida: <span id="inv_Date"></span><br />
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="information">
+                                                    <td colspan="2">
+                                                        <table>
+                                                            <tr>
+                                                                <td style={{ fontFamily: "Calibri" }}>
+                                                                    CleaningHub, S.A.<br />
+									                                ISCTE - Av. das Forças Armadas<br />
+                                                                    1649-026, Lisboa<br />
+                                                                    NIF: 500 00 0000
+                                                                </td>
+
+                                                                <td >
+                                                                    <span id="inv_Cli_Nome" ></span><br />
+                                                                    <span id="inv_Cli_Rua"></span><br />
+                                                                    <span id="inv_Cli_CodigoPostal"></span>, <span id="inv_Localidade"></span><br />
+                                                                    <span id="inv_Cli_NIF"></span><br />
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+
+                                                <tr class="heading">
+                                                    <td>Método de pagamento</td>
+
+                                                    <td></td>
+                                                </tr>
+
+                                                <tr class="details">
+                                                    <td><span id="inv_MetodoPagamento"></span></td>
+
+                                                    <td><span id="inv_InfoPagamento"></span></td>
+                                                </tr>
+
+                                                <tr class="heading">
+                                                    <td>Serviço</td>
+
+                                                    <td>Preço</td>
+                                                </tr>
+
+                                                <tr class="item last">
+                                                    <td><span id="inv_TipoServico"></span> (<span id="inv_DataHoraInicio"></span> - <span id="inv_DataHoraFim"></span>)</td>
+
+                                                    <td><span id="inv_PrecoHora"></span> / hora</td>
+                                                </tr>
+
+                                                <tr class="total">
+                                                    <td></td>
+
+                                                    <td>Total: <span id="inv_PrecoTotal"></span></td>
+                                                </tr>
+                                            </table>
+
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="btnSaveFile">Gravar em PDF</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

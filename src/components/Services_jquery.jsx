@@ -28,6 +28,7 @@ class Services_jquery extends React.Component {
     componentDidMount() {
         $(document).ready(function () {
 
+
             var table = $('#example').DataTable({
                 "columns": [
                     {
@@ -46,7 +47,9 @@ class Services_jquery extends React.Component {
                         "data": "prestadorDataNascimento",
                         visible: false
                     },
-                    { "data": "nacionalidade" },
+                    { 
+                        "data": "nacionalidade"
+                    },
                     { "data": "localidade" },
                     { "data": "rating" },
                     { "data": "distance" },
@@ -57,8 +60,14 @@ class Services_jquery extends React.Component {
                         "orderable": false
                     }
                 ],
+                "oLanguage": {
+                    "sSearch": ""
+                },
                 "order": [[1, 'asc']]
             });
+
+            $('div.dataTables_filter input').addClass('form-control');
+            $("div.dataTables_filter input").attr("placeholder", "Procurar");
 
             PreencherLinhasPrestadores(table);
 
@@ -95,6 +104,13 @@ class Services_jquery extends React.Component {
                 }
             });
 
+            $("#example_paginate").css("font-size", "small");
+            $(".dataTables_filter").css("font-size", "small");
+            $(".dataTables_length").css("font-size", "small");
+            $(".dataTables_info").css("font-size", "small");
+            $(".sc-bQdQlF").css("justify-content", "center");
+            $(".cbcJKv").css("width", "95%");
+
             $('#hours').val(1);
 
             $('#hours').change(function () {
@@ -128,6 +144,23 @@ class Services_jquery extends React.Component {
                     });
                 });
         });
+
+        function GetUserImageToCloudStorage(prestadorId) 
+        {
+            var storage = firebase.storage();
+        
+            var storageRef = storage.ref();
+
+            var starsRef = storageRef.child('UserImages/' + prestadorId + '.jpg');
+
+            starsRef.getDownloadURL().then(function(url) 
+            {
+                var img = document.getElementById('imageCard');
+                img.src = url;
+              }).catch(function(error) {              
+                alert('erro: ' + error);
+              });
+        }
 
         function InsertRequestAndSendEmail(docUtilizadores, docPrestadores) {
             let randString = Math.random().toString(36).substring(7);
@@ -237,7 +270,11 @@ class Services_jquery extends React.Component {
             return firebase.firestore();
         }
 
-        function GetExpandTableWithOtherServices(prestadorId, prestadorName, prestadorDataRegisto) {
+        function GetExpandTableWithOtherServices(prestadorId, prestadorName, prestadorDataRegisto) 
+        {
+        
+            GetUserImageToCloudStorage(prestadorId);
+
             const db = ReturnInstanceFirebase();
 
             db.collection("PedidosServico")
@@ -308,13 +345,13 @@ class Services_jquery extends React.Component {
     render() {
 
         const styleDiv = {
-            paddingTop: "100px",
-            paddingLeft: "225px",
-            fontFamily: "Calibri"
+            fontFamily: "Calibri",
+            paddingTop: "7%"
         }
 
-        const modalService = {
-            paddingTop: "40px"
+        const modalRequestDiv = {
+            fontFamily: "Calibri",
+            paddingTop: "1%"
         }
 
         const tbody = {
@@ -322,7 +359,8 @@ class Services_jquery extends React.Component {
         }
 
         const thead = {
-            fontSize: "smaller"
+            fontSize: "smaller",
+            backgroundColor: "aliceblue"
         }
 
         return (
@@ -353,15 +391,10 @@ class Services_jquery extends React.Component {
                     </table>
 
                 </div>
-                <div class="modal fade" id="exampleModal" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModal" style={{modalRequestDiv}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Pedido de serviço</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
+
                             <div class="modal-body">
 
                                 <div class="form-group">
@@ -456,10 +489,10 @@ class Services_jquery extends React.Component {
                     </div>
                 </div >
 
-                <div class="modal" id="modalMoreInformation" style={modalService} tabindex="-1" role="dialog">
+                <div class="modal" id="modalMoreInformation" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="card" style={{ width: "22rem" }}>
-                            <img class="card-img-top" src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg" alt="Card image cap"></img>
+                            <img class="card-img-top" id="imageCard"></img>
                             <div class="card-body">
                                 <h5 class="card-title" id="cardPrestadorNome" style={{ fontWeight: "bold" }}></h5>
 

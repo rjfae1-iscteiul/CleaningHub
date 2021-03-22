@@ -12,13 +12,10 @@ import Services from "./pages/ServicesPage";
 import MyServices_Prestador from "./pages/MyServices_PrestadorPage";
 import MyServices_Utilizador from "./pages/MyServices_UtilizadorPage";
 import Dashboard_CH from "./pages/Dashboard_CHPage";
-
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import EditProfile from "./pages/EditProfile";
 import firebase from 'firebase';
-import 'firebase/firestore';
-
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,21 +37,21 @@ export default function App() {
     <Wrapper>
       <BrowserRouter>
         <Header />
-          <AppBody>
-            <Route path="/" exact component={Home}/>
-            <Route path="/AboutUs" exact component={About}/>
-            <Route path="/Offers" exact component={Offers}/>
-            <Route path="/Timeline" exact component={Timeline}/>
-            <Route path="/Safety" exact component={Safety}/>
-            <Route path="/Support" exact component={Support}/>
-            <Route path="/Services" exact component={Services}/>
-            <Route path="/MyServices_Prestador" exact component={MyServices_Prestador}/>
-            <Route path="/MyServices_Utilizador" exact component={MyServices_Utilizador}/>
-            <Route path="/Dashboard_CH" exact component={Dashboard_CH}/>
-            <Route path="/Login" exact component={Login} />
-            <Route path="/Register" exact component={Register} />
-            <Route path="/EditProfile" exact component={EditProfile} />
-         </AppBody>
+        <AppBody>
+          <Route path="/" exact component={Home} />
+          <Route path="/AboutUs" exact component={About} />
+          <Route path="/Offers" exact component={Offers} />
+          <Route path="/Timeline" exact component={Timeline} />
+          <Route path="/Safety" exact component={Safety} />
+          <Route path="/Support" exact component={Support} />
+          <Route path="/Services" exact component={Services} />
+          <Route path="/MyServices_Prestador" exact component={MyServices_Prestador} />
+          <Route path="/MyServices_Utilizador" exact component={MyServices_Utilizador} />
+          <Route path="/Dashboard_CH" exact component={Dashboard_CH} />
+          <Route path="/Login" exact component={Login} />
+          <Route path="/Register" exact component={Register} />
+          <Route path="/EditProfile" exact component={EditProfile} />
+        </AppBody>
       </BrowserRouter>
     </Wrapper>
   );

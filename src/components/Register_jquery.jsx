@@ -1,10 +1,25 @@
 import React from "react"
 import firebase from 'firebase';
+import styled from "styled-components";
 import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
 import 'bootstrap';
 import emailjs from 'emailjs-com';
+import { Helmet } from 'react-helmet';
+import Logo_Completo from "../resources/Logo_Completo.png";
+
+
+const S = {
+  StyledFirstPic: styled.img`
+      position: absolute;
+      top: 5%;
+      left: 37%;
+      max-width: 18%;
+      max-height: 30vh;
+      border-radius: 5%;
+    `,
+};
 
 class Register extends React.Component {
   constructor() {
@@ -16,21 +31,12 @@ class Register extends React.Component {
 
   componentDidMount() {
 
+    var files = [];
+
     $(document).ready(function () {
       $('#chbPrestador').click(function () {
         $('#modalMoreDataPrestador').modal('show');
       });
-
-      $('#saveDataPrestador').click(function () {
-        if (Prestador_CheckInformation()) {
-          $('#modalMoreDataPrestador').modal('hide');
-        }
-        else {
-          alert('Todos os campos (excepto o IBAN) são de preenchimento obrigatório');
-        }
-      });
-
-
 
       $('#btnRegister').click(function () {
 
@@ -41,6 +47,9 @@ class Register extends React.Component {
             alert("A password não se encontra igual nas duas opções.");
           }
           else {
+
+            let randString = Math.random().toString(36).substring(7);
+
             if ($('#chbPrestador').prop("checked")) {
               db.collection("Prestadores")
                 .where("email", "==", $('#idTxbEmail').val())
@@ -48,10 +57,15 @@ class Register extends React.Component {
                 .then(querySnapshot => {
                   alert(querySnapshot.size);
 
-                  if (querySnapshot.size == 0) {
-                    AddPrestadorInCollectionFirebase();
+                  if (querySnapshot.size == 0) 
+                  {
+                    AddPrestadorInCollectionFirebase(randString);
 
                     CreateUserInAuthFirebase();
+
+                    SendEmailRegister($('#idTxbPrimeiroNome').val(), $('#idTxbEmail').val());
+
+                    SetImageInCloudFirebase(files, randString);
 
                     alert("Utilizador criado.");
                   } else {
@@ -69,13 +83,14 @@ class Register extends React.Component {
                 .then(querySnapshot => {
                   alert(querySnapshot.size);
 
-                  if (querySnapshot.size == 0) {
-                    AddUtilizadorInCollectionFirebase();
+                  if (querySnapshot.size == 0) 
+                  {
+                    AddUtilizadorInCollectionFirebase(randString);
 
                     CreateUserInAuthFirebase();
 
                     SendEmailRegister($('#idTxbPrimeiroNome').val(), $('#idTxbEmail').val());
-
+                    
                     alert("Utilizador criado");
                   } else {
                     alert("Utilizador já existe.");
@@ -90,6 +105,21 @@ class Register extends React.Component {
         else {
           alert("Por favor preencha todos os campos.");
         }
+      });
+
+      $('#saveDataPrestador').click(function () {
+        if (Prestador_CheckInformation()) {
+          $('#modalMoreDataPrestador').modal('hide');
+          alert(files.length);
+        }
+        else {
+          alert('Todos os campos (excepto o IBAN) são de preenchimento obrigatório');
+        }
+      });
+
+      $('#importPrestadorPhoto').change(function (e)
+      {
+        files = e.target.files;
       });
 
     });
@@ -176,8 +206,7 @@ class Register extends React.Component {
         });
     }
 
-    function AddUtilizadorInCollectionFirebase() {
-      let randString = Math.random().toString(36).substring(7);
+    function AddUtilizadorInCollectionFirebase(randString) {
 
       const db = ReturnInstanceFirebase();
 
@@ -202,13 +231,30 @@ class Register extends React.Component {
         });
     }
 
+    function SetImageInCloudFirebase(files, prestadorId) 
+    {
+      ReturnInstanceFirebase();
+
+      try 
+      {
+        var storage = firebase.storage();
+
+        var storageRef = storage.ref();
+
+        storageRef.child('UserImages/' + prestadorId + '.jpg').put(files[0]);
+      } 
+      catch (error) 
+      {
+        alert(error);
+      }
+    }
+
     function GetTimeNowStringFormat() {
       var m = new Date();
       return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
     }
 
-    function AddPrestadorInCollectionFirebase() {
-      let randString = Math.random().toString(36).substring(7);
+    function AddPrestadorInCollectionFirebase(randString) {
 
       const db = ReturnInstanceFirebase();
 
@@ -241,86 +287,84 @@ class Register extends React.Component {
   render() {
 
     const styleDiv = {
-      paddingTop: "50px",
       textAlign: "center",
       fontFamily: "Calibri",
-      paddingLeft: "400px"
+      paddingLeft: "500px"
     };
 
     const styleCheckbox = {
       textAlign: "left"
     };
-    const styleTexBox = {
-      height: "24px",
-      fontFamily: "Calibri"
-    }
-    const styleLabel = {
-      fontFamily: "Calibri",
-      fontWeight: "bold"
-    }
 
-    const modalService = {
-      paddingTop: "40px"
+    const styleRow = {
+      paddingTop: "275px"
     }
-
     return (
 
 
       <div style={styleDiv} className="Register">
+        <Helmet>
+          <style>{'body { background-color: #7CD4EA; }'}</style>
+        </Helmet>
 
 
         <form>
+          <Form.Group size="lg" >
+            <S.StyledFirstPic src={Logo_Completo} alt="" />
+            <div class="form-row" style={styleRow}>
+              <div class="col">
 
-          <div class="form-row">
-            <div class="col">
+                <div class="form-group" style={styleCheckbox}>
 
-              <div class="form-group" style={styleCheckbox}>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="groupChbTipo" id="chbPrestador"></input>
-                  <label>Prestador</label>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="groupChbTipo" id="chbPrestador"></input>
+                    <label>Prestador</label>
+
+                  </div>
+
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="groupChbTipo" id="chbUtilizador"></input>
+                    <label>Utilizador</label>
+                  </div>
                 </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="groupChbTipo" id="chbUtilizador"></input>
-                  <label>Utilizador</label>
+
+
+                <div class="form-group">
+                  <label>Primeiro Nome</label>
+                  <input type="text" class="form-control" id="idTxbPrimeiroNome" ></input>
+                </div>
+
+                <div class="form-group">
+                  <label>Data Nascimento</label>
+                  <input type="date" class="form-control" id="idTxbDataNascimento" ></input>
+                </div>
+
+              </div>
+              <div class="col">
+
+                <div class="form-group" style={styleCheckbox}>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="groupChbGenero" id="chbMasculino"></input>
+                    <label>Masculino</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="groupChbGenero" id="chbFeminino"></input>
+                    <label>Feminino</label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Segundo Nome</label>
+                  <input type="text" class="form-control" id="idTxbSegundoNome" ></input>
+                </div>
+
+                <div class="form-group">
+                  <label>Nacionalidade</label>
+                  <input type="text" class="form-control" id="idTxbNacionalidade" ></input>
                 </div>
               </div>
-
-
-              <div class="form-group">
-                <label>Primeiro Nome</label>
-                <input type="text" class="form-control" id="idTxbPrimeiroNome" ></input>
-              </div>
-
-              <div class="form-group">
-                <label>Data Nascimento</label>
-                <input type="date" class="form-control" id="idTxbDataNascimento" ></input>
-              </div>
-
             </div>
-            <div class="col">
-
-              <div class="form-group" style={styleCheckbox}>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="groupChbGenero" id="chbMasculino"></input>
-                  <label>Masculino</label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="groupChbGenero" id="chbFeminino"></input>
-                  <label>Feminino</label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Segundo Nome</label>
-                <input type="text" class="form-control" id="idTxbSegundoNome" ></input>
-              </div>
-
-              <div class="form-group">
-                <label>Nacionalidade</label>
-                <input type="text" class="form-control" id="idTxbNacionalidade" ></input>
-              </div>
-            </div>
-          </div>
+          </Form.Group>
 
           <div class="form-group">
             <label>Rua</label>
@@ -366,9 +410,12 @@ class Register extends React.Component {
             </div>
           </div>
 
-          <button type="button" class="btn btn-primary" id="btnRegister">Registar</button>
+          {/* <button type="button" class="btn btn-primary" id="btnRegister">Registar</button> */}
+          <button type="button" id="btnRegister" style={{ background: '#BACA12', color: '#000' }}>
+            Registar
+                    </button>
 
-          <div class="modal fade" id="modalMoreDataPrestador" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="modalMoreDataPrestador" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
@@ -405,6 +452,11 @@ class Register extends React.Component {
                         <input type="number" class="form-control" id="idTxbPriceWithProducts" ></input>
                       </div>
                     </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label>Importar Fotografia</label>
+                    <input type="file" class="form-control-file" id="importPrestadorPhoto"></input>
                   </div>
 
                   <div class="modal-footer">

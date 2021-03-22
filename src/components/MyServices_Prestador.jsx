@@ -54,10 +54,24 @@ class MyServices_Prestador extends React.Component {
                     { "data": "acoes" },
                     { "data": "obterCoordenadas" }
                 ],
+                "oLanguage": {
+                    "sSearch": ""
+                },
                 "order": [[1, 'asc']]
             });
 
+            $('div.dataTables_filter input').addClass('form-control');
+            $("div.dataTables_filter input").attr("placeholder", "Procurar");
+
             PreencherLinhasPrestadores(table);
+
+            $("#example_paginate").css("font-size", "small");
+            $(".dataTables_filter").css("font-size", "small");
+            $(".dataTables_length").css("font-size", "small");
+            $(".dataTables_info").css("font-size", "small");
+            $(".sc-bQdQlF").css("justify-content", "center");
+            $(".sc-bQdQlF").css("width", "85%");
+
         });
 
         function ReturnInstanceFirebase() {
@@ -214,16 +228,7 @@ class MyServices_Prestador extends React.Component {
     render() {
 
         const styleDiv = {
-            paddingTop: "100px",
             fontFamily: "Calibri"
-        }
-
-        const modalService = {
-            paddingTop: "40px"
-        }
-
-        const map = {
-            height: "100%"
         }
 
         const tbody = {
@@ -231,7 +236,8 @@ class MyServices_Prestador extends React.Component {
         }
 
         const thead = {
-            fontSize: "smaller"
+            fontSize: "smaller",
+            backgroundColor: "aliceblue"
         }
 
         const labelWithoutBold = {
@@ -248,7 +254,7 @@ class MyServices_Prestador extends React.Component {
 
                     <div className="MainDiv" style={styleDiv}>
 
-                        <div className="container">
+                        <div className="container" style={{maxWidth:"100%"}}>
 
                             <table id="tableInfo">
                                 <thead style={thead}>
@@ -276,7 +282,7 @@ class MyServices_Prestador extends React.Component {
                         </div>
 
                         {/* Google Maps */}
-                        <div class="modal fade" id="modalGoogleMaps" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalGoogleMaps" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
 
@@ -325,7 +331,7 @@ class MyServices_Prestador extends React.Component {
                         </div >
 
                         {/* Action Service */}
-                        <div class="modal fade" id="modalConfirmAction" style={modalService} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalConfirmAction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">

@@ -9,22 +9,20 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
- 
-class Dashboard_CH extends React.Component {
-    constructor(props) {
-        super(props)
 
-        this.state = {
-        }
-    }
+class Dashboard_CH extends React.Component {
 
     componentDidMount() {
 
         $(document).ready(function () {
-
             NumeroUtilizadores();
             NumeroPrestadores();
-            NumeroServicos();
+            NumeroEPagamentosServicos();
+            EstadosServicos();
+            AvalicoesServicos();
+            TaxasServicos();
+            $(".sc-bQdQlF").css("justify-content", "end");
+
         });
 
         function ReturnInstanceFirebase() {
@@ -49,11 +47,6 @@ class Dashboard_CH extends React.Component {
             return firebase.firestore();
         }
 
-        function GetTimeNowStringFormat() {
-            var m = new Date();
-            return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
-        }
-
         function NumeroUtilizadores() {
 
             const db = ReturnInstanceFirebase();
@@ -61,8 +54,8 @@ class Dashboard_CH extends React.Component {
             db.collection("Utilizadores")
                 .get()
                 .then((querySnapshot) => {
-                    var label = $('#indicator1').html();
-                    $('#indicator1').html(label + querySnapshot.size);
+                    var label = $('#ind_ger_indicator1').html();
+                    $('#ind_ger_indicator1').html(label + querySnapshot.size);
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
@@ -76,15 +69,15 @@ class Dashboard_CH extends React.Component {
             db.collection("Utilizadores")
                 .get()
                 .then((querySnapshot) => {
-                    var label = $('#indicator2').html();
-                    $('#indicator2').html(label + querySnapshot.size);
+                    var label = $('#ind_ger_indicator1').html();
+                    $('#ind_ger_indicator1').html(label + ' / ' + querySnapshot.size);
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
                 });
         }
 
-        function NumeroServicos() {
+        function NumeroEPagamentosServicos() {
 
             const db = ReturnInstanceFirebase();
 
@@ -95,8 +88,8 @@ class Dashboard_CH extends React.Component {
                     var mbway = 0;
                     var cc = 0;
 
-                    var label = $('#indicator3').html();
-                    $('#indicator3').html(label + querySnapshot.size);
+                    var label2 = $('#ind_ger_indicator2').html();
+                    $('#ind_ger_indicator2').html(label2 + querySnapshot.size);
 
                     querySnapshot.forEach((doc) => {
                         switch (doc.data().tipoPagamento) {
@@ -114,21 +107,211 @@ class Dashboard_CH extends React.Component {
                         }
                     })
 
-                    var label8 = $('#indicator8').html();
-                    $('#indicator8').html(label8 + iban);
+                    var label3 = $('#ind_ger_indicator3').html();
+                    $('#ind_ger_indicator3').html(label3 + iban + ' / ' + ((iban/querySnapshot.size)*100).toFixed(2) + '%');
 
-                    var label9 = $('#indicator9').html();
-                    $('#indicator9').html(label9 + mbway);
+                    var label4 = $('#ind_ger_indicator4').html();
+                    $('#ind_ger_indicator4').html(label4 + mbway + ' / ' + ((mbway/querySnapshot.size)*100).toFixed(2) + '%');
 
-                    var label10 = $('#indicator10').html();
-                    $('#indicator10').html(label10 + cc);
+                    var label5 = $('#ind_ger_indicator5').html();
+                    $('#ind_ger_indicator5').html(label5 + cc + ' / ' + ((cc/querySnapshot.size)*100).toFixed(2) + '%');
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
                 });
         }
-        function CheckIsNull(value) {
-            return value != null ? value : "";
+
+        function EstadosServicos() {
+
+            const db = ReturnInstanceFirebase();
+
+            db.collection("PedidosServico")
+                .get()
+                .then((querySnapshot) => 
+                {
+                    
+                    var uti_remarcado = 0;
+                    var uti_canceladoUtilizador = 0;
+                    var uti_canceladoPrestador = 0;
+                    var uti_terminado = 0;
+                    var uti_semAcao = 0;
+
+                    var pre_remarcado = 0;
+                    var pre_canceladoUtilizador = 0;
+                    var pre_canceladoPrestador = 0;
+                    var pre_terminado = 0;
+                    var pre_semAcao = 0;
+
+                    querySnapshot.forEach((doc) => 
+                    {
+                        switch (doc.data().estadoUtilizador) 
+                        {
+                            case "Remarcado":
+                                uti_remarcado++;
+                                break;
+                            case "Cancelado P/ utilizador":
+                                uti_canceladoUtilizador++;
+                                break;
+                            case "Cancelado P/ prestador":
+                                uti_canceladoPrestador++;
+                                break;
+                            case "Terminado":
+                                uti_terminado++;
+                                break;
+                            default:
+                                uti_semAcao++;
+                                break;
+                        }
+
+                        switch (doc.data().estadoPrestador) 
+                        {
+                            case "Remarcado":
+                                pre_remarcado++;
+                                break;
+                            case "Cancelado P/ utilizador":
+                                pre_canceladoUtilizador++;
+                                break;
+                            case "Cancelado P/ prestador":
+                                pre_canceladoPrestador++;
+                                break;
+                            case "Terminado":
+                                pre_terminado++;
+                                break;
+                            default:
+                                pre_semAcao++;
+                                break;
+                        }
+                    })
+
+                    /* UTILIZADOR */
+                    var label_uti_1 = $('#ind_uti_indicador1').html();
+                    $('#ind_uti_indicador1').html(label_uti_1 + uti_remarcado + ' / ' + ((uti_remarcado/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    var label_uti_2 = $('#ind_uti_indicador2').html();
+                    $('#ind_uti_indicador2').html(label_uti_2 + uti_canceladoUtilizador + ' / ' + ((uti_canceladoUtilizador/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    var label_uti_3 = $('#ind_uti_indicador3').html();
+                    $('#ind_uti_indicador3').html(label_uti_3 + uti_canceladoPrestador + ' / ' + ((uti_canceladoPrestador/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    var label_uti_4 = $('#ind_uti_indicador4').html();
+                    $('#ind_uti_indicador4').html(label_uti_4 + uti_terminado + ' / ' + ((uti_terminado/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    var label_uti_5 = $('#ind_uti_indicador5').html();
+                    $('#ind_uti_indicador5').html(label_uti_5 + uti_semAcao + ' / ' + ((uti_semAcao/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    /* PRESTADOR */
+                    var label_pre_1 = $('#ind_pre_indicador1').html();
+                    $('#ind_pre_indicador1').html(label_pre_1 + pre_remarcado + ' / ' + ((pre_remarcado/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    var label_pre_2 = $('#ind_pre_indicador2').html();
+                    $('#ind_pre_indicador2').html(label_pre_2 + pre_canceladoUtilizador + ' / ' + ((pre_canceladoUtilizador/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    var label_pre_3 = $('#ind_pre_indicador3').html();
+                    $('#ind_pre_indicador3').html(label_pre_3 + pre_canceladoPrestador + ' / ' + ((pre_canceladoPrestador/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    var label_pre_4 = $('#ind_pre_indicador4').html();
+                    $('#ind_pre_indicador4').html(label_pre_4 + pre_terminado + ' / ' + ((pre_terminado/querySnapshot.size)*100).toFixed(2) + '%');
+
+                    var label_pre_5 = $('#ind_pre_indicador5').html();
+                    $('#ind_pre_indicador5').html(label_pre_5 + pre_semAcao + ' / ' + ((pre_semAcao/querySnapshot.size)*100).toFixed(2) + '%');
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+        }
+
+        function AvalicoesServicos() {
+
+            const db = ReturnInstanceFirebase();
+
+            db.collection("AvaliacaoServico")
+                .get()
+                .then((querySnapshot) => 
+                {
+                    var questao1 = 0;
+                    var questao2 = 0;
+                    var questao3 = 0;
+                    var questao4 = 0;
+
+                    querySnapshot.forEach((doc) => 
+                    {
+                        questao1 += parseInt(doc.data().valorPrimeiraQuestao);
+                        questao2 += parseInt(doc.data().valorSegundaQuestao);
+                        questao3 += parseInt(doc.data().valorTerceiraQuestao);
+                        questao4 += parseInt(doc.data().valorQuartaQuestao);
+                    })
+
+                    var label1 = $('#ind_questao1').html();
+                    $('#ind_questao1').html(label1 + (questao1/querySnapshot.size));
+
+                    var label2 = $('#ind_questao2').html();
+                    $('#ind_questao2').html(label2 + (questao2/querySnapshot.size));
+
+                    var label3 = $('#ind_questao3').html();
+                    $('#ind_questao3').html(label3 + (questao3/querySnapshot.size));
+
+                    var label4 = $('#ind_questao4').html();
+                    $('#ind_questao4').html(label4 + (questao4/querySnapshot.size));
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+        }
+
+        function TaxasServicos() 
+        {
+            const db = ReturnInstanceFirebase();
+
+            db.collection("PedidosServico")
+                .get()
+                .then((querySnapshot) => 
+                {
+                    var taxa1 = 0;
+                    var taxa2 = 0;
+                    var taxa3 = 0;
+                    var taxa4 = 0;
+
+                    querySnapshot.forEach((doc) => 
+                    {
+                        if(parseInt(doc.data().precoTotal) < 100) 
+                        {
+                            taxa1 += parseInt(doc.data().precoTotal);
+                        } 
+                        else if(parseInt(doc.data().precoTotal) >= 100 && parseInt(doc.data().precoTotal) <= 200) 
+                        {
+                            taxa2 += parseInt(doc.data().precoTotal);
+                        } 
+                        else if(parseInt(doc.data().precoTotal) >= 200 && parseInt(doc.data().precoTotal) <= 300) 
+                        {
+                            taxa3 += parseInt(doc.data().precoTotal);
+                        } 
+                        else 
+                        {
+                            taxa4 += parseInt(doc.data().precoTotal);
+                        }
+                    })
+
+                    var label1 = $('#ind_taxa1').html();
+                    $('#ind_taxa1').html(label1 + taxa1 + '€ / ' + (taxa1*0.075) + '€');
+
+                    var label2 = $('#ind_taxa2').html();
+                    $('#ind_taxa2').html(label2 + taxa2 + '€ / ' + (taxa2*0.10) + '€');
+
+                    var label3 = $('#ind_taxa3').html();
+                    $('#ind_taxa3').html(label3 + taxa3 + '€ / ' + (taxa3*0.125) + '€');
+
+                    var label4 = $('#ind_taxa4').html();
+                    $('#ind_taxa4').html(label4 + taxa4 + '€ / ' + (taxa4*0.15) + '€');
+
+                    var totalTaxas = (taxa1*0.075) + (taxa2*0.10) + (taxa3*0.125) + (taxa4*0.15);
+
+                    var labelHeader = $('#cardIdIndicadoresFinanceiros').html();
+                    $('#cardIdIndicadoresFinanceiros').html(labelHeader + ' - Total de taxas: ' + totalTaxas + '€');
+
+                })
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
         }
     }
 
@@ -173,44 +356,74 @@ class Dashboard_CH extends React.Component {
 
                             <table>
                                 <tr>
-                                    <td>
+                                    <td style={{paddingRight:"1em",paddingBottom:"3em"}}>
                                         <div class="card" style={{ width: "25rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
                                                 Indicadores gerais
-                                </div>
+                                            </div>
                                             <ul class="list-group list-group-flush">
-                                                <li class="list-group-item" id="indicator1">Número de utilizadores:&nbsp;</li>
-                                                <li class="list-group-item" id="indicator2">Número de prestadores:&nbsp;</li>
-                                                <li class="list-group-item" id="indicator3">Número de serviços:&nbsp;</li>
-                                                <li class="list-group-item" id="indicator8">Número de pagamentos com IBAN:&nbsp;</li>
-                                                <li class="list-group-item" id="indicator9">Número de pagamentos com MbWay:&nbsp;</li>
-                                                <li class="list-group-item" id="indicator10">Número de pagamentos com Cartão de Crédito:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_ger_indicator1">Número de utilizadores/prestadores:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_ger_indicator2">Número de serviços:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_ger_indicator3">Número de pagamentos com IBAN:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_ger_indicator4">Número de pagamentos com MbWay:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_ger_indicator5">Número de pagamentos com CC:&nbsp;</li>
                                             </ul>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td style={{paddingRight:"1em", paddingBottom:"3em"}}>
                                         <div class="card" style={{ width: "25rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
                                                 Indicadores utilizadores
-                                </div>
+                                            </div>
                                             <ul class="list-group list-group-flush">
-                                                <li class="list-group-item">Número de serviços remarcados:&nbsp;</li>
-                                                <li class="list-group-item">Número de serviços cancelados pelo utilizador:&nbsp;</li>
-                                                <li class="list-group-item">Número de serviços cancelados pelo prestador:&nbsp;</li>
-                                                <li class="list-group-item">Número de serviços terminados:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_uti_indicador1">Número de serviços remarcados:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_uti_indicador2">Número de serviços cancelados P/ utilizador:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_uti_indicador3">Número de serviços cancelados P/ prestador:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_uti_indicador4">Número de serviços terminados:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_uti_indicador5">Número de serviços sem ação:&nbsp;</li>
                                             </ul>
                                         </div>
                                     </td>
-                                    <td>
+                                    <td style={{paddingRight:"1em",paddingBottom:"3em"}}>
                                         <div class="card" style={{ width: "25rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
                                                 Indicadores prestadores
                                 </div>
                                             <ul class="list-group list-group-flush">
-                                                <li class="list-group-item">Número de serviços remarcados:&nbsp;</li>
-                                                <li class="list-group-item">Número de serviços cancelados pelo utilizador:&nbsp;</li>
-                                                <li class="list-group-item">Número de serviços cancelados pelo prestador:&nbsp;</li>
-                                                <li class="list-group-item">Número de serviços terminados:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_pre_indicador1">Número de serviços remarcados:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_pre_indicador2">Número de serviços cancelados P/ utilizador:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_pre_indicador3">Número de serviços cancelados P/ prestador:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_pre_indicador4">Número de serviços terminados:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_pre_indicador5">Número de serviços sem ação:&nbsp;</li>
+
+                                            </ul>
+                                        </div>
+                                    </td>
+                                <td>
+                                        <div class="card" style={{ width: "25rem" }}>
+                                            <div class="card-header" style={{ fontWeight: "bold" }}>
+                                                Avaliação dos utilizadores sobre prestadores (0 a 5)
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" id="ind_questao1">Questão 1 - Média:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_questao2">Questão 2 - Média:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_questao3">Questão 3 - Média:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_questao4">Questão 4 - Média:&nbsp;</li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                    <tr>
+                                    <td>
+                                        <div class="card" style={{ width: "25rem" }}>
+                                            <div class="card-header" id="cardIdIndicadoresFinanceiros" style={{ fontWeight: "bold" }}>
+                                                Indicadores financeiros
+                                            </div>
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item" id="ind_taxa1">(Taxa 7,5%) Serviços menos 100€:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_taxa2">(Taxa 10%) Serviços dos 100€ e os 200€:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_taxa3">(Taxa 12.5%) Serviços dos 200€ e os 300€:&nbsp;</li>
+                                                <li class="list-group-item" id="ind_taxa4">(Taxa 15%) Serviços superiores a 300€:&nbsp;</li>
                                             </ul>
                                         </div>
                                     </td>
