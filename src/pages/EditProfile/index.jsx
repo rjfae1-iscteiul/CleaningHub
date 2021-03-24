@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import EditProfile from "../../components/EditProfile.jsx";
+import EditProfile from "../../components/EditProfile";
 import Header from "../../components/common/header"
 
 export default function Home() {

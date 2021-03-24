@@ -214,6 +214,12 @@ export default function Header() {
         >
           Dashboard
         </S.ButtonStyle>
+        <S.ButtonStyle
+           component={Link}
+           to="/EditProfile"
+        >
+          Editar Perfil
+        </S.ButtonStyle>
         <S.LoginButton
           disableElevation
           variant="contained"

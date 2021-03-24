@@ -48,9 +48,9 @@ export default function App() {
           <Route path="/MyServices_Prestador" exact component={MyServices_Prestador} />
           <Route path="/MyServices_Utilizador" exact component={MyServices_Utilizador} />
           <Route path="/Dashboard_CH" exact component={Dashboard_CH} />
+          <Route path="/EditProfile" exact component={EditProfile} />
           <Route path="/Login" exact component={Login} />
           <Route path="/Register" exact component={Register} />
-          <Route path="/EditProfile" exact component={EditProfile} />
         </AppBody>
       </BrowserRouter>
     </Wrapper>

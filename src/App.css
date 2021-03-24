@@ -96,8 +96,8 @@ tr.shown td.details-control {
   left: 50%;
   width: 18px;
   height: 18px;
-  background-color: #000;
-  border: 2px solid #fff;
+  background-color: #60f591;
+  border: 2px solid rgb(179, 240, 36);
   border-radius: 100%;
   user-select: none;
   transform: translate(-50%, -50%);
@@ -108,22 +108,14 @@ tr.shown td.details-control {
   width: 30px;
   height: 30px;
   border-radius: 50% 50% 50% 0;
-  background: #717677;
+  background: #ffffff;
   position: absolute;
   transform: rotate(-45deg);
   left: 50%;
   top: 50%;
   margin: -20px 0 0 -20px;
 }
-.pin:after {
-  content: "";
-  width: 14px;
-  height: 14px;
-  margin: 8px 0 0 8px;
-  background: #e6e6e6;
-  position: absolute;
-  border-radius: 50%;
-}
+
 
 .bounce {
   animation-name: bounce;
@@ -132,7 +124,7 @@ tr.shown td.details-control {
 }
 
 .pulse {
-  background: #d6d4d4;
+  background: #ffffff;
   border-radius: 50%;
   height: 14px;
   width: 14px;
@@ -153,7 +145,7 @@ tr.shown td.details-control {
   animation: pulsate 1s ease-out;
   animation-iteration-count: infinite;
   opacity: 0;
-  box-shadow: 0 0 1px 2px #7b8385;
+  box-shadow: 0 0 1px 2px #ffffff;
   animation-delay: 1.1s;
 }
 
@@ -192,7 +184,6 @@ tr.shown td.details-control {
     transform: translateY(0) rotate(-45deg);
   }
 }
-
 
 .invoice-box {
   max-width: 800px;

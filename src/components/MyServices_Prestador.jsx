@@ -303,7 +303,7 @@ class MyServices_Prestador extends React.Component {
                                                 lat={59.95}
                                                 lng={30.33}
                                                 name="My Marker"
-                                                color="gray"
+                                                color="#55b3e9"
                                             />
 
                                             </GoogleMapReact>
