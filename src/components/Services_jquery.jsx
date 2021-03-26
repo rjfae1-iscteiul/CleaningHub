@@ -9,6 +9,8 @@ import $ from 'jquery';
 import 'bootstrap';
 import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import emailjs from 'emailjs-com';
+import Logo_Facebook from "../resources/facebook.png";
+
 
 class Services_jquery extends React.Component {
     constructor(props) {
@@ -507,6 +509,13 @@ class Services_jquery extends React.Component {
                                         <li class="list-group-item" id="cardTotalServicos"></li>
                                         <li class="list-group-item" id="cardPrecoMedio"></li>
                                     </ul>
+                                </div>
+
+                                <br/>
+                                <div style={{textAlign:'center'}}>
+                                <img src="https://img.icons8.com/color/144/000000/facebook.png" height="50px" width="50px" id="imageFacebook"></img>
+                                <img src="https://img.icons8.com/cute-clipart/64/000000/instagram-new.png" height="50px" width="50px" id="imageFacebook"></img>
+                                <img src="https://img.icons8.com/cute-clipart/64/000000/twitter.png" height="50px" width="50px" id="imageFacebook"></img>
                                 </div>
 
                             </div>

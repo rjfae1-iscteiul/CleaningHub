@@ -8,7 +8,6 @@ import "datatables.net-dt/css/jquery.dataTables.min.css"
 import $ from 'jquery';
 import 'bootstrap';
 import 'react-rater/lib/react-rater.css';
-import { Helmet } from "react-helmet";
 
 class Dashboard_CH extends React.Component {
 
@@ -403,6 +402,8 @@ class Dashboard_CH extends React.Component {
                                         </div>
                                     </td>
                                 </tr>
+                                <canvas id="myChart" width="400" height="400"></canvas>
+
                             </table>
 
 
