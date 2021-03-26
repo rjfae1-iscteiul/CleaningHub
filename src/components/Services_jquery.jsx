@@ -494,7 +494,7 @@ class Services_jquery extends React.Component {
                     </div>
                 </div >
 
-                <div class="modal" id="modalMoreInformation" tabindex="-1" role="dialog">
+                <div class="modal" id="modalMoreInformation" style={{paddingTop: '5%'}} tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="card" style={{ width: "22rem" }}>
                             <img class="card-img-top" id="imageCard"></img>
