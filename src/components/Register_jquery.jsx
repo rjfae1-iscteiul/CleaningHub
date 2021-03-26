@@ -287,9 +287,10 @@ class Register extends React.Component {
   render() {
 
     const styleDiv = {
+      paddingTop: '12.5%',
       textAlign: "center",
       fontFamily: "Calibri",
-      paddingLeft: "500px"
+      paddingLeft: "700px"
     };
 
     const styleCheckbox = {

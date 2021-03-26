@@ -350,7 +350,7 @@ class Services_jquery extends React.Component {
 
         const modalRequestDiv = {
             fontFamily: "Calibri",
-            paddingTop: "1%"
+            paddingTop: "5%"
         }
 
         const tbody = {
@@ -363,14 +363,14 @@ class Services_jquery extends React.Component {
         }
 
         return (
-            <div style={{
-                position: 'absolute', left: '50%', top: '20%',
-                transform: 'translate(-50%, -50%)'
-              }}>
+            <div >
 
             <div className="MainDiv" style={styleDiv}>
 
-                <div className="container">
+                <div className="container" style={{
+                position: 'absolute', left: '50%', top: '20%',
+                transform: 'translate(-50%, -50%)'
+              }}>
 
                     <table id="example">
                         <thead style={thead}>
@@ -395,7 +395,8 @@ class Services_jquery extends React.Component {
                     </table>
 
                 </div>
-                <div class="modal fade" id="exampleModal" style={{modalRequestDiv}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                
+                <div class="modal fade" id="exampleModal" style={modalRequestDiv} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
 
@@ -512,7 +513,7 @@ class Services_jquery extends React.Component {
                         </div>
                     </div>
                 </div>
-            </div >
+            </div>
             </div>
         )
     }

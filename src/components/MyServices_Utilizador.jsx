@@ -315,13 +315,13 @@ class MyServices_Utilizador extends React.Component {
 
         return (
       
-                <div style={{
+                <div>
+                    <div className="MainDiv" style={styleDiv}>
+
+                        <div className="container" style={{
                 position: 'absolute', left: '50%', top: '30%',
                 transform: 'translate(-50%, -50%)'
               }}>
-                    <div className="MainDiv" style={styleDiv}>
-
-                        <div className="container" style={{ maxWidth: "100%" }}>
 
                             <table id="tableInfo">
                                 <thead style={thead}>
@@ -349,7 +349,7 @@ class MyServices_Utilizador extends React.Component {
                         </div>
 
                         {/* Action Service */}
-                        <div class="modal fade" id="modalConfirmAction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalConfirmAction" style={{paddingTop: '4%'}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -383,7 +383,7 @@ class MyServices_Utilizador extends React.Component {
                         </div >
 
                         {/* Survey */}
-                        <div class="modal fade" id="modalSurveySatisfaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalSurveySatisfaction" style={{paddingTop: '4%'}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-scrollable" role="document">
                                 <div class="modal-content">
 
@@ -488,7 +488,7 @@ class MyServices_Utilizador extends React.Component {
                         </div>
 
                         {/* Invoices */}
-                        <div class="modal fade" id="modalInvoices" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalInvoices" tabindex="-1" style={{paddingTop: '4%'}} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
 

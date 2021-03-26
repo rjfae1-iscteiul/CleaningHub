@@ -30,10 +30,10 @@ class Login extends React.Component
     render() 
     {
       const styleDiv = {
-        paddingTop: "332px",
+        paddingTop: "45%",
         textAlign: "center",
         fontFamily: "Calibri",
-        paddingLeft: "600px"
+        paddingLeft: "790px"
         
       };
   

@@ -246,14 +246,14 @@ class MyServices_Prestador extends React.Component {
         }
 
         return (
-            <div style={{
-                position: 'absolute', left: '50%', top: '30%',
-                transform: 'translate(-50%, -50%)'
-              }}>
+            <div>
 
                     <div className="MainDiv" style={styleDiv} >
 
-                        <div className="container" >
+                        <div className="container" style={{
+                position: 'absolute', left: '50%', top: '30%',
+                transform: 'translate(-50%, -50%)'
+              }} >
 
                             <table id="tableInfo">
                                 <thead style={thead}>
@@ -281,7 +281,7 @@ class MyServices_Prestador extends React.Component {
                         </div>
 
                         {/* Google Maps */}
-                        <div class="modal fade" id="modalGoogleMaps" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalGoogleMaps" style={{paddingTop: '4%'}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
 
@@ -330,7 +330,7 @@ class MyServices_Prestador extends React.Component {
                         </div >
 
                         {/* Action Service */}
-                        <div class="modal fade" id="modalConfirmAction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalConfirmAction" style={{paddingTop: '4%'}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">

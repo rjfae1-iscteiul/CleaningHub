@@ -162,7 +162,7 @@ class EditProfile extends React.Component {
   render() {
 
     const styleDiv = {
-      paddingTop: "50px",
+      paddingTop: "8%",
       textAlign: "center",
       fontFamily: "Calibri",
       paddingLeft: "400px"
