@@ -69,9 +69,10 @@ class MyServices_Prestador extends React.Component {
             $(".dataTables_filter").css("font-size", "small");
             $(".dataTables_length").css("font-size", "small");
             $(".dataTables_info").css("font-size", "small");
+            /*
             $(".sc-bQdQlF").css("justify-content", "center");
             $(".sc-bQdQlF").css("width", "85%");
-
+            */
         });
 
         function ReturnInstanceFirebase() {
@@ -245,16 +246,14 @@ class MyServices_Prestador extends React.Component {
         }
 
         return (
-            <html>
-                <head>
-                    <Helmet>
-                    </Helmet>
-                </head>
-                <body>
+            <div style={{
+                position: 'absolute', left: '50%', top: '30%',
+                transform: 'translate(-50%, -50%)'
+              }}>
 
-                    <div className="MainDiv" style={styleDiv}>
+                    <div className="MainDiv" style={styleDiv} >
 
-                        <div className="container" style={{maxWidth:"100%"}}>
+                        <div className="container" >
 
                             <table id="tableInfo">
                                 <thead style={thead}>
@@ -364,8 +363,8 @@ class MyServices_Prestador extends React.Component {
                             </div>
                         </div >
                     </div >
-                </body>
-            </html>
+                
+            </div>
         )
     }
 }

@@ -21,8 +21,6 @@ class Dashboard_CH extends React.Component {
             EstadosServicos();
             AvalicoesServicos();
             TaxasServicos();
-            $(".sc-bQdQlF").css("justify-content", "end");
-
         });
 
         function ReturnInstanceFirebase() {
@@ -318,38 +316,15 @@ class Dashboard_CH extends React.Component {
     render() {
 
         const styleDiv = {
-            paddingTop: "30px",
             fontFamily: "Calibri"
         }
 
-        const modalService = {
-            paddingTop: "100px"
-        }
-
-        const map = {
-            height: "100%"
-        }
-
-        const tbody = {
-            fontSize: "smaller"
-        }
-
-        const thead = {
-            fontSize: "smaller"
-        }
-
-        const labelWithoutBold = {
-            fontWeight: "normal"
-        }
 
         return (
-            <html>
-                <head>
-                    <Helmet>
-                    </Helmet>
-                </head>
-                <body>
-
+            <div style={{
+                position: 'absolute', left: '30%', top: '20%',
+                transform: 'translate(-50%, -50%)'
+              }}>
                     <div className="MainDiv" style={styleDiv}>
 
                         <div className="container">
@@ -433,8 +408,7 @@ class Dashboard_CH extends React.Component {
 
                         </div>
                     </div >
-                </body >
-            </html >
+                    </div>
         )
     }
 }

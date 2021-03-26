@@ -185,6 +185,7 @@ class EditProfile extends React.Component {
     }
 
     return (
+
       <div style={styleDiv} className="EditProfile">
         <form>
 

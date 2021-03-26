@@ -54,7 +54,6 @@ class MyServices_Utilizador extends React.Component {
             $(".dataTables_filter").css("font-size", "small");
             $(".dataTables_length").css("font-size", "small");
             $(".dataTables_info").css("font-size", "small");
-            $(".sc-bQdQlF").css("justify-content", "center");
 
             $('#dropDownQuestion1').change(function (e) {
                 $('#dropDownQuestion1').val() < 3 ? $('#divTextAreaQuestion1').show() : $('#divTextAreaQuestion1').hide();
@@ -315,13 +314,11 @@ class MyServices_Utilizador extends React.Component {
         }
 
         return (
-            <html>
-                <head>
-                    <Helmet>
-                    </Helmet>
-                </head>
-                <body>
-
+      
+                <div style={{
+                position: 'absolute', left: '50%', top: '30%',
+                transform: 'translate(-50%, -50%)'
+              }}>
                     <div className="MainDiv" style={styleDiv}>
 
                         <div className="container" style={{ maxWidth: "100%" }}>
@@ -580,8 +577,7 @@ class MyServices_Utilizador extends React.Component {
                             </div>
                         </div>
                     </div >
-                </body >
-            </html >
+                    </div>
         )
     }
 }

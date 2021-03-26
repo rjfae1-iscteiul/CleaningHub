@@ -346,7 +346,6 @@ class Services_jquery extends React.Component {
 
         const styleDiv = {
             fontFamily: "Calibri",
-            paddingTop: "7%"
         }
 
         const modalRequestDiv = {
@@ -364,6 +363,11 @@ class Services_jquery extends React.Component {
         }
 
         return (
+            <div style={{
+                position: 'absolute', left: '50%', top: '20%',
+                transform: 'translate(-50%, -50%)'
+              }}>
+
             <div className="MainDiv" style={styleDiv}>
 
                 <div className="container">
@@ -509,6 +513,7 @@ class Services_jquery extends React.Component {
                     </div>
                 </div>
             </div >
+            </div>
         )
     }
 }
