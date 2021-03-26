@@ -319,7 +319,7 @@ class MyServices_Utilizador extends React.Component {
                     <div className="MainDiv" style={styleDiv}>
 
                         <div className="container" style={{
-                position: 'absolute', left: '50%', top: '30%',
+                position: 'absolute', left: '50%', top: '40%', maxWidth: '100%',
                 transform: 'translate(-50%, -50%)'
               }}>
 
