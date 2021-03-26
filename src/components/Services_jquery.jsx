@@ -368,7 +368,7 @@ class Services_jquery extends React.Component {
             <div className="MainDiv" style={styleDiv}>
 
                 <div className="container" style={{
-                position: 'absolute', left: '50%', top: '20%',
+                position: 'absolute', left: '50%', top: '20%', maxWidth: '90%',
                 transform: 'translate(-50%, -50%)'
               }}>
 
