@@ -51,7 +51,7 @@ const S = {
     font-weight: 600;
     font-size: 1.8vw;
     letter-spacing: 0.15vw;
-    left: 65%;
+    left: 55%;
     right: 10%;
     top: 8%;
     color: #38c1d3;
