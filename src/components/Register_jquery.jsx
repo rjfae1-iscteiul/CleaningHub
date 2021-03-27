@@ -9,18 +9,6 @@ import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
 import Logo_Completo from "../resources/Logo_Completo.png";
 
-
-const S = {
-  StyledFirstPic: styled.img`
-      position: absolute;
-      top: 5%;
-      left: 37%;
-      max-width: 18%;
-      max-height: 30vh;
-      border-radius: 5%;
-    `,
-};
-
 class Register extends React.Component {
   constructor() {
     super()
@@ -287,10 +275,11 @@ class Register extends React.Component {
   render() {
 
     const styleDiv = {
-      paddingTop: '12.5%',
+      position: "absolute",
+      paddingTop: "5%",
       textAlign: "center",
       fontFamily: "Calibri",
-      paddingLeft: "700px"
+      paddingLeft: "50%"
     };
 
     const styleCheckbox = {
@@ -298,20 +287,24 @@ class Register extends React.Component {
     };
 
     const styleRow = {
-      paddingTop: "275px"
+      paddingTop: "5%"
     }
     return (
 
-
+      
       <div style={styleDiv} className="Register">
         <Helmet>
           <style>{'body { background-color: #7CD4EA; }'}</style>
         </Helmet>
 
-
+        <div className="row">
+        <div className="logo">
+          <img src={Logo_Completo} width="341" height="281" />
+        </div>
+      </div>
         <form>
           <Form.Group size="lg" >
-            <S.StyledFirstPic src={Logo_Completo} alt="" />
+           
             <div class="form-row" style={styleRow}>
               <div class="col">
 
