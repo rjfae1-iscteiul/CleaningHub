@@ -73,15 +73,17 @@ export default function BannerHome() {
       <S.StyledLogo src={Logo} alt=""></S.StyledLogo>
       <S.StyledCard elevation={10}>
         <CardContent>
-          <S.StyledTitle>Lorem ipsum dolor sit amet</S.StyledTitle>
+          <S.StyledTitle>Reviews dos nossos clientes</S.StyledTitle>
           <p></p>
           <S.StyleBody>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            vitae varius metus. Nunc in tortor nec urna pharetra vulputate. Nam
-            at est ultrices, mattis risus et, placerat est. Proin turpis neque,
-            finibus eu purus sit amet, aliquet dapibus sapien. Etiam quis turpis
-            et elit dapibus ultrices. Nam non magna et sapien porta congue.
+              "Muito profissionais e atenciosos! Recomendo vivamente!" - Maria Gomes
+              
           </S.StyleBody>
+          <p></p>
+          <S.StyleBody>
+          "O serviço de limpeza mais fácil que já usei. Preços bastante acessíveis" - André Silva
+          </S.StyleBody>
+          
             <S.StyledDivider>
               <S.StyledSpan>Est. 2020</S.StyledSpan>
             </S.StyledDivider>
