@@ -157,11 +157,11 @@ class MyServices_Utilizador extends React.Component {
                             "tipoServico": CheckIsNull(doc.data().tipoServico),
                             "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
                             "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estado) + '>' +
-                                '<option checked>Selecionar</option>' +
-                                '<option>Remarcado</option>' +
-                                '<option>Cancelado P/ prestador</option>' +
-                                '<option>Cancelado P/ utilizador</option>' +
-                                '<option>Terminado</option>' +
+                                '<option ' + Selected(doc.data().estadoUtilizador, "Selecionar") + '>Selecionar</option>' +
+                                '<option ' + Selected(doc.data().estadoUtilizador, "Remarcado") + '>Remarcado</option>' +
+                                '<option ' + Selected(doc.data().estadoUtilizador, "Cancelado P/ prestador") + '>Cancelado P/ prestador</option>' +
+                                '<option ' + Selected(doc.data().estadoUtilizador, "Cancelado P/ utilizador") + '>Cancelado P/ utilizador</option>' +
+                                '<option ' + Selected(doc.data().estadoUtilizador, "Terminado") + '>Terminado</option>' +
                                 '</select>',
                             "avaliarServico": '<button type="button" id="btnAvaliarServico_' + doc.data().numeroServico + '_' + doc.data().prestadorId + '" class="btn btn-light">Avaliar</button>',
                             "faturaServico": '<button type="button" id="btnFaturaServico_' + doc.data().numeroServico + '" class="btn btn-light">Fatura</button>'
@@ -228,6 +228,11 @@ class MyServices_Utilizador extends React.Component {
                 .catch((error) => {
                     alert("Error update: " + error);
                 });
+        }
+
+        function Selected(currentStatus, statusToCompare) 
+        {
+            return currentStatus == statusToCompare ? "Selected" : "";
         }
 
         function ReadOnly(status) {

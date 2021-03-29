@@ -138,11 +138,11 @@ class MyServices_Prestador extends React.Component {
                             "tipoServico": CheckIsNull(doc.data().tipoServico),
                             "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
                             "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estado) +'>' +
-                                '<option checked>Selecionar</option>' +
-                                '<option>Remarcado</option>' +
-                                '<option>Cancelado P/ prestador</option>' +
-                                '<option>Cancelado P/ utilizador</option>' +
-                                '<option>Terminado</option>' +
+                                '<option ' + Selected(doc.data().estadoPrestador, "Selecionar") + '>Selecionar</option>' +
+                                '<option ' + Selected(doc.data().estadoPrestador, "Remarcado") + '>Remarcado</option>' +
+                                '<option ' + Selected(doc.data().estadoPrestador, "Cancelado P/ prestador") + '>Cancelado P/ prestador</option>' +
+                                '<option ' + Selected(doc.data().estadoPrestador, "Cancelado P/ utilizador") + '>Cancelado P/ utilizador</option>' +
+                                '<option ' + Selected(doc.data().estadoPrestador, "Terminado") + '>Terminado</option>' +
                                 '</select>',
                             "obterCoordenadas": '<button type="button" name="btnObterCoordenadas_' + doc.data().utilizadorId + '" class="btn btn-light">Google&nbsp;Maps</button>'
                         }).draw();
@@ -218,6 +218,11 @@ class MyServices_Prestador extends React.Component {
         function ReadOnly(status) 
         {
             return status != "" ? "readonly" : "";
+        }
+
+        function Selected(currentStatus, statusToCompare) 
+        {
+            return currentStatus == statusToCompare ? "Selected" : "";
         }
 
         function CheckIsNull(value) 
