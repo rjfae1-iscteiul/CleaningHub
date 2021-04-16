@@ -10,7 +10,7 @@ import 'bootstrap';
 import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootstrap";
 import emailjs from 'emailjs-com';
 import Logo_Facebook from "../resources/facebook.png";
-
+import swal from 'sweetalert';
 
 class Services_jquery extends React.Component {
     constructor(props) {
@@ -78,6 +78,7 @@ class Services_jquery extends React.Component {
                 var row = table.row(tr);
 
                 $('#modalMoreInformation').modal('show');
+                
                 GetExpandTableWithOtherServices(row.data().prestadorCodigo, row.data().prestadorNome, row.data().prestadorDataRegisto);
             });
 
@@ -123,29 +124,83 @@ class Services_jquery extends React.Component {
 
             $('#confirmRequest').click(function () {
 
-                const db = ReturnInstanceFirebase();
+                if(CheckInformationBeforeSubmitRequest()) 
+                {
+                    const db = ReturnInstanceFirebase();
 
-                db.collection("Utilizadores")
-                    .where("utilizadorId", "==", "g9tgom")
-                    .get()
-                    .then((querySnapshotUtilizadores) => 
-                    {
-                        querySnapshotUtilizadores.forEach((docUtilizadores) => 
+                    db.collection("Utilizadores")
+                        .where("utilizadorId", "==", "g9tgom")
+                        .get()
+                        .then((querySnapshotUtilizadores) => 
                         {
-                            db.collection("Prestadores")
-                            .where("prestadorId", "==", $('#idPrestador').val().split(' ')[0])
-                            .get()
-                            .then((querySnapshotPrestadores) => 
+                            querySnapshotUtilizadores.forEach((docUtilizadores) => 
                             {
-                                querySnapshotPrestadores.forEach((docPrestadores) => 
+                                db.collection("Prestadores")
+                                .where("prestadorId", "==", $('#idPrestador').val().split(' ')[0])
+                                .get()
+                                .then((querySnapshotPrestadores) => 
                                 {
-                                    InsertRequestAndSendEmail(docUtilizadores, docPrestadores);
-                                })
-                            });
-                        })
-                    });
-                });
+                                    querySnapshotPrestadores.forEach((docPrestadores) => 
+                                    {
+                                        InsertRequestAndSendEmail(docUtilizadores, docPrestadores);
+                                    })
+                                });
+                            })
+                        });
+                }
+                else 
+                {
+                    SweetAlert("Alerta", "Existem dados por preencher ou preenchidos incorretamente", "warning");
+                }
+            });
         });
+
+        function ClearFieldsAfterRequest() 
+        {
+            $('#ccCodigo').val("");
+            $('#ccValidade').val("");
+            $('#ccCardNumber').val("");
+            $('#ibanNumber').val("");
+            $('#phoneNumber').val("");
+            $('#paymentMethod').val("Selecionar");
+            $('#dataHoraFim').val("");
+            $('#dataHoraInicio').val("");
+            $('#observations').val("");
+            $('#hours').val(1);
+            $('#div_IBAN').hide();
+            $('#div_MBWay').hide();
+            $('#div_CreditCard').hide();
+        }
+
+        function CheckInformationBeforeSubmitRequest() 
+        {
+            var hours = $('#hours').val();
+            var dataHoraInicio = $('#dataHoraInicio').val();
+            var dataHoraFim = $('#dataHoraFim').val();
+            var metodoPagamento = $('#paymentMethod').val();
+
+            var metodoPagamentBoolean = false;
+
+            if(metodoPagamento.startsWith("MB")) 
+            {
+                metodoPagamentBoolean = CheckMBWay();
+            }
+            else if (metodoPagamento.startsWith("Transferência")) 
+            {
+                metodoPagamentBoolean = CheckIBAN();
+            }
+            else if(metodoPagamento.startsWith("Cartão")) 
+            {
+                metodoPagamentBoolean = CheckCC();
+            }
+
+            return Date.parse(dataHoraFim) > Date.parse(dataHoraInicio) && hours != "" && hours != "0" && dataHoraInicio != "" && dataHoraFim != "" && metodoPagamento != "Selecionar" && metodoPagamentBoolean == true;
+        }
+
+        function IsNumber(val)
+        {
+        return /^\d+$/.test(val);
+        }
 
         function GetUserImageToCloudStorage(prestadorId) 
         {
@@ -160,8 +215,13 @@ class Services_jquery extends React.Component {
                 var img = document.getElementById('imageCard');
                 img.src = url;
               }).catch(function(error) {              
-                alert('erro: ' + error);
+                console.log('erro: ' + error);
               });
+        }
+
+        function SweetAlert(MensagemPrincipal, MensagemSecundaria, Tipo) 
+        {
+          swal(MensagemPrincipal, MensagemSecundaria, Tipo);
         }
 
         function InsertRequestAndSendEmail(docUtilizadores, docPrestadores) {
@@ -208,16 +268,50 @@ class Services_jquery extends React.Component {
                         $('#dataHoraFim').val(),
                         $('#paymentMethod option:selected').text()
                     )
-                    alert("Pedido de serviço finalizado!");
+                    SweetAlert("Sucesso", "Pedido de serviço finalizado. Receberá um e-mail com todos os detalhes do serviço!", "success");
+                    ClearFieldsAfterRequest();
+                    $('#requestServiceModal').modal('hide');
                 })
                 .catch((error) => {
-                    alert("Error writing document: ", error);
+                    console.log("Error writing document: ", error);
                 });
         }
 
         function GetTimeNowStringFormat() {
             var m = new Date();
             return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
+        }
+
+        function CheckIBAN() 
+        {
+          var IBAN = $('#ibanNumber').val();
+    
+          if(IBAN != "")
+            return IBAN.length == 24 && IBAN.startsWith("P") && IsNumber(IBAN.replace("P", ""));
+          else 
+            return true;
+        }
+    
+        function CheckMBWay() 
+        {
+          var MBWay = $('#phoneNumber').val();
+    
+          if(MBWay != "")
+            return MBWay.length == 9 && IsNumber(MBWay);
+          else
+            return true
+        }
+    
+        function CheckCC() 
+        {
+          var numCC = $('#ccCardNumber').val();
+          var codCC = $('#ccCodigo').val();
+          var valCC = $('#ccValidade').val();
+    
+          if(numCC != "" || codCC != "" || valCC != "")
+            return numCC.length == 16 && IsNumber(numCC) && codCC.length == 3 && IsNumber(codCC) && valCC.length == 5 && IsNumber(valCC.replace("/", ""));
+          else
+            return true;
         }
 
         function SendEmailRequestService(var_to_name, var_to_email, codPrestador, noPrestador, coPrestador, codCliente, noCliente, coCliente, obs, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
@@ -244,9 +338,9 @@ class Services_jquery extends React.Component {
 
             emailjs.send('serviceId_CleaningHub', 'template_requestService', templateParams)
                 .then(function (response) {
-                    alert('SUCCESS!', response.status, response.text);
+                    console.log('SUCCESS!', response.status, response.text);
                 }, function (error) {
-                    alert('FAILED...', error);
+                    console.log('FAILED...', error);
                 });
         }
 
@@ -330,7 +424,11 @@ class Services_jquery extends React.Component {
 
                         $('#idPrestador').val(prestadorId + " - " + prestadorName);
 
-                        $('#exampleModal').modal('show');
+                        var price = 10;
+
+                        $('#price').val($('#hours').val() * price);
+                        
+                        $('#requestServiceModal').modal('show');
                     });
                     // console.log(this.state.row[0].PrimeiroNome);
                 })
@@ -398,7 +496,7 @@ class Services_jquery extends React.Component {
 
                 </div>
                 
-                <div class="modal fade" id="exampleModal" style={modalRequestDiv} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="requestServiceModal" style={modalRequestDiv} tabindex="-1" role="dialog" aria-labelledby="requestServiceModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-scrollable" role="document">
                         <div class="modal-content">
 

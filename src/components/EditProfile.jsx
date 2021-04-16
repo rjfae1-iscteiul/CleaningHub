@@ -8,6 +8,8 @@ import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
 import GoogleMapReact from 'google-map-react';
 import Geocode from "react-geocode";
+import swal from 'sweetalert';
+
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const Marker = (props) => {
@@ -58,14 +60,30 @@ class EditProfile extends React.Component {
         var auth = firebase.auth();
 
         auth.sendPasswordResetEmail("ferreira.jorge.ricardo@gmail.com").then(function () {
-          alert('Foi enviado um e-mail para  enviado');
+          SweetAlert("Sucesso", "Foi enviado um e-mail para redefinir a sua password.", "success");
         }).catch(function (error) {
-          alert('error: ' + error);
+          console.log('error: ' + error);
         });
       });
 
-      $('#btnGuardarGeral').click(function () {
-        SetNewInformationInFirebase("g9tgom");
+      $('#btnGuardarGeral').click(function () 
+      {
+        var localidade = $('#idTxbLocalidade').val();
+        var contatoTelefonico = $('#idTxbContatoTelefonico').val();
+        var nacionalidade = $('#idTxbNacionalidade').val();
+        var codigoPostal = $('#idTxbCodigoPostal').val();
+        var rua = $('#idTxbRua').val();
+
+        if(localidade == "" || contatoTelefonico == "" || nacionalidade == "" || codigoPostal == "" || rua == "") 
+        {
+          SweetAlert("Alerta", "Dados principais devem estar todos preenchidos.", "warning");
+        } 
+        else 
+        {
+          SweetAlert("Sucesso", "Dados principais atualizados com sucesso.", "success");
+          SetNewInformationInFirebase("g9tgom");
+        }
+
       });
 
       $('#btnDadosPagamentos').click(function () {
@@ -73,11 +91,65 @@ class EditProfile extends React.Component {
       });
 
       $('#atualizarDadosPagamento').click(function () {
-        SetNewInformationInFirebase("g9tgom");
-        $('#modalPayment').modal('hide');
+
+        if(!CheckCC()) 
+        {
+          SweetAlert("Aviso", "Os dados do cartão de crédito não se encontram corretamente preenchidos.", "warning");
+        } 
+        else if(!CheckIBAN()) 
+        {
+          SweetAlert("Aviso", "O IBAN não se encontra corretamente preenchido.", "warning");
+        } 
+        else if(!CheckMBWay())
+        {
+          SweetAlert("Aviso", "O número de MBWay não se encontra corretamente preenchido", "warning");
+        } 
+        else 
+        {
+          $('#modalPayment').modal('hide');
+          SweetAlert("Sucesso", "Dados atualizados com sucesso", "success");
+          SetNewInformationInFirebase("g9tgom");
+        }
       })
 
     });
+
+    function CheckIBAN() 
+    {
+      var IBAN = $('#idTxbIBAN').val();
+
+      if(IBAN != "")
+        return IBAN.length == 24 && IBAN.startsWith("P") && IsNumber(IBAN.replace("P", ""));
+      else 
+        return true;
+    }
+
+    function CheckMBWay() 
+    {
+      var MBWay = $('#idTxbMbWay').val();
+
+      if(MBWay != "")
+        return MBWay.length == 9 && IsNumber(MBWay);
+      else
+        return true
+    }
+
+    function CheckCC() 
+    {
+      var numCC = $('#txbNumCartaoCredito').val();
+      var codCC = $('#txbCCVCartaoCredito').val();
+      var valCC = $('#txbDataValidadeCartaoCredito').val();
+
+      if(numCC != "" || codCC != "" || valCC != "")
+        return numCC.length == 16 && IsNumber(numCC) && codCC.length == 3 && IsNumber(codCC) && valCC.length == 5 && IsNumber(valCC.replace("/", ""));
+      else
+        return true;
+    }
+
+    function IsNumber(val)
+    {
+      return /^\d+$/.test(val);
+    }
 
     function GetCurrentInformation() {
       const db = ReturnInstanceFirebase();
@@ -106,8 +178,13 @@ class EditProfile extends React.Component {
           })
         })
         .catch((error) => {
-          alert("Erro: " + error);
+          console.log("Erro: " + error);
         });
+    }
+
+    function SweetAlert(MensagemPrincipal, MensagemSecundaria, Tipo) 
+    {
+      swal(MensagemPrincipal, MensagemSecundaria, Tipo);
     }
 
     function SetNewInformationInFirebase(utilizadorId) {
@@ -128,10 +205,10 @@ class EditProfile extends React.Component {
         "ccCartaoCredito": $('#txbNumCartaoCredito').val()
       })
         .then(() => {
-          alert("Document successfully updated!");
+          console.log("Document successfully updated!");
         })
         .catch((error) => {
-          alert("Error update: " + error);
+          console.log("Error update: " + error);
         });
     }
 

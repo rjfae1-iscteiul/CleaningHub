@@ -8,6 +8,7 @@ import 'bootstrap';
 import emailjs from 'emailjs-com';
 import { Helmet } from 'react-helmet';
 import Logo_Completo from "../resources/Logo_Completo.png";
+import swal from 'sweetalert';
 
 class Register extends React.Component {
   constructor() {
@@ -32,7 +33,7 @@ class Register extends React.Component {
 
         if (Colaborador_CheckInformation() && VerifyCheckboxEmptys()) {
           if (!VerifyPassword()) {
-            alert("A password não se encontra igual nas duas opções.");
+            SweetAlert("Aviso", "A password não se encontra igual nas duas opções.", "warning");
           }
           else {
 
@@ -43,7 +44,7 @@ class Register extends React.Component {
                 .where("email", "==", $('#idTxbEmail').val())
                 .get()
                 .then(querySnapshot => {
-                  alert(querySnapshot.size);
+                  console.log(querySnapshot.size);
 
                   if (querySnapshot.size == 0) 
                   {
@@ -55,13 +56,13 @@ class Register extends React.Component {
 
                     SetImageInCloudFirebase(files, randString);
 
-                    alert("Utilizador criado.");
+                    SweetAlert("Sucesso", "Utilizador criado.", "success");
                   } else {
-                    alert("Utilizador já existe.");
+                    SweetAlert("Aviso", "Utilizador já existe.", "warning");
                   }
                 })
                 .catch((error) => {
-                  alert("Erro: " + error);
+                  console.log("Erro: " + error);
                 });
             }
             else {
@@ -69,7 +70,7 @@ class Register extends React.Component {
                 .where("email", "==", $('#idTxbEmail').val())
                 .get()
                 .then(querySnapshot => {
-                  alert(querySnapshot.size);
+                  console.log(querySnapshot.size);
 
                   if (querySnapshot.size == 0) 
                   {
@@ -79,29 +80,29 @@ class Register extends React.Component {
 
                     SendEmailRegister($('#idTxbPrimeiroNome').val(), $('#idTxbEmail').val());
                     
-                    alert("Utilizador criado");
+                    SweetAlert("Sucesso", "Utilizador criado.", "success");
                   } else {
-                    alert("Utilizador já existe.");
+                    SweetAlert("Aviso", "Utilizador já existe.", "warning");
                   }
                 })
                 .catch((error) => {
-                  alert("Erro: " + error);
+                  console.log("Erro: " + error);
                 });
             }
           }
         }
         else {
-          alert("Por favor preencha todos os campos.");
+          SweetAlert("Alerta", "Por favor preencha corretamente todos os campos.", "warning");
         }
       });
 
       $('#saveDataPrestador').click(function () {
         if (Prestador_CheckInformation()) {
           $('#modalMoreDataPrestador').modal('hide');
-          alert(files.length);
+          console.log(files.length);
         }
         else {
-          alert('Todos os campos (excepto o IBAN) são de preenchimento obrigatório');
+          SweetAlert("Alerta", "Todos os campos (excepto o IBAN) são de preenchimento obrigatório.", "warning");
         }
       });
 
@@ -113,7 +114,7 @@ class Register extends React.Component {
     });
 
     function Colaborador_CheckInformation() {
-      if ($('#idTxbPrimeiroNome').val() == "" || $('#idTxbSegundoNome').val() == "" || $('#idTxbNacionalidade').val() == "" || $('#idTxbRua').val() == "" ||
+      if (!CheckCodigoPostal() || !CheckContactoTelefonico() || $('#idTxbPrimeiroNome').val() == "" || $('#idTxbSegundoNome').val() == "" || $('#idTxbNacionalidade').val() == "" || $('#idTxbRua').val() == "" ||
         $('#idTxbCodigoPostal').val() == "" || $('#idTxbContatoTelefonico').val() == "" || $('#idTxbPassword').val() == "" || $('#idTxbLocalidade').val() == "" || $('#idTxbEmail').val() == "" || $('#idTxbRewritePassword').val() == "") {
         return false;
       }
@@ -123,10 +124,16 @@ class Register extends React.Component {
     }
 
     function Prestador_CheckInformation() {
-      if ($('#chbPrestador').attr('checked') && $('#idTxbNIF').val() == "" || $('#idTxbPriceWithoutProducts').val() == "" || $('#idTxbPriceWithProducts').val() == "") {
+
+      if (!CheckCodigoPostal() || !CheckContactoTelefonico() || !CheckNIF() || $('#chbPrestador').attr('checked') && $('#idTxbNIF').val() == "" || $('#idTxbPriceWithoutProducts').val() == "" || $('#idTxbPriceWithProducts').val() == "") {    
         return false;
       }
       else {
+
+        if($('#idTxbIBAN').val() != "") 
+        {
+            return CheckIBAN();
+        } 
         return true;
       }
     }
@@ -138,6 +145,39 @@ class Register extends React.Component {
       else {
         return false;
       }
+    }
+
+    function CheckNIF() 
+    {
+      var NIF = $('#idTxbNIF').val();
+
+      return NIF.length == 9 && IsNumber(NIF);
+    }
+
+    function CheckCodigoPostal() 
+    {
+      var codigoPostal = $('#idTxbCodigoPostal').val();
+
+      return codigoPostal.length == 8 && IsNumber(codigoPostal.replace("-", ""));
+    }
+
+    function CheckIBAN() 
+    {
+      var IBAN = $('#idTxbIBAN').val();
+
+      return IBAN.length == 24 && IBAN.startsWith("P") && IsNumber(IBAN.replace("P", ""));
+    }
+
+    function CheckContactoTelefonico() 
+    {
+      var contactoTelefonico = $('#idTxbContatoTelefonico').val();
+
+      return IsNumber(contactoTelefonico) && contactoTelefonico.length == 9 && (contactoTelefonico.startsWith("2") || contactoTelefonico.startsWith("9"));
+    }
+
+    function IsNumber(val)
+    {
+      return /^\d+$/.test(val);
     }
 
     function VerifyPassword() {
@@ -156,9 +196,9 @@ class Register extends React.Component {
 
       emailjs.send('serviceId_CleaningHub', 'template_registerUser', templateParams)
         .then(function (response) {
-          alert('SUCCESS!', response.status, response.text);
+          console.log('SUCCESS!', response.status, response.text);
         }, function (error) {
-          alert('FAILED...', error);
+          console.log('FAILED...', error);
         });
     }
 
@@ -187,10 +227,10 @@ class Register extends React.Component {
     function CreateUserInAuthFirebase() {
       firebase.auth().createUserWithEmailAndPassword($('#idTxbEmail').val(), $('#idTxbPassword').val())
         .then((user) => {
-          alert("User criado no Auth Firebase");
+          console.log("User criado no Auth Firebase");
         })
         .catch((error) => {
-          alert("Erro no Auth Firebase:" + error.code + " - " + error.message);
+          console.log("Erro no Auth Firebase:" + error.code + " - " + error.message);
         });
     }
 
@@ -212,11 +252,16 @@ class Register extends React.Component {
         dataRegisto: GetTimeNowStringFormat()
       })
         .then(() => {
-          alert("Document successfully written!");
+          console.log("Document successfully written!");
         })
         .catch((error) => {
-          alert("Error writing document: ", error);
+          console.log("Error writing document: ", error);
         });
+    }
+
+    function SweetAlert(MensagemPrincipal, MensagemSecundaria, Tipo) 
+    {
+      swal(MensagemPrincipal, MensagemSecundaria, Tipo);
     }
 
     function SetImageInCloudFirebase(files, prestadorId) 
@@ -233,7 +278,7 @@ class Register extends React.Component {
       } 
       catch (error) 
       {
-        alert(error);
+        console.log(error);
       }
     }
 
@@ -264,10 +309,10 @@ class Register extends React.Component {
         dataRegisto: GetTimeNowStringFormat()
       })
         .then(() => {
-          alert("Document successfully written!");
+          console.log("Document successfully written!");
         })
         .catch((error) => {
-          alert("Error writing document: ", error);
+          console.log("Error writing document: ", error);
         });
     }
   }
