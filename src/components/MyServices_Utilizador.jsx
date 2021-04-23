@@ -11,6 +11,7 @@ import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
 import emailjs from 'emailjs-com';
 import Logo_Completo from "../resources/Logo_Completo.png";
+import swal from 'sweetalert';
 
 class MyServices_Utilizador extends React.Component {
     constructor(props) {
@@ -45,6 +46,43 @@ class MyServices_Utilizador extends React.Component {
                 "order": [[1, 'asc']]
             });
 
+            table.on('click', 'button[id^="btnAvaliarServico"]', function (e) 
+            {
+                var serviceId = e.target.id.split('_')[1];
+                var prestadorId = e.target.id.split('_')[2];
+
+                $('#titleAvaliacao_Prestador').html('Código do prestador avaliado: <b>' + prestadorId + '</b>');
+                $('#titleAvaliacao_Servico').html('Código do serviço avaliado: <b>' + serviceId + '</b>');
+
+                $("#titleAvaliacao_Prestador").attr("name", prestadorId);
+                $("#titleAvaliacao_Servico").attr("name", serviceId);
+
+                $('#modalSurveySatisfaction').modal('show');
+            });
+            
+            table.on('click', 'button[id^="btnFaturaServico"]', function (e) 
+            {
+                var numeroServico = e.target.id.split('_')[1];
+
+                DadosParaFatura(numeroServico);
+            });
+            
+            table.on('change', 'select[id^="actionService_"]', function (e) 
+            {
+                var numeroServico = e.target.id.split('_')[1];
+                var accao = e.target.value;
+
+                if (accao == 'Remarcado') {
+                    $('#divActionNovaDataHora').show();
+                } else {
+                    $('#divActionNovaDataHora').hide();
+                }
+
+                $('#lblActionService').html(accao);
+                $('#lblNumeroService').html(numeroServico);
+                $('#modalConfirmAction').modal('show');
+            });
+
             $('div.dataTables_filter input').addClass('form-control');
             $("div.dataTables_filter input").attr("placeholder", "Procurar");
 
@@ -71,9 +109,22 @@ class MyServices_Utilizador extends React.Component {
                 $('#dropDownQuestion4').val() < 3 ? $('#divTextAreaQuestion4').show() : $('#divTextAreaQuestion4').hide();
             });
 
-            $('#btnSubmitSurvey').click(function (e) {
-                InserirAvaliacao();
-                $('#modalSurveySatisfaction').modal('hide');
+            $('#btnSubmitSurvey').click(function (e) 
+            {
+                if(!CheckOptionSurvey()) 
+                {
+                    SweetAlert('Alerta', 'Existem questões sem opção selecionada.', 'warning');
+                } 
+                else if(!CheckMoreInformationSurvey(1) || !CheckMoreInformationSurvey(2) || !CheckMoreInformationSurvey(3) || !CheckMoreInformationSurvey(4)) 
+                {
+                    SweetAlert('Alerta', 'Existem motivos de insatisfação por preenche.', 'warning');
+                }
+                else 
+                {
+                    SweetAlert('Suceso', 'Avaliação ao prestador submetida.', 'success');
+                    InserirAvaliacao($('#titleAvaliacao_Servico').attr("name"), $('#titleAvaliacao_Prestador').attr("name"));
+                    $('#modalSurveySatisfaction').modal('hide');
+                }
             });
 
             $('#btnSaveFile').click(function (e) {
@@ -112,6 +163,9 @@ class MyServices_Utilizador extends React.Component {
         function InserirAvaliacao(serviceId, prestId) {
             let randString = Math.random().toString(36).substring(7);
 
+            console.log('ServiceId: ' + serviceId);
+            console.log('PrestadorId: ' + prestId);
+
             const db = ReturnInstanceFirebase();
 
             db.collection("AvaliacaoServico")
@@ -131,10 +185,10 @@ class MyServices_Utilizador extends React.Component {
                     dataDeInsercao: GetTimeNowStringFormat()
                 })
                 .then(() => {
-                    alert("Document successfully written!");
+                    console.log("Document successfully written!");
                 })
                 .catch((error) => {
-                    alert("Error writing document: ", error);
+                    console.log("Error writing document: ", error);
                 });
         }
 
@@ -148,7 +202,7 @@ class MyServices_Utilizador extends React.Component {
                     querySnapshot.forEach((doc) => {
                         table.row.add({
                             "numeroServico": CheckIsNull(doc.data().numeroServico),
-                            "nomePrestador": "Ricardo Jorge Ferreira",
+                            "nomePrestador": CheckIsNull(doc.data().prestadorId) + " - Ricardo Jorge Ferreira",
                             "contactoPrestador": "910 000 000",
                             "observacoes": CheckIsNull(doc.data().observacoes),
                             "dataDoPedido": CheckIsNull(doc.data().dataPedido),
@@ -164,22 +218,25 @@ class MyServices_Utilizador extends React.Component {
                                 '<option ' + Selected(doc.data().estadoUtilizador, "Terminado") + '>Terminado</option>' +
                                 '</select>',
                             "avaliarServico": '<button type="button" id="btnAvaliarServico_' + doc.data().numeroServico + '_' + doc.data().prestadorId + '" class="btn btn-light">Avaliar</button>',
-                            "faturaServico": '<button type="button" id="btnFaturaServico_' + doc.data().numeroServico + '" class="btn btn-light">Fatura</button>'
+                            "faturaServico": '<button type="button" id="btnFaturaServico_' + doc.data().numeroServico + '" class="btn btn-light faturaServ">Fatura</button>'
                         }).draw();
+                        
                     });
-
+                   
+                    /*
+                    Old Event Buttons
                     $('button[id^="btnAvaliarServico"]').click(function (e) {
                         $('#modalSurveySatisfaction').modal('show');
                     });
 
-                    $('button[id^="btnFaturaServico"]').click(function (e) {
+                    $('button[id^="btnFaturaServico"]').click(function (e) 
+                    {
                         var numeroServico = e.target.id.split('_')[1];
 
                         DadosParaFatura(numeroServico);
 
-                        $('#modalInvoices').modal('show');
-
-                    });
+                        // $('#modalInvoices').modal('show');
+                    });                         
 
                     $('select[id^="actionService_"').change(function (e) {
                         var numeroServico = e.target.id.split('_')[1];
@@ -195,12 +252,13 @@ class MyServices_Utilizador extends React.Component {
                         $('#lblNumeroService').html(numeroServico);
                         $('#modalConfirmAction').modal('show');
                     });
+                    */      
 
                     $('#confirmAction').click(function (e) {
                         var numeroServico = '#actionService_' + $('#lblNumeroService').text();
 
                         if ($('#lblActionService').html() == 'Remarcado' && $('#novaDataHora').val() == '') {
-                            alert('Preencha a nova data do serviço');
+                            SweetAlert('Alerta', 'Preencha a nova data do serviço', 'warning');
                         }
                         else {
                             $(numeroServico).attr("disabled", true);
@@ -223,11 +281,29 @@ class MyServices_Utilizador extends React.Component {
                 "estadoUtilizador": newStatus
             })
                 .then(() => {
-                    alert("Document successfully updated!");
+                    console.log("Document successfully updated!");
                 })
                 .catch((error) => {
-                    alert("Error update: " + error);
+                    console.log("Error update: " + error);
                 });
+        }
+
+        function CheckOptionSurvey() 
+        {
+            return $('#dropDownQuestion1').val() != "0" && $('#dropDownQuestion2').val() != "0" && $('#dropDownQuestion3').val() != "0" && $('#dropDownQuestion4').val() != "0";
+        }
+
+        function CheckMoreInformationSurvey(id) 
+        {        
+            if( ($('#dropDownQuestion' + id).val() == "1" || $('#dropDownQuestion' + id).val() == "2") && $('#divTextAreaQuestion' + id).val() == "")
+                return false;
+            else 
+                return true;
+        }
+
+        function SweetAlert(MensagemPrincipal, MensagemSecundaria, Tipo) 
+        {
+          swal(MensagemPrincipal, MensagemSecundaria, Tipo);
         }
 
         function Selected(currentStatus, statusToCompare) 
@@ -276,6 +352,27 @@ class MyServices_Utilizador extends React.Component {
                         $('#inv_PrecoTotal').html(docPedServicos.data().precoTotal + '€');
                         $('#inv_TipoServico').html(docPedServicos.data().tipoServico);
                         $('#inv_DataHoraInicio').html(docPedServicos.data().dataHoraInicio);
+
+                        var div = docPedServicos.data().divisoes;
+                        var spanToInvoice_Div = "";
+
+                        for(let i = 0; i < div.length; i++)
+                        {
+                            switch(div[i]) 
+                            {
+                                case "SalaDeEstar":
+                                    spanToInvoice_Div += '<li>Sala de Estar</li>';
+                                    break;
+                                case "SalaDeJantar":
+                                     spanToInvoice_Div += '<li>Sala de Jantar</li>';
+                                     break;
+                                default:
+                                    spanToInvoice_Div += '<li>' + div[i] + '</li>';
+                                    break;
+                            }
+                        }
+                        $('#inv_DivisoesDaCasa').html(spanToInvoice_Div);
+
                         $('#inv_DataHoraFim').html(docPedServicos.data().dataHoraFim);
 
                         db.collection("Utilizadores")
@@ -394,18 +491,24 @@ class MyServices_Utilizador extends React.Component {
 
                                     <div class="modal-body">
 
+                                        <span id="titleAvaliacao_Prestador"></span>
+                                        <br/>
+                                        <span id="titleAvaliacao_Servico"></span>
+                                        <br/>
+
                                         <div id="Question1">
                                             <div class="card" style={{ width: "28rem" }}>
                                                 <div class="card-header" style={{ fontWeight: "bold" }}>
                                                     Cumprimento de prazos e assiduidade do prestador?
                                                 </div>
                                                 <select class="form-control" id="dropDownQuestion1" style={{ width: "15rem", marginLeft: "7em" }}>
-                                                    <option checked>Selecionar</option>
+                                                    <option value="0" checked>Selecionar</option>
                                                     <option value="1">Muito mau</option>
                                                     <option value="2">Mau</option>
                                                     <option value="3">Razoável</option>
                                                     <option value="4">Bom</option>
                                                     <option value="5">Muito bom</option>
+                                                    <option value="6">N/A</option>
                                                 </select>
                                                 <div id="divTextAreaQuestion1" style={{ display: "none", width: "24rem", marginLeft: "2em" }}>
                                                     <br />
@@ -422,12 +525,13 @@ class MyServices_Utilizador extends React.Component {
                                                     Higienização e cuidado na realização do serviço?
                                                 </div>
                                                 <select class="form-control" id="dropDownQuestion2" style={{ width: "15rem", marginLeft: "7em" }}>
-                                                    <option checked>Selecionar</option>
+                                                    <option value="0" checked>Selecionar</option>
                                                     <option value="1">Muito mau</option>
                                                     <option value="2">Mau</option>
                                                     <option value="3">Razoável</option>
                                                     <option value="4">Bom</option>
                                                     <option value="5">Muito bom</option>
+                                                    <option value="6">N/A</option>
                                                 </select>
                                                 <div id="divTextAreaQuestion2" style={{ display: "none", width: "24rem", marginLeft: "2em" }}>
                                                     <br />
@@ -444,12 +548,13 @@ class MyServices_Utilizador extends React.Component {
                                                     Relação qualidade/preço do serviço prestado?
                                                 </div>
                                                 <select class="form-control" id="dropDownQuestion3" style={{ width: "15rem", marginLeft: "7em" }}>
-                                                    <option checked>Selecionar</option>
+                                                    <option value="0" checked>Selecionar</option>
                                                     <option value="1">Muito mau</option>
                                                     <option value="2">Mau</option>
                                                     <option value="3">Razoável</option>
                                                     <option value="4">Bom</option>
                                                     <option value="5">Muito bom</option>
+                                                    <option value="6">N/A</option>
                                                 </select>
                                                 <div id="divTextAreaQuestion3" style={{ display: "none", width: "24rem", marginLeft: "2em" }}>
                                                     <br />
@@ -466,12 +571,13 @@ class MyServices_Utilizador extends React.Component {
                                                     Qual a probabilidade de recomendar o serviço do prestador?
                                                 </div>
                                                 <select class="form-control" id="dropDownQuestion4" style={{ width: "15rem", marginLeft: "7em" }}>
-                                                    <option checked>Selecionar</option>
+                                                    <option value="0" checked>Selecionar</option>
                                                     <option value="1">Não recomendaria</option>
                                                     <option value="2">Pouco provável</option>
                                                     <option value="3">Talvez</option>
                                                     <option value="4">Recomendaria</option>
                                                     <option value="5">Recomendaria de certeza</option>
+                                                    <option value="6">N/A</option>
                                                 </select>
                                                 <div id="divTextAreaQuestion4" style={{ display: "none", width: "24rem", marginLeft: "2em" }}>
                                                     <br />
@@ -552,6 +658,8 @@ class MyServices_Utilizador extends React.Component {
                                                     <td><span id="inv_InfoPagamento"></span></td>
                                                 </tr>
 
+                                                
+
                                                 <tr class="heading">
                                                     <td>Serviço</td>
 
@@ -559,7 +667,11 @@ class MyServices_Utilizador extends React.Component {
                                                 </tr>
 
                                                 <tr class="item last">
-                                                    <td><span id="inv_TipoServico"></span> (<span id="inv_DataHoraInicio"></span> - <span id="inv_DataHoraFim"></span>)</td>
+                                                    <td>
+                                                        <span id="inv_TipoServico"></span> (<span id="inv_DataHoraInicio"></span> - <span id="inv_DataHoraFim"></span>)
+                                                        <br/>
+                                                        <span >Divisões da casa: <span id="inv_DivisoesDaCasa"></span></span>
+                                                        </td>
 
                                                     <td><span id="inv_PrecoHora"></span> / hora</td>
                                                 </tr>

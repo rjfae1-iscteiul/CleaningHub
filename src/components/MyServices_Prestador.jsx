@@ -12,6 +12,7 @@ import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
 import GoogleMapReact from 'google-map-react'; 
+import swal from 'sweetalert';
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const Marker = (props) => {
@@ -58,6 +59,33 @@ class MyServices_Prestador extends React.Component {
                     "sSearch": ""
                 },
                 "order": [[1, 'asc']]
+            });
+
+            table.on('click', 'button[name^="btnObterCoordenadas_"]', function (e) 
+            {
+                var nameButton = e.target.name;
+
+                var utilizadorId = nameButton.split('_')[1];
+
+                $('#modalGoogleMaps').modal('show');
+
+                GetUtilizadorDirections(utilizadorId);
+            });
+
+            table.on('change', 'select[id^="actionService_"]', function (e) 
+            {
+                var numeroServico = e.target.id.split('_')[1];
+                var accao = e.target.value;
+
+                if (accao == 'Remarcado') {
+                    $('#divActionNovaDataHora').show();
+                } else {
+                    $('#divActionNovaDataHora').hide();
+                }
+
+                $('#lblActionService').html(accao);
+                $('#lblNumeroService').html(numeroServico);
+                $('#modalConfirmAction').modal('show');
             });
 
             $('div.dataTables_filter input').addClass('form-control');
@@ -112,11 +140,16 @@ class MyServices_Prestador extends React.Component {
                 "estadoPrestador": newStatus
             })
             .then(() => {
-                alert("Document successfully updated!");
+                console.log("Document successfully updated!");
             })
             .catch((error) => {
-                alert("Error update: " + error);
+                console.log("Error update: " + error);
             });
+        }
+
+        function SweetAlert(MensagemPrincipal, MensagemSecundaria, Tipo) 
+        {
+          swal(MensagemPrincipal, MensagemSecundaria, Tipo);
         }
 
         function PreencherLinhasPrestadores(table) {
@@ -148,6 +181,7 @@ class MyServices_Prestador extends React.Component {
                         }).draw();
                     });
 
+                    /*
                     $('button[name^="btnObterCoordenadas_"').click(function (e) {
 
                         var nameButton = e.target.name;
@@ -173,12 +207,13 @@ class MyServices_Prestador extends React.Component {
                         $('#lblNumeroService').html(numeroServico);
                         $('#modalConfirmAction').modal('show');
                     });
+                    */
 
                     $('#confirmAction').click(function (e) {
                         var numeroServico = '#actionService_' + $('#lblNumeroService').text();
 
                         if ($('#lblActionService').html() == 'Remarcado' && $('#novaDataHora').val() == '') {
-                            alert('Preencha a nova data do serviço');
+                            SweetAlert('Alerta', 'Preencha a nova data do serviço', 'warning');
                         }
                         else {
                             $(numeroServico).attr("disabled", true);

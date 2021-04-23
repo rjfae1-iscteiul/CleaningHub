@@ -96,7 +96,8 @@ class Register extends React.Component {
         }
       });
 
-      $('#saveDataPrestador').click(function () {
+      $('#saveDataPrestador').click(function ()
+      {
         if (Prestador_CheckInformation()) {
           $('#modalMoreDataPrestador').modal('hide');
           console.log(files.length);
@@ -236,6 +237,8 @@ class Register extends React.Component {
 
     function AddUtilizadorInCollectionFirebase(randString) {
 
+      console.log("AddUtilizadorInCollectionFirebase");
+
       const db = ReturnInstanceFirebase();
 
       db.collection("Utilizadores").doc(randString).set({
@@ -289,32 +292,59 @@ class Register extends React.Component {
 
     function AddPrestadorInCollectionFirebase(randString) {
 
-      const db = ReturnInstanceFirebase();
+      console.log("AddPrestadorInCollectionFirebase");
 
-      db.collection("Prestadores").doc(randString).set({
-        prestadorId: randString,
-        primeiroNome: $('#idTxbPrimeiroNome').val(),
-        segundoNome: $('#idTxbSegundoNome').val(),
-        nacionalidade: $('#idTxbNacionalidade').val(),
-        dataNascimento: $('#idTxbDataNascimento').val(),
-        rua: $('#idTxbRua').val(),
-        codigoPostal: $('#idTxbCodigoPostal').val(),
-        localidade: $('#idTxbLocalidade').val(),
-        contactoTelefonico: $('#idTxbContatoTelefonico').val(),
-        email: $('#idTxbEmail').val(),
-        nif: $('#idTxbNIF').val(),
-        iban: $('#idTxbIBAN').val(),
-        priceWithoutProducts: $('#idTxbPriceWithoutProducts').val(),
-        priceWithProducts: $('#idTxbPriceWithProducts').val(),
-        dataRegisto: GetTimeNowStringFormat()
-      })
-        .then(() => {
-          console.log("Document successfully written!");
+      try 
+      {
+      
+        console.log('0' + randString);
+        console.log('1' + $('#idTxbPrimeiroNome').val());
+        console.log('2' + $('#idTxbSegundoNome').val());
+        console.log('3' + $('#idTxbNacionalidade').val());
+        console.log('4' + $('#idTxbDataNascimento').val());
+        console.log('5' + $('#idTxbRua').val());
+        console.log('6' + $('#idTxbCodigoPostal').val());
+        console.log('7' + $('#idTxbLocalidade').val());
+        console.log('8' + $('#idTxbContatoTelefonico').val());
+        console.log('9' + $('#idTxbEmail').val());
+        console.log('10' + $('#idTxbNIF').val());
+        console.log('11' + $('#idTxbIBAN').val());
+        console.log('12' + $('#idTxbPriceWithoutProducts').val());
+        console.log('13' + $('#idTxbPriceWithProducts').val());
+        console.log('14' + GetTimeNowStringFormat());
+        
+        const db = ReturnInstanceFirebase();
+
+        var teste = db.collection("Prestadores").doc(randString).set({
+          prestadorId: randString,
+          primeiroNome: $('#idTxbPrimeiroNome').val(),
+          segundoNome: $('#idTxbSegundoNome').val(),
+          nacionalidade: $('#idTxbNacionalidade').val(),
+          dataNascimento: $('#idTxbDataNascimento').val(),
+          rua: $('#idTxbRua').val(),
+          codigoPostal: $('#idTxbCodigoPostal').val(),
+          localidade: $('#idTxbLocalidade').val(),
+          contactoTelefonico: $('#idTxbContatoTelefonico').val(),
+          email: $('#idTxbEmail').val(),
+          nif: $('#idTxbNIF').val(),
+          iban: $('#idTxbIBAN').val(),
+          priceWithoutProducts: $('#idTxbPriceWithoutProducts').val(),
+          priceWithProducts: $('#idTxbPriceWithProducts').val(),
+          dataRegisto: GetTimeNowStringFormat()
         })
-        .catch((error) => {
-          console.log("Error writing document: ", error);
-        });
+          .then(() => {
+            console.log("Document successfully written!");
+          })
+          .catch((error) => {
+            console.log("Error writing document: ", error);
+          });
+      } catch (error) {
+        console.log("Erro AddPrestadorInCollectionFirebase");
+      }      
     }
+
+
+
   }
 
   render() {
@@ -472,7 +502,7 @@ class Register extends React.Component {
 
                   <div class="form-group">
                     <label>IBAN</label>
-                    <input type="number" class="form-control" id="idTxbIBAN" Placeholder="PT50"></input>
+                    <input type="text" class="form-control" id="idTxbIBAN" Placeholder="PT50"></input>
                   </div>
 
                   <div class="form-row">
@@ -499,8 +529,7 @@ class Register extends React.Component {
                   </div>
 
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-success" id="saveDataPrestador">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
                   </div>
                 </div>
               </div>

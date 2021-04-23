@@ -31,6 +31,7 @@
     "rater-js": "^1.0.1",
     "react": "^17.0.1",
     "react-bootstrap": "^1.5.2",
+    "react-bootstrap-select": "^0.14.0",
     "react-bootstrap-sweetalert": "^5.2.0",
     "react-chartjs-2": "^2.11.1",
     "react-dom": "^17.0.1",

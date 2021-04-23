@@ -20,6 +20,7 @@ class Services_jquery extends React.Component {
         }
     }
 
+
     /*
     contractClick() 
     {
@@ -68,6 +69,30 @@ class Services_jquery extends React.Component {
                 "order": [[1, 'asc']]
             });
 
+            
+            table.on('click', 'button[name^="btnContratar"]', function (e) 
+            {
+                var nameButton = e.target.name;
+
+                var prestadorId = nameButton.split('_')[1];
+                var prestadorFirstName = nameButton.split('_')[2];
+                var prestadorSecndName = nameButton.split('_')[3];
+                var priceWithoutProducts = nameButton.split('_')[4];
+                var priceWithProducts = nameButton.split('_')[5];
+
+                $('.classOptionWithProducts').attr('id', 'optionWithProducts_' + priceWithProducts);
+                $('.classOptionWithoutProducts').attr('id', 'optionWithoutProducts_' + priceWithoutProducts);
+
+                $('#idPrestador').val(prestadorId + " - " + prestadorFirstName + " " + prestadorSecndName);
+
+                if($('#serviceType').val() == 1) // COM PRODUTOS
+                    $('#price').val($('#hours').val() * priceWithProducts);
+                else // SEM PRODUTOS
+                    $('#price').val($('#hours').val() * priceWithoutProducts);
+
+                $('#requestServiceModal').modal('show');
+            });
+
             $('div.dataTables_filter input').addClass('form-control');
             $("div.dataTables_filter input").attr("placeholder", "Procurar");
 
@@ -107,6 +132,19 @@ class Services_jquery extends React.Component {
                 }
             });
 
+            $('#serviceType').change(function () 
+            {
+                var optionId;
+
+                if($('#serviceType').val() == 1) // COM PRODUTOS
+                    optionId = $("option[id^='optionWithProducts_']" ).attr('id');
+                else // SEM PRODUTOS
+                    optionId = $("option[id^='optionWithoutProducts_']").attr('id');
+                
+                $('#price').val($('#hours').val() * optionId.split('_')[1]);
+                
+            });
+
             $("#example_paginate").css("font-size", "small");
             $(".dataTables_filter").css("font-size", "small");
             $(".dataTables_length").css("font-size", "small");
@@ -116,10 +154,16 @@ class Services_jquery extends React.Component {
 
             $('#hours').val(1);
 
-            $('#hours').change(function () {
-                var price = 10;
+            $('#hours').change(function () 
+            {
+                var optionId;
 
-                $('#price').val($('#hours').val() * price);
+                if($('#serviceType').val() == 1) // COM PRODUTOS
+                    optionId = $("option[id^='optionWithProducts_']" ).attr('id');
+                else // SEM PRODUTOS
+                    optionId = $("option[id^='optionWithoutProducts_']").attr('id');
+                
+                $('#price').val($('#hours').val() * optionId.split('_')[1]);
             });
 
             $('#confirmRequest').click(function () {
@@ -170,6 +214,7 @@ class Services_jquery extends React.Component {
             $('#div_IBAN').hide();
             $('#div_MBWay').hide();
             $('#div_CreditCard').hide();
+            $("#houseDivisions option:selected").removeAttr("selected");
         }
 
         function CheckInformationBeforeSubmitRequest() 
@@ -238,6 +283,7 @@ class Services_jquery extends React.Component {
                 tipoPagamento: $('#paymentMethod option:selected').text(),
                 IBAN: $('#ibanNumber').val(),
                 observacoes: $('#observations').val(),
+                divisoes: $('#houseDivisions').val(),
                 contactMBWay: $('#phoneNumber').val(),
                 cc_Numero: $('#ccCardNumber').val(),
                 cc_Validade: $('#ccValidade').val(),
@@ -260,6 +306,7 @@ class Services_jquery extends React.Component {
                         docUtilizadores.data().utilizadorId,
                         docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
                         docUtilizadores.data().contactoTelefonico,
+                        $('#houseDivisions').val(),
                         $('#observations').val(),
                         $('#serviceType option:selected').text(),
                         $('#hours').val(),
@@ -314,7 +361,7 @@ class Services_jquery extends React.Component {
             return true;
         }
 
-        function SendEmailRequestService(var_to_name, var_to_email, codPrestador, noPrestador, coPrestador, codCliente, noCliente, coCliente, obs, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
+        function SendEmailRequestService(var_to_name, var_to_email, codPrestador, noPrestador, coPrestador, codCliente, noCliente, coCliente, obs, divisoes, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
             emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
 
             var templateParams =
@@ -328,6 +375,7 @@ class Services_jquery extends React.Component {
                 nomeCliente: noCliente,
                 contactoCliente: coCliente,
                 observacoes: obs,
+                divisoes: divisoes,
                 tipoServico: tipoSer,
                 numeroHoras: numHoras,
                 preco: preco,
@@ -387,9 +435,19 @@ class Services_jquery extends React.Component {
                     $('#cardPrestadorNome').html(prestadorName);
                     $('#cardRegistadoDesde').html("Registado desde:&nbsp;" + prestadorDataRegisto);
                     $('#cardTotalServicos').html("Total de serviços:&nbsp;" + querySnapshot.size);
-                    $('#cardPrecoMedio').html("Preço médio:&nbsp;" + (somaPrecoTotal / querySnapshot.size) + "€");
+                    $('#cardPrecoMedio').html("Preço médio:&nbsp;" + CalculateAveragePrice(somaPrecoTotal, querySnapshot.size) + "€");
 
+                    CalculateAveragePrice(somaPrecoTotal, querySnapshot.size);
                 });
+        }
+
+        function CalculateAveragePrice(totalValue, servicesNumber) 
+        {
+            var result = totalValue/servicesNumber;
+
+            console.log(result);
+
+            return isNaN(result) ? 0 : result;
         }
 
         function PreencherLinhasPrestadores(table) {
@@ -411,25 +469,35 @@ class Services_jquery extends React.Component {
                             "distance": CheckIsNull(doc.data().distance),
                             "priceWithoutProducts": CheckIsNull(doc.data().priceWithoutProducts) + "€",
                             "priceWithProducts": CheckIsNull(doc.data().priceWithProducts) + "€",
-                            "button": '<button type="button" name="btnContratar_' + doc.data().prestadorId + '_' + doc.data().primeiroNome + '" class="btn btn-light">Contratar</button>'
+                            "button": '<button type="button" name="btnContratar_' + doc.data().prestadorId + '_' + doc.data().primeiroNome + '_' + doc.data().segundoNome + '_' + doc.data().priceWithoutProducts + '_' + doc.data().priceWithProducts + '" class="btn btn-light">Contratar</button>'
                         }).draw();
                     });
 
+                    /*
                     $('button[name^="btnContratar"').click(function (e) {
 
                         var nameButton = e.target.name;
 
                         var prestadorId = nameButton.split('_')[1];
-                        var prestadorName = nameButton.split('_')[2];
+                        var prestadorFirstName = nameButton.split('_')[2];
+                        var prestadorSecndName = nameButton.split('_')[3];
+                        var priceWithoutProducts = nameButton.split('_')[4];
+                        var priceWithProducts = nameButton.split('_')[5];
 
-                        $('#idPrestador').val(prestadorId + " - " + prestadorName);
+                        $('.classOptionWithProducts').attr('id', 'optionWithProducts_' + priceWithProducts);
+                        $('.classOptionWithoutProducts').attr('id', 'optionWithoutProducts_' + priceWithoutProducts);
 
-                        var price = 10;
+                        $('#idPrestador').val(prestadorId + " - " + prestadorFirstName + " " + prestadorSecndName);
 
-                        $('#price').val($('#hours').val() * price);
-                        
+                        if($('#serviceType').val() == 1) // COM PRODUTOS
+                            $('#price').val($('#hours').val() * priceWithProducts);
+                        else // SEM PRODUTOS
+                            $('#price').val($('#hours').val() * priceWithoutProducts);
+
                         $('#requestServiceModal').modal('show');
                     });
+                    */
+
                     // console.log(this.state.row[0].PrimeiroNome);
                 })
                 .catch((error) => {
@@ -512,20 +580,40 @@ class Services_jquery extends React.Component {
                                         <div class="col">
                                             <label>Tipo de serviço</label>
                                             <select class="form-control" id="serviceType" aria-label="Default select example">
-                                                <option value="1">Com produtos</option>
-                                                <option value="2">Sem produtos</option>
+                                                <option id="optionWithProducts" class="classOptionWithProducts" value="1">Com produtos</option>
+                                                <option id="optionWithoutProducts"class="classOptionWithoutProducts" value="2">Sem produtos</option>
                                             </select>
+                                        </div>
+                                        <div class="col">
+                                        <label>Divisões</label>
+                                        <select class="form-control" multiple data-live-search="true" id="houseDivisions">
+                                            <option value="Selecionar">Selecionar</option>
+                                            <option value="Quarto">Quarto</option>
+                                            <option value="SalaDeEstar">Sala de estar</option>
+                                            <option value="SalaDeJantar">Sala de jantar</option>
+                                            <option value="WC">WC</option>
+                                            <option value="Suite">Suíte</option>
+                                            <option value="Cozinha">Cozinha</option>
+                                            <option value="Sotao">Sótão</option>
+                                            <option value="Arrecadacao">Arrecadação</option>
+                                            <option value="Garagem">Garagem</option>
+                                            <option value="Corredor">Corredor</option>
+                                            <option value="Quintal">Quintal</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <label>Preço</label>
+                                            <input type="number" class="form-control" id="price" disabled></input>
                                         </div>
                                         <div class="col">
                                             <label>Número de horas</label>
                                             <input type="number" class="form-control" id="hours" min="1"></input>
                                         </div>
-                                        <div class="col">
-                                            <label>Preço</label>
-                                            <input type="number" class="form-control" id="price" disabled></input>
-                                        </div>
                                     </div>
-
                                 </div>
 
                                 <div class="form-group">
