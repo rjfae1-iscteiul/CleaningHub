@@ -188,18 +188,20 @@ class Register extends React.Component {
     function SendEmailRegister(var_to_name, var_to_email) {
       emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
 
+      console.log('SendEmailRegister: ' + var_to_name + ' ' + var_to_email);
+
       var templateParams =
       {
         to_name: var_to_name,
-        to: var_to_email,
-        message: 'Bem-Vindo! E-mail de teste'
+        // to: var_to_email,
+        to: 'rjfae1@iscte-iul.pt'
       };
 
       emailjs.send('serviceId_CleaningHub', 'template_registerUser', templateParams)
         .then(function (response) {
-          console.log('SUCCESS!', response.status, response.text);
+          console.log('Email enviado com sucesso!', response.status, response.text);
         }, function (error) {
-          console.log('FAILED...', error);
+          console.log('Erro no envio do e-mail', error);
         });
     }
 

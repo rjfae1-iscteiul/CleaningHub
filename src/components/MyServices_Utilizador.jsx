@@ -115,7 +115,7 @@ class MyServices_Utilizador extends React.Component {
                 {
                     SweetAlert('Alerta', 'Existem questões sem opção selecionada.', 'warning');
                 } 
-                else if(!CheckMoreInformationSurvey(1) || !CheckMoreInformationSurvey(2) || !CheckMoreInformationSurvey(3) || !CheckMoreInformationSurvey(4)) 
+                else if(CheckMoreInformationSurvey(1) == false || CheckMoreInformationSurvey(2) == false || CheckMoreInformationSurvey(3) == false || CheckMoreInformationSurvey(4) == false) 
                 {
                     SweetAlert('Alerta', 'Existem motivos de insatisfação por preenche.', 'warning');
                 }
@@ -132,6 +132,53 @@ class MyServices_Utilizador extends React.Component {
             });
 
         });
+        
+        function SendEmailRequestServic_Avaliacao(var_to_name, var_to_email, codServico, avalP1, avalP2, avalP3, avalP4, obsP1, obsP2, obsP3, obsP4) {
+            emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
+
+            var templateParams =
+            {
+                to_name: var_to_name,
+                to: var_to_email,
+                codServico: codServico,
+                avalP1: avalP1,
+                avalP2: avalP2,
+                avalP3: avalP3,
+                avalP4: avalP4,
+                obsP1: obsP1,
+                obsP2: obsP2,
+                obsP3: obsP3,
+                obsP4: obsP4
+            };
+
+            emailjs.send('serviceId_CleaningHub', 'template_survey', templateParams)
+                .then(function (response) {
+                    console.log('Sucesso no envio do e-mail: SendEmailRequestServic_Avaliacao', response.status, response.text);
+                }, function (error) {
+                    console.log('Erro a enviar e-mail: SendEmailRequestServic_Avaliacao', error);
+                });
+        }
+
+        function SendEmailRequestServic_AltEstServico(var_to_name, var_to_email, tipo, codServico, novoEstadoServico, novaDataServico) {
+            emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
+
+            var templateParams =
+            {
+                to_name: var_to_name,
+                to: var_to_email,
+                tipo: tipo,
+                codServico: codServico,
+                novoEstadoServico: novoEstadoServico,
+                novaDataServico: novaDataServico.replace('T', ' ')
+            };
+
+            emailjs.send('serviceId_CleaningHub', 'template_chngeSrvStatus', templateParams)
+                .then(function (response) {
+                    console.log('Sucesso no envio do e-mail: SendEmailRequestServic_AltEstServico', response.status, response.text);
+                }, function (error) {
+                    console.log('Erro a enviar e-mail: SendEmailRequestServic_AltEstServico', error);
+                });
+        }
 
         function ReturnInstanceFirebase() {
             var config =
@@ -190,6 +237,20 @@ class MyServices_Utilizador extends React.Component {
                 .catch((error) => {
                     console.log("Error writing document: ", error);
                 });
+
+                SendEmailRequestServic_Avaliacao(
+                                            'Ricardo Jorge Ferreira',
+                                            'rjfae1@iscte-iul.pt',
+                                            serviceId,
+                                            $('#dropDownQuestion1 option:selected').text(),
+                                            $('#dropDownQuestion2 option:selected').text(),
+                                            $('#dropDownQuestion3 option:selected').text(),
+                                            $('#dropDownQuestion4 option:selected').text(),
+                                            $('#textAreaQuestion1').val(),
+                                            $('#textAreaQuestion2').val(),
+                                            $('#textAreaQuestion3').val(),
+                                            $('#textAreaQuestion4').val()
+                                            );
         }
 
         function PreencherLinhasPrestadores(table) {
@@ -262,8 +323,10 @@ class MyServices_Utilizador extends React.Component {
                         }
                         else {
                             $(numeroServico).attr("disabled", true);
-                            AtualizarEstadoDoDocumento(numeroServico.split('_')[1], $('#lblActionService').html());
+                            AtualizarEstadoDoDocumento(numeroServico.split('_')[1], $('#lblActionService').html(), $('#novaDataHora').val());
                             $('#modalConfirmAction').modal('hide');
+                            SweetAlert('Sucesso', 'Estado do serviço foi alterado a nova data do serviço', 'success');
+
                         }
                     });
                 })
@@ -272,12 +335,12 @@ class MyServices_Utilizador extends React.Component {
                 });
         }
 
-        function AtualizarEstadoDoDocumento(serviceId, newStatus) {
+        function AtualizarEstadoDoDocumento(serviceId, newStatus, newDate) {
             const db = ReturnInstanceFirebase();
 
             var servicoReference = db.collection("PedidosServico").doc(serviceId);
 
-            return servicoReference.update({
+            servicoReference.update({
                 "estadoUtilizador": newStatus
             })
                 .then(() => {
@@ -286,6 +349,21 @@ class MyServices_Utilizador extends React.Component {
                 .catch((error) => {
                     console.log("Error update: " + error);
                 });
+
+            var novaData = '';
+
+            if(newDate != '') {
+                novaData = 'Nova data do serviço: ' + newDate;
+            }
+            SendEmailRequestServic_AltEstServico(
+                'Ricardo Jorge Ferreira',
+                'rjfae1@iscte-iul.pt',
+                'utilizador',
+                serviceId,
+                newStatus,
+                novaData
+            )
+
         }
 
         function CheckOptionSurvey() 
@@ -295,7 +373,7 @@ class MyServices_Utilizador extends React.Component {
 
         function CheckMoreInformationSurvey(id) 
         {        
-            if( ($('#dropDownQuestion' + id).val() == "1" || $('#dropDownQuestion' + id).val() == "2") && $('#divTextAreaQuestion' + id).val() == "")
+            if( ($('#dropDownQuestion' + id).val() == "1" || $('#dropDownQuestion' + id).val() == "2") && $('#textAreaQuestion' + id).val() == "")
                 return false;
             else 
                 return true;

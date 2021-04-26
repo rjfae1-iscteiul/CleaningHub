@@ -11,6 +11,7 @@ import { Form, Button, FormGroup, FormControl, ControlLabel } from "react-bootst
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
+import emailjs from 'emailjs-com';
 import GoogleMapReact from 'google-map-react'; 
 import swal from 'sweetalert';
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
@@ -103,6 +104,27 @@ class MyServices_Prestador extends React.Component {
             */
         });
 
+        function SendEmailRequestServic_AltEstServico(var_to_name, var_to_email, tipo, codServico, novoEstadoServico, novaDataServico) {
+            emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
+
+            var templateParams =
+            {
+                to_name: var_to_name,
+                to: var_to_email,
+                tipo: tipo,
+                codServico: codServico,
+                novoEstadoServico: novoEstadoServico,
+                novaDataServico: novaDataServico.replace('T', ' ')
+            };
+
+            emailjs.send('serviceId_CleaningHub', 'template_chngeSrvStatus', templateParams)
+                .then(function (response) {
+                    console.log('Sucesso no envio do e-mail: SendEmailRequestServic_AltEstServico', response.status, response.text);
+                }, function (error) {
+                    console.log('Erro a enviar e-mail: SendEmailRequestServic_AltEstServico', error);
+                });
+        }
+
         function ReturnInstanceFirebase() {
             var config =
             {
@@ -130,13 +152,13 @@ class MyServices_Prestador extends React.Component {
             return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
         }
 
-        function AtualizarEstadoDoDocumento(serviceId, newStatus) 
+        function AtualizarEstadoDoDocumento(serviceId, newStatus, newDate) 
         {
             const db = ReturnInstanceFirebase();
 
             var servicoReference = db.collection("PedidosServico").doc(serviceId);
 
-            return servicoReference.update({
+            servicoReference.update({
                 "estadoPrestador": newStatus
             })
             .then(() => {
@@ -145,6 +167,21 @@ class MyServices_Prestador extends React.Component {
             .catch((error) => {
                 console.log("Error update: " + error);
             });
+
+            var novaData = '';
+
+            if(newDate != '') {
+                novaData = 'Nova data do serviço: ' + newDate;
+            }
+
+            SendEmailRequestServic_AltEstServico(
+                'Ricardo Jorge Ferreira',
+                'rjfae1@iscte-iul.pt',
+                'prestador',
+                serviceId,
+                newStatus,
+                novaData
+            )
         }
 
         function SweetAlert(MensagemPrincipal, MensagemSecundaria, Tipo) 
@@ -217,8 +254,9 @@ class MyServices_Prestador extends React.Component {
                         }
                         else {
                             $(numeroServico).attr("disabled", true);
-                            AtualizarEstadoDoDocumento(numeroServico.split('_')[1], $('#lblActionService').html());
+                            AtualizarEstadoDoDocumento(numeroServico.split('_')[1], $('#lblActionService').html(), $('#novaDataHora').val());
                             $('#modalConfirmAction').modal('hide');
+                            SweetAlert('Sucesso', 'Estado do serviço foi alterado a nova data do serviço', 'success');
                         }
                     });
                 })

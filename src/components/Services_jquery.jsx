@@ -297,17 +297,14 @@ class Services_jquery extends React.Component {
             })
                 .then(() => {
 
-                    SendEmailRequestService(
+                    /* ENVIO PARA UTILIZADOR */
+                    SendEmailRequestServic_Utilizador(
                         "Ricardo Jorge Ferreira",
                         "rjfae1@iscte-iul.pt",
-                        docPrestadores.data().prestadorId,
                         docPrestadores.data().primeiroNome + " " + docPrestadores.data().segundoNome,
                         docPrestadores.data().contactoTelefonico,
-                        docUtilizadores.data().utilizadorId,
-                        docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
-                        docUtilizadores.data().contactoTelefonico,
-                        $('#houseDivisions').val(),
                         $('#observations').val(),
+                        $('#houseDivisions').val(),
                         $('#serviceType option:selected').text(),
                         $('#hours').val(),
                         $('#price').val(),
@@ -315,6 +312,23 @@ class Services_jquery extends React.Component {
                         $('#dataHoraFim').val(),
                         $('#paymentMethod option:selected').text()
                     )
+
+                    /* ENVIO PARA PRESTADOR */
+                    SendEmailRequestService_Prestador(
+                        "Ricardo Jorge Ferreira",
+                        "rjfae1@iscte-iul.pt",
+                        docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
+                        docUtilizadores.data().contactoTelefonico,
+                        $('#observations').val(),
+                        $('#houseDivisions').val(),
+                        $('#serviceType option:selected').text(),
+                        $('#hours').val(),
+                        $('#price').val(),
+                        $('#dataHoraInicio').val(),
+                        $('#dataHoraFim').val(),
+                        $('#paymentMethod option:selected').text()
+                    )
+                    
                     SweetAlert("Sucesso", "Pedido de serviço finalizado. Receberá um e-mail com todos os detalhes do serviço!", "success");
                     ClearFieldsAfterRequest();
                     $('#requestServiceModal').modal('hide');
@@ -361,34 +375,57 @@ class Services_jquery extends React.Component {
             return true;
         }
 
-        function SendEmailRequestService(var_to_name, var_to_email, codPrestador, noPrestador, coPrestador, codCliente, noCliente, coCliente, obs, divisoes, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
+        function SendEmailRequestServic_Utilizador(var_to_name, var_to_email, noPrestador, coPrestador, obs, divisoes, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
             emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
 
             var templateParams =
             {
                 to_name: var_to_name,
                 to: var_to_email,
-                codigoPrestador: codPrestador,
                 nomePrestador: noPrestador,
                 contactoPrestador: coPrestador,
-                codigoCliente: codCliente,
+                observacoes: obs,
+                divisoes: divisoes,
+                tipoServico: tipoSer,
+                numeroHoras: numHoras,
+                preco: preco,
+                dataHoraInicio: dahoInicio.replace('T', ' '),
+                dataHoraFim: dahoFim.replace('T', ' '),
+                tipoPagamento: tipoPag
+            };
+
+            emailjs.send('serviceId_CleaningHub', 'template_reqService_Util', templateParams)
+                .then(function (response) {
+                    console.log('Sucesso no envio do e-mail: SendEmailRequestServic_Utilizador', response.status, response.text);
+                }, function (error) {
+                    console.log('Erro a enviar e-mail: SendEmailRequestServic_Utilizador', error);
+                });
+        }
+
+        function SendEmailRequestService_Prestador(var_to_name, var_to_email, noCliente, coCliente, obs, divisoes, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
+            emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
+
+            var templateParams =
+            {
+                to_name: var_to_name,
+                to: var_to_email,
                 nomeCliente: noCliente,
                 contactoCliente: coCliente,
                 observacoes: obs,
                 divisoes: divisoes,
                 tipoServico: tipoSer,
                 numeroHoras: numHoras,
-                preco: preco,
-                dataHoraInicio: dahoInicio,
-                dataHoraFim: dahoFim,
+                preco: preco + '€',
+                dataHoraInicio: dahoInicio.replace('T', ' '),
+                dataHoraFim: dahoFim.replace('T', ' '),
                 tipoPagamento: tipoPag
             };
 
-            emailjs.send('serviceId_CleaningHub', 'template_requestService', templateParams)
+            emailjs.send('serviceId_CleaningHub', 'template_reqService_Pres', templateParams)
                 .then(function (response) {
-                    console.log('SUCCESS!', response.status, response.text);
+                    console.log('Sucesso no envio do e-mail: SendEmailRequestServic_Prestador', response.status, response.text);
                 }, function (error) {
-                    console.log('FAILED...', error);
+                    console.log('Erro a enviar e-mail: SendEmailRequestServic_Prestador', error);
                 });
         }
 
