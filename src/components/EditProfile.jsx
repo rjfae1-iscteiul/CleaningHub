@@ -267,8 +267,8 @@ class EditProfile extends React.Component {
     const styleDiv = {
       paddingTop: "8%",
       textAlign: "center",
-      fontFamily: "Calibri",
-      paddingLeft: "30rem"
+      fontFamily: "Calibri"
+      // paddingLeft: "30rem"
     };
 
     const styleCheckbox = {
