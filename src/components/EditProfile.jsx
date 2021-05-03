@@ -274,10 +274,12 @@ class EditProfile extends React.Component {
     const styleCheckbox = {
       textAlign: "left"
     };
+    
     const styleTexBox = {
       height: "24px",
       fontFamily: "Calibri"
     }
+
     const styleLabel = {
       fontFamily: "Calibri",
       fontWeight: "bold"
@@ -405,7 +407,7 @@ class EditProfile extends React.Component {
           </table>
 
           {/* Modal */}
-          <div class="modal" id="modalPayment" style={{ paddingTop: "10em" }} tabindex="-1" role="dialog">
+          <div class="modal" id="modalPayment" style={{ paddingTop: "3%" }} tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
