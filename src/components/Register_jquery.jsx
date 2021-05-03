@@ -356,7 +356,7 @@ class Register extends React.Component {
       paddingTop: "5%",
       textAlign: "center",
       fontFamily: "Calibri",
-      paddingLeft: "50%"
+      paddingLeft: "45%"
     };
 
     const styleCheckbox = {
@@ -376,7 +376,7 @@ class Register extends React.Component {
 
         <div className="row">
         <div className="logo">
-          <img src={Logo_Completo} width="341" height="281" />
+          <img src={Logo_Completo} style={{display: "none"}} width="341" height="281" />
         </div>
       </div>
         <form>
@@ -398,7 +398,6 @@ class Register extends React.Component {
                     <label>Utilizador</label>
                   </div>
                 </div>
-
 
                 <div class="form-group">
                   <label>Primeiro Nome</label>
@@ -486,7 +485,7 @@ class Register extends React.Component {
             Registar
                     </button>
 
-          <div class="modal fade" id="modalMoreDataPrestador" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="modalMoreDataPrestador" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style={{paddingTop: "3%"}}>
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
