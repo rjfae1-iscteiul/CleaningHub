@@ -31,7 +31,7 @@ class Login extends React.Component
       
       paddingTop: "5%",
       position: "absolute",
-      paddingLeft: "50%"
+      paddingLeft: "43%"
       };
   
       const styleTexBox = {

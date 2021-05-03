@@ -321,7 +321,7 @@ class Dashboard_CH extends React.Component {
 
         return (
             <div style={{
-                position: 'absolute', left: '30%', top: '20%',
+                position: 'absolute', left: '30%', top: '40%',
                 transform: 'translate(-50%, -50%)'
               }}>
                     <div className="MainDiv" style={styleDiv}>
