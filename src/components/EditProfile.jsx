@@ -6,7 +6,7 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'react-rater/lib/react-rater.css';
 import { Helmet } from "react-helmet";
-import GoogleMapReact from 'google-map-react';
+import GoogleMapReact, { latLng2Tile } from 'google-map-react';
 import Geocode from "react-geocode";
 import swal from 'sweetalert';
 
@@ -26,16 +26,26 @@ const Marker = (props) => {
   );
 };
 
-
 class EditProfile extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-
+    this.state = {  
+        latitude: 0.0,
+        longitude: 0.0,
+        center: {
+          lati: 38.7222524, 
+          long: -9.1393366
+      }
     }
   }
 
   componentDidMount() {
+
+    Geocode.setApiKey("AIzaSyDRa5tSeLYFGsON0p6FwcBzUMEoIoLonXM");
+
+    Geocode.setLanguage("en");
+
+    Geocode.setRegion("es");
 
     /*
     Geocode.setApiKey("AIzaSyBnyvkAnkVp4RHFuqvNzlkLDMCEL6fRu1w");
@@ -233,7 +243,23 @@ class EditProfile extends React.Component {
       }
       return firebase.firestore();
     }
+    
+    Geocode.fromAddress('Rua do Jardim, 2695-656, Loures').then(
+      (response) => {
+        const { lat, lng } = response.results[0].geometry.location;
 
+        console.log('Latitude: ' + lat + ' || Longitude: ' + lng);
+
+        this.setState({
+          latitude: lat,
+          longitude: lng
+        });
+
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   render() {
@@ -349,19 +375,23 @@ class EditProfile extends React.Component {
               <td style={{ paddingLeft: "2em" }}>
                 {/* Google Maps */}
                 <h4>Google Maps</h4>
+                <span><b>Latitude:</b> {this.state.latitude}</span>
+                <br/>
+                <span><b>Longitude:</b> {this.state.longitude}</span>
+
                 <div style={{ height: '50vh', width: '50vh' }}>
                   <GoogleMapReact
-                    bootstrapURLKeys={{ key: "AIzaSyBnyvkAnkVp4RHFuqvNzlkLDMCEL6fRu1w" }}
+                    bootstrapURLKeys={{ key: "AIzaSyDRa5tSeLYFGsON0p6FwcBzUMEoIoLonXM" }}
                     defaultCenter={{
-                      lat: 59.95,
-                      lng: 30.33
+                      lat: 38.83247679999999,
+                      lng: -9.101574
                     }}
                     defaultZoom={11}
                   >
 
                     <Marker
-                      lat={59.95}
-                      lng={30.33}
+                      lat={this.state.latitude}
+                      lng={this.state.longitude}
                       name="My Marker"
                       color="#55b3e9"
                     />

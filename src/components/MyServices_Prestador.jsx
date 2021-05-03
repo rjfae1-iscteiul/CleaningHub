@@ -14,6 +14,8 @@ import { Helmet } from "react-helmet";
 import emailjs from 'emailjs-com';
 import GoogleMapReact from 'google-map-react'; 
 import swal from 'sweetalert';
+import Geocode from "react-geocode";
+
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
 const Marker = (props) => {
@@ -34,11 +36,23 @@ class MyServices_Prestador extends React.Component {
     constructor(props) {
         super(props)
 
-        this.state = {
+        this.state = {  
+            latitude: 0.0,
+            longitude: 0.0,
+            center: {
+              lati: 38.7222524, 
+              long: -9.1393366
+          }
         }
     }
 
     componentDidMount() {
+
+        Geocode.setApiKey("AIzaSyDRa5tSeLYFGsON0p6FwcBzUMEoIoLonXM");
+
+        Geocode.setLanguage("en");
+    
+        Geocode.setRegion("es");
 
         $(document).ready(function () {
 
@@ -302,6 +316,23 @@ class MyServices_Prestador extends React.Component {
         {
             return value != null ? value : "";
         }
+
+        Geocode.fromAddress('Rua do Jardim, 2695-656, Loures').then(
+            (response) => {
+              const { lat, lng } = response.results[0].geometry.location;
+      
+              console.log('Latitude: ' + lat + ' || Longitude: ' + lng);
+      
+              this.setState({
+                latitude: lat,
+                longitude: lng
+              });
+      
+            },
+            (error) => {
+              console.log(error);
+            }
+          );    
     }
 
     render() {
@@ -359,26 +390,30 @@ class MyServices_Prestador extends React.Component {
                         </div>
 
                         {/* Google Maps */}
+
                         <div class="modal fade" id="modalGoogleMaps" style={{paddingTop: '4%'}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
 
                                     <div class="modal-body">
-
+                                        <h4>Google Maps</h4>
+                                        <span><b>Latitude:</b> {this.state.latitude}</span>
+                                        <br/>
+                                        <span><b>Longitude:</b> {this.state.longitude}</span>
                                         <div style={{ height: '50vh', width: '100%' }}>
 
                                             <GoogleMapReact
                                                 bootstrapURLKeys={{ key: "AIzaSyBnyvkAnkVp4RHFuqvNzlkLDMCEL6fRu1w" }}
                                                 defaultCenter={{
-                                                    lat: 59.95,
-                                                    lng: 30.33
+                                                    lat: 38.83247679999999,
+                                                    lng: -9.101574
                                                 }}
                                                 defaultZoom={11}
                                             >
 
-                                            <Marker
-                                                lat={59.95}
-                                                lng={30.33}
+                                            <Marker                      
+                                                lat={this.state.latitude}
+                                                lng={this.state.longitude}
                                                 name="My Marker"
                                                 color="#55b3e9"
                                             />
@@ -395,8 +430,8 @@ class MyServices_Prestador extends React.Component {
                                         <label>Código-postal:&nbsp;</label>
                                         <label id="modalGoogleMapsCodigoPostal" style={{fontWeight:"normal"}}></label>
                                         <br/>
-                                        <label>Distância:&nbsp;</label>
-                                        <label id="modalGoogleMapsDistance" style={{fontWeight:"normal"}}></label>
+                                        <label style={{display: "none"}}>Distância:&nbsp;</label>
+                                        <label id="modalGoogleMapsDistance" style={{fontWeight:"normal", display: "none"}}></label>
                                         <br/>
 
                                         <div class="modal-footer">
