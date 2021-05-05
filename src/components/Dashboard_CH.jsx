@@ -67,7 +67,7 @@ class Dashboard_CH extends React.Component {
                 .get()
                 .then((querySnapshot) => {
                     var label = $('#ind_ger_indicator1').html();
-                    $('#ind_ger_indicator1').html(label + ' / ' + querySnapshot.size);
+                    $('#ind_ger_indicator1').html(label + ' / ' + ValueIsNan(querySnapshot.size));
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
@@ -86,7 +86,7 @@ class Dashboard_CH extends React.Component {
                     var cc = 0;
 
                     var label2 = $('#ind_ger_indicator2').html();
-                    $('#ind_ger_indicator2').html(label2 + querySnapshot.size);
+                    $('#ind_ger_indicator2').html(label2 + ValueIsNan(querySnapshot.size));
 
                     querySnapshot.forEach((doc) => {
                         switch (doc.data().tipoPagamento) {
@@ -105,13 +105,13 @@ class Dashboard_CH extends React.Component {
                     })
 
                     var label3 = $('#ind_ger_indicator3').html();
-                    $('#ind_ger_indicator3').html(label3 + iban + ' / ' + ((iban/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_ger_indicator3').html(label3 + iban + ' / ' + ValueIsNan((iban/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label4 = $('#ind_ger_indicator4').html();
-                    $('#ind_ger_indicator4').html(label4 + mbway + ' / ' + ((mbway/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_ger_indicator4').html(label4 + mbway + ' / ' + ValueIsNan((mbway/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label5 = $('#ind_ger_indicator5').html();
-                    $('#ind_ger_indicator5').html(label5 + cc + ' / ' + ((cc/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_ger_indicator5').html(label5 + cc + ' / ' + ValueIsNan((cc/querySnapshot.size)*100).toFixed(2) + '%');
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
@@ -182,35 +182,35 @@ class Dashboard_CH extends React.Component {
 
                     /* UTILIZADOR */
                     var label_uti_1 = $('#ind_uti_indicador1').html();
-                    $('#ind_uti_indicador1').html(label_uti_1 + uti_remarcado + ' / ' + ((uti_remarcado/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_uti_indicador1').html(label_uti_1 + uti_remarcado + ' / ' + ValueIsNan((uti_remarcado/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label_uti_2 = $('#ind_uti_indicador2').html();
-                    $('#ind_uti_indicador2').html(label_uti_2 + uti_canceladoUtilizador + ' / ' + ((uti_canceladoUtilizador/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_uti_indicador2').html(label_uti_2 + uti_canceladoUtilizador + ' / ' + ValueIsNan((uti_canceladoUtilizador/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label_uti_3 = $('#ind_uti_indicador3').html();
-                    $('#ind_uti_indicador3').html(label_uti_3 + uti_canceladoPrestador + ' / ' + ((uti_canceladoPrestador/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_uti_indicador3').html(label_uti_3 + uti_canceladoPrestador + ' / ' + ValueIsNan((uti_canceladoPrestador/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label_uti_4 = $('#ind_uti_indicador4').html();
-                    $('#ind_uti_indicador4').html(label_uti_4 + uti_terminado + ' / ' + ((uti_terminado/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_uti_indicador4').html(label_uti_4 + uti_terminado + ' / ' + ValueIsNan((uti_terminado/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label_uti_5 = $('#ind_uti_indicador5').html();
-                    $('#ind_uti_indicador5').html(label_uti_5 + uti_semAcao + ' / ' + ((uti_semAcao/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_uti_indicador5').html(label_uti_5 + uti_semAcao + ' / ' + ValueIsNan((uti_semAcao/querySnapshot.size)*100).toFixed(2) + '%');
 
                     /* PRESTADOR */
                     var label_pre_1 = $('#ind_pre_indicador1').html();
-                    $('#ind_pre_indicador1').html(label_pre_1 + pre_remarcado + ' / ' + ((pre_remarcado/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_pre_indicador1').html(label_pre_1 + pre_remarcado + ' / ' + ValueIsNan((pre_remarcado/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label_pre_2 = $('#ind_pre_indicador2').html();
-                    $('#ind_pre_indicador2').html(label_pre_2 + pre_canceladoUtilizador + ' / ' + ((pre_canceladoUtilizador/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_pre_indicador2').html(label_pre_2 + pre_canceladoUtilizador + ' / ' + ValueIsNan((pre_canceladoUtilizador/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label_pre_3 = $('#ind_pre_indicador3').html();
-                    $('#ind_pre_indicador3').html(label_pre_3 + pre_canceladoPrestador + ' / ' + ((pre_canceladoPrestador/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_pre_indicador3').html(label_pre_3 + pre_canceladoPrestador + ' / ' + ValueIsNan((pre_canceladoPrestador/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label_pre_4 = $('#ind_pre_indicador4').html();
-                    $('#ind_pre_indicador4').html(label_pre_4 + pre_terminado + ' / ' + ((pre_terminado/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_pre_indicador4').html(label_pre_4 + pre_terminado + ' / ' + ValueIsNan((pre_terminado/querySnapshot.size)*100).toFixed(2) + '%');
 
                     var label_pre_5 = $('#ind_pre_indicador5').html();
-                    $('#ind_pre_indicador5').html(label_pre_5 + pre_semAcao + ' / ' + ((pre_semAcao/querySnapshot.size)*100).toFixed(2) + '%');
+                    $('#ind_pre_indicador5').html(label_pre_5 + pre_semAcao + ' / ' + ValueIsNan((pre_semAcao/querySnapshot.size)*100).toFixed(2) + '%');
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
@@ -239,20 +239,25 @@ class Dashboard_CH extends React.Component {
                     })
 
                     var label1 = $('#ind_questao1').html();
-                    $('#ind_questao1').html(label1 + (questao1/querySnapshot.size));
+                    $('#ind_questao1').html(label1 + ValueIsNan(questao1/querySnapshot.size).toFixed(2));
 
                     var label2 = $('#ind_questao2').html();
-                    $('#ind_questao2').html(label2 + (questao2/querySnapshot.size));
+                    $('#ind_questao2').html(label2 + ValueIsNan(questao2/querySnapshot.size).toFixed(2));
 
                     var label3 = $('#ind_questao3').html();
-                    $('#ind_questao3').html(label3 + (questao3/querySnapshot.size));
+                    $('#ind_questao3').html(label3 + ValueIsNan(questao3/querySnapshot.size).toFixed(2));
 
                     var label4 = $('#ind_questao4').html();
-                    $('#ind_questao4').html(label4 + (questao4/querySnapshot.size));
+                    $('#ind_questao4').html(label4 + ValueIsNan(questao4/querySnapshot.size).toFixed(2));
                 })
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
                 });
+        }
+
+        function ValueIsNan(result) 
+        {
+            return isNaN(result) ? 0 : result;
         }
 
         function TaxasServicos() 
@@ -289,16 +294,16 @@ class Dashboard_CH extends React.Component {
                     })
 
                     var label1 = $('#ind_taxa1').html();
-                    $('#ind_taxa1').html(label1 + taxa1 + '€ / ' + (taxa1*0.075) + '€');
+                    $('#ind_taxa1').html(label1 + ValueIsNan(taxa1) + '€ / ' + ValueIsNan(taxa1*0.075) + '€');
 
                     var label2 = $('#ind_taxa2').html();
-                    $('#ind_taxa2').html(label2 + taxa2 + '€ / ' + (taxa2*0.10) + '€');
+                    $('#ind_taxa2').html(label2 + ValueIsNan(taxa2) + '€ / ' + ValueIsNan(taxa2*0.10) + '€');
 
                     var label3 = $('#ind_taxa3').html();
-                    $('#ind_taxa3').html(label3 + taxa3 + '€ / ' + (taxa3*0.125) + '€');
+                    $('#ind_taxa3').html(label3 + ValueIsNan(taxa3) + '€ / ' + ValueIsNan(taxa3*0.125) + '€');
 
                     var label4 = $('#ind_taxa4').html();
-                    $('#ind_taxa4').html(label4 + taxa4 + '€ / ' + (taxa4*0.15) + '€');
+                    $('#ind_taxa4').html(label4 + ValueIsNan(taxa4) + '€ / ' + ValueIsNan(taxa4*0.15) + '€');
 
                     var totalTaxas = (taxa1*0.075) + (taxa2*0.10) + (taxa3*0.125) + (taxa4*0.15);
 
