@@ -92,15 +92,18 @@ class MyServices_Prestador extends React.Component {
                 var numeroServico = e.target.id.split('_')[1];
                 var accao = e.target.value;
 
-                if (accao == 'Remarcado') {
-                    $('#divActionNovaDataHora').show();
-                } else {
-                    $('#divActionNovaDataHora').hide();
-                }
+                if(accao != 'Selecionar') 
+                {
+                    if (accao == 'Remarcado') {
+                        $('#divActionNovaDataHora').show();
+                    } else {
+                        $('#divActionNovaDataHora').hide();
+                    }
 
-                $('#lblActionService').html(accao);
-                $('#lblNumeroService').html(numeroServico);
-                $('#modalConfirmAction').modal('show');
+                    $('#lblActionService').html(accao);
+                    $('#lblNumeroService').html(numeroServico);
+                    $('#modalConfirmAction').modal('show');
+                }
             });
 
             $('div.dataTables_filter input').addClass('form-control');
@@ -221,7 +224,7 @@ class MyServices_Prestador extends React.Component {
                             "dataHoraFim": CheckIsNull(doc.data().dataHoraFim).replace('T', '&nbsp;'),
                             "tipoServico": CheckIsNull(doc.data().tipoServico),
                             "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
-                            "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estado) +'>' +
+                            "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estadoPrestador) +'>' +
                                 '<option ' + Selected(doc.data().estadoPrestador, "Selecionar") + '>Selecionar</option>' +
                                 '<option ' + Selected(doc.data().estadoPrestador, "Remarcado") + '>Remarcado</option>' +
                                 '<option ' + Selected(doc.data().estadoPrestador, "Cancelado P/ prestador") + '>Cancelado P/ prestador</option>' +
@@ -304,7 +307,7 @@ class MyServices_Prestador extends React.Component {
 
         function ReadOnly(status) 
         {
-            return status != "" ? "readonly" : "";
+            return status != "" && status != 'Selecionar' ? "readonly" : "";
         }
 
         function Selected(currentStatus, statusToCompare) 
@@ -363,7 +366,9 @@ class MyServices_Prestador extends React.Component {
                 position: 'absolute', left: '50%', top: '30%', maxWidth: '90%',
                 transform: 'translate(-50%, -50%)'
               }} >
-
+                            <span style={{fontSize:'x-large', fontWeight: 'bold'}}><u>Ecrã do prestador com serviços contratados</u></span>
+                            <br/>
+                            <br/>
                             <table id="tableInfo">
                                 <thead style={thead}>
                                     <tr>

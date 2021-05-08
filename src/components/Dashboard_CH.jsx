@@ -305,10 +305,10 @@ class Dashboard_CH extends React.Component {
                     var label4 = $('#ind_taxa4').html();
                     $('#ind_taxa4').html(label4 + ValueIsNan(taxa4) + '€ / ' + ValueIsNan(taxa4*0.15) + '€');
 
-                    var totalTaxas = (taxa1*0.075) + (taxa2*0.10) + (taxa3*0.125) + (taxa4*0.15);
+                    var totalTaxas = ValueIsNan(taxa1*0.075) + ValueIsNan(taxa2*0.10) + ValueIsNan(taxa3*0.1259) + ValueIsNan(taxa4*0.15);
 
                     var labelHeader = $('#cardIdIndicadoresFinanceiros').html();
-                    $('#cardIdIndicadoresFinanceiros').html(labelHeader + ' - Total de taxas: ' + totalTaxas + '€');
+                    $('#cardIdIndicadoresFinanceiros').html(labelHeader + ' - Total de taxas: ' + ValueIsNan(totalTaxas) + '€');
 
                 })
                 .catch((error) => {
@@ -336,7 +336,7 @@ class Dashboard_CH extends React.Component {
                             <table>
                                 <tr>
                                     <td style={{paddingRight:"1em",paddingBottom:"3em"}}>
-                                        <div class="card" style={{ width: "25rem" }}>
+                                        <div class="card" style={{ width: "27rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
                                                 Indicadores gerais
                                             </div>
@@ -350,7 +350,7 @@ class Dashboard_CH extends React.Component {
                                         </div>
                                     </td>
                                     <td style={{paddingRight:"1em", paddingBottom:"3em"}}>
-                                        <div class="card" style={{ width: "25rem" }}>
+                                        <div class="card" style={{ width: "27rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
                                                 Indicadores utilizadores
                                             </div>
@@ -364,7 +364,7 @@ class Dashboard_CH extends React.Component {
                                         </div>
                                     </td>
                                     <td style={{paddingRight:"1em",paddingBottom:"3em"}}>
-                                        <div class="card" style={{ width: "25rem" }}>
+                                        <div class="card" style={{ width: "27rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
                                                 Indicadores prestadores
                                 </div>
@@ -379,7 +379,7 @@ class Dashboard_CH extends React.Component {
                                         </div>
                                     </td>
                                 <td>
-                                        <div class="card" style={{ width: "25rem" }}>
+                                        <div class="card" style={{ width: "27rem" }}>
                                             <div class="card-header" style={{ fontWeight: "bold" }}>
                                                 Avaliação dos utilizadores sobre prestadores (0 a 5)
                                             </div>
@@ -394,7 +394,7 @@ class Dashboard_CH extends React.Component {
                                     </tr>
                                     <tr>
                                     <td>
-                                        <div class="card" style={{ width: "25rem" }}>
+                                        <div class="card" style={{ width: "27rem" }}>
                                             <div class="card-header" id="cardIdIndicadoresFinanceiros" style={{ fontWeight: "bold" }}>
                                                 Indicadores financeiros
                                             </div>

@@ -292,7 +292,7 @@ class Services_jquery extends React.Component {
                 dataHoraInicio: $('#dataHoraInicio').val(),
                 dataHoraFim: $('#dataHoraFim').val(),
                 estadoUtilizador: '',
-                estadoPresador: '',
+                estadoPrestador: '',
                 utilizadorId: "g9tgom"
             })
                 .then(() => {
@@ -472,7 +472,7 @@ class Services_jquery extends React.Component {
                     $('#cardPrestadorNome').html(prestadorName);
                     $('#cardRegistadoDesde').html("Registado desde:&nbsp;" + prestadorDataRegisto);
                     $('#cardTotalServicos').html("Total de serviços:&nbsp;" + querySnapshot.size);
-                    $('#cardPrecoMedio').html("Preço médio:&nbsp;" + CalculateAveragePrice(somaPrecoTotal, querySnapshot.size) + "€");
+                    $('#cardPrecoMedio').html("Preço médio:&nbsp;" + CalculateAveragePrice(somaPrecoTotal, querySnapshot.size).toFixed(2) + "€");
 
                     CalculateAveragePrice(somaPrecoTotal, querySnapshot.size);
                 });
@@ -487,6 +487,12 @@ class Services_jquery extends React.Component {
             return isNaN(result) ? 0 : result;
         }
 
+        function ValueIsNan(result) 
+        {
+            return isNaN(result) ? "" : result;
+        }
+
+
         function PreencherLinhasPrestadores(table) {
             const db = ReturnInstanceFirebase();
 
@@ -494,20 +500,37 @@ class Services_jquery extends React.Component {
                 .get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
-                        table.row.add({
-                            "": "",
-                            "prestadorNome": CheckIsNull(doc.data().primeiroNome),
-                            "prestadorCodigo": CheckIsNull(doc.data().prestadorId),
-                            "prestadorDataRegisto": CheckIsNull(doc.data().dataRegisto),
-                            "prestadorDataNascimento": CheckIsNull(doc.data().dataNascimento),
-                            "nacionalidade": CheckIsNull(doc.data().nacionalidade),
-                            "localidade": CheckIsNull(doc.data().localidade),
-                            "rating": CheckIsNull(doc.data().rating),
-                            "distance": CheckIsNull(doc.data().distance),
-                            "priceWithoutProducts": CheckIsNull(doc.data().priceWithoutProducts) + "€",
-                            "priceWithProducts": CheckIsNull(doc.data().priceWithProducts) + "€",
-                            "button": '<button type="button" name="btnContratar_' + doc.data().prestadorId + '_' + doc.data().primeiroNome + '_' + doc.data().segundoNome + '_' + doc.data().priceWithoutProducts + '_' + doc.data().priceWithProducts + '" class="btn btn-light">Contratar</button>'
-                        }).draw();
+
+                        /* -> QUERY AOS SERVIÇOS */
+                        db.collection("AvaliacaoServico")
+                        .where("prestadorId", "==", doc.data().prestadorId)
+                        .get()
+                        .then((querySnapshotAval) => 
+                        {
+                            var rating = 0;
+
+                            querySnapshotAval.forEach((docServ) => 
+                            {
+                                rating += (parseInt(docServ.data().valorPrimeiraQuestao) + parseInt(docServ.data().valorSegundaQuestao) + parseInt(docServ.data().valorTerceiraQuestao) + parseInt(docServ.data().valorQuartaQuestao))/4;
+                            })
+
+                            table.row.add({
+                                "": "",
+                                "prestadorNome": CheckIsNull(doc.data().primeiroNome),
+                                "prestadorCodigo": CheckIsNull(doc.data().prestadorId),
+                                "prestadorDataRegisto": CheckIsNull(doc.data().dataRegisto),
+                                "prestadorDataNascimento": CheckIsNull(doc.data().dataNascimento),
+                                "nacionalidade": CheckIsNull(doc.data().nacionalidade),
+                                "localidade": CheckIsNull(doc.data().localidade),
+                                "rating": ValueIsNan(rating/querySnapshotAval.size),
+                                "distance": CheckIsNull(doc.data().distance),
+                                "priceWithoutProducts": CheckIsNull(doc.data().priceWithoutProducts) + "€",
+                                "priceWithProducts": CheckIsNull(doc.data().priceWithProducts) + "€",
+                                "button": '<button type="button" name="btnContratar_' + doc.data().prestadorId + '_' + doc.data().primeiroNome + '_' + doc.data().segundoNome + '_' + doc.data().priceWithoutProducts + '_' + doc.data().priceWithProducts + '" class="btn btn-light">Contratar</button>'
+                            }).draw();
+                        });
+                        /* <- QUERY AOS SERVIÇOS */
+                       
                     });
 
                     /*

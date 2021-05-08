@@ -72,15 +72,18 @@ class MyServices_Utilizador extends React.Component {
                 var numeroServico = e.target.id.split('_')[1];
                 var accao = e.target.value;
 
-                if (accao == 'Remarcado') {
-                    $('#divActionNovaDataHora').show();
-                } else {
-                    $('#divActionNovaDataHora').hide();
-                }
+                if(accao != 'Selecionar') 
+                {
+                    if (accao == 'Remarcado') {
+                        $('#divActionNovaDataHora').show();
+                    } else {
+                        $('#divActionNovaDataHora').hide();
+                    }
 
-                $('#lblActionService').html(accao);
-                $('#lblNumeroService').html(numeroServico);
-                $('#modalConfirmAction').modal('show');
+                    $('#lblActionService').html(accao);
+                    $('#lblNumeroService').html(numeroServico);
+                    $('#modalConfirmAction').modal('show');
+                }
             });
 
             $('div.dataTables_filter input').addClass('form-control');
@@ -271,7 +274,7 @@ class MyServices_Utilizador extends React.Component {
                             "dataHoraFim": CheckIsNull(doc.data().dataHoraFim).replace('T', '&nbsp;'),
                             "tipoServico": CheckIsNull(doc.data().tipoServico),
                             "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
-                            "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estado) + '>' +
+                            "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estadoUtilizador) + '>' +
                                 '<option ' + Selected(doc.data().estadoUtilizador, "Selecionar") + '>Selecionar</option>' +
                                 '<option ' + Selected(doc.data().estadoUtilizador, "Remarcado") + '>Remarcado</option>' +
                                 '<option ' + Selected(doc.data().estadoUtilizador, "Cancelado P/ prestador") + '>Cancelado P/ prestador</option>' +
@@ -390,7 +393,7 @@ class MyServices_Utilizador extends React.Component {
         }
 
         function ReadOnly(status) {
-            return status != "" ? "readonly" : "";
+            return status != "" && status != 'Selecionar' ? "readonly" : "";
         }
 
         function CheckIsNull(value) {
@@ -417,6 +420,7 @@ class MyServices_Utilizador extends React.Component {
                                 $('#inv_InfoPagamento').html(docPedServicos.data().IBAN);
                                 break;
                             case "MBWay":
+                            case "MB Way":
                                 $('#inv_InfoPagamento').html(docPedServicos.data().contactMBWay);
                                 break;
                             default:
@@ -429,7 +433,7 @@ class MyServices_Utilizador extends React.Component {
                         $('#inv_PrecoHora').html('20€');
                         $('#inv_PrecoTotal').html(docPedServicos.data().precoTotal + '€');
                         $('#inv_TipoServico').html(docPedServicos.data().tipoServico);
-                        $('#inv_DataHoraInicio').html(docPedServicos.data().dataHoraInicio);
+                        $('#inv_DataHoraInicio').html(docPedServicos.data().dataHoraInicio.replace('T', ' '));
 
                         var div = docPedServicos.data().divisoes;
                         var spanToInvoice_Div = "";
@@ -451,7 +455,7 @@ class MyServices_Utilizador extends React.Component {
                         }
                         $('#inv_DivisoesDaCasa').html(spanToInvoice_Div);
 
-                        $('#inv_DataHoraFim').html(docPedServicos.data().dataHoraFim);
+                        $('#inv_DataHoraFim').html(docPedServicos.data().dataHoraFim.replace('T', ' '));
 
                         db.collection("Utilizadores")
                         .where("utilizadorId", "==", docPedServicos.data().utilizadorId)
@@ -464,7 +468,7 @@ class MyServices_Utilizador extends React.Component {
                                 $('#inv_Cli_Rua').html(docUti.data().rua);
                                 $('#inv_Cli_CodigoPostal').html(docUti.data().codigoPostal);
                                 $('#inv_Localidade').html(docUti.data().localidade);
-                                $('#inv_Cli_NIF').html('NIF: ' + docUti.data().NIF);
+                                // $('#inv_Cli_NIF').html('NIF: ' + docUti.data().NIF);
                             })
                         });
 
@@ -502,7 +506,9 @@ class MyServices_Utilizador extends React.Component {
                 position: 'absolute', left: '50%', top: '30%', maxWidth: '90%',
                 transform: 'translate(-50%, -50%)'
               }}>
-
+                            <span style={{fontSize:'x-large', fontWeight: 'bold'}}><u>Ecrã do utilizador com serviços contratados</u></span>
+                            <br/>
+                            <br/>
                             <table id="tableInfo">
                                 <thead style={thead}>
                                     <tr>
@@ -717,7 +723,7 @@ class MyServices_Utilizador extends React.Component {
                                                                     <span id="inv_Cli_Nome" ></span><br />
                                                                     <span id="inv_Cli_Rua"></span><br />
                                                                     <span id="inv_Cli_CodigoPostal"></span>, <span id="inv_Localidade"></span><br />
-                                                                    <span id="inv_Cli_NIF"></span><br />
+                                                                    <span id="inv_Cli_NIF" style={{display:'none'}}></span><br />
                                                                 </td>
                                                             </tr>
                                                         </table>
