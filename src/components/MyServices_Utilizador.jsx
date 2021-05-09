@@ -371,6 +371,11 @@ class MyServices_Utilizador extends React.Component {
 
         }
 
+        function ValueIsNan(result) 
+        {
+            return isNaN(result) ? "" : result.toFixed(2);
+        }
+
         function CheckOptionSurvey() 
         {
             return $('#dropDownQuestion1').val() != "0" && $('#dropDownQuestion2').val() != "0" && $('#dropDownQuestion3').val() != "0" && $('#dropDownQuestion4').val() != "0";
@@ -432,7 +437,7 @@ class MyServices_Utilizador extends React.Component {
 
                         $('#inv_Code').html(docPedServicos.data().numeroServico);
                         $('#inv_Date').html(docPedServicos.data().dataPedido);
-                        $('#inv_PrecoHora').html('20€');
+                        $('#inv_PrecoHora').html( ValueIsNan(docPedServicos.data().precoTotal / docPedServicos.data().numeroHoras) + '€');
                         $('#inv_PrecoTotal').html(docPedServicos.data().precoTotal + '€');
                         $('#inv_TipoServico').html(docPedServicos.data().tipoServico);
                         $('#inv_DataHoraInicio').html(docPedServicos.data().dataHoraInicio.replace('T', ' '));
