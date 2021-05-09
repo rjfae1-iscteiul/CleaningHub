@@ -92,6 +92,8 @@ class MyServices_Prestador extends React.Component {
                 var numeroServico = e.target.id.split('_')[1];
                 var accao = e.target.value;
 
+                $('#novaDataHora').val('');
+                
                 if(accao != 'Selecionar') 
                 {
                     if (accao == 'Remarcado') {

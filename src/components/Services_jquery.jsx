@@ -385,7 +385,7 @@ class Services_jquery extends React.Component {
                 nomePrestador: noPrestador,
                 contactoPrestador: coPrestador,
                 observacoes: obs,
-                divisoes: divisoes,
+                divisoes: CheckDivision(divisoes),
                 tipoServico: tipoSer,
                 numeroHoras: numHoras,
                 preco: preco,
@@ -489,7 +489,7 @@ class Services_jquery extends React.Component {
 
         function ValueIsNan(result) 
         {
-            return isNaN(result) ? "" : result;
+            return isNaN(result) ? "" : result.toFixed(2);
         }
 
 
@@ -563,6 +563,28 @@ class Services_jquery extends React.Component {
                 .catch((error) => {
                     console.log("Error getting documents: ", error);
                 });
+        }
+
+        function CheckDivision(divisions) 
+        {
+            var spanToInvoice_Div = "";
+
+            for(let i = 0; i < divisions.length; i++)
+            {
+                switch(divisions[i]) 
+                {
+                    case "SalaDeEstar":
+                        spanToInvoice_Div += '- Sala de Estar ';
+                        break;
+                    case "SalaDeJantar":
+                         spanToInvoice_Div += '- Sala de Jantar ';
+                         break;
+                    default:
+                        spanToInvoice_Div += '- ' + divisions[i] + ' ';
+                        break;
+                }
+            }
+            return spanToInvoice_Div;
         }
 
         function CheckIsNull(value) {

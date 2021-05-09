@@ -72,6 +72,8 @@ class MyServices_Utilizador extends React.Component {
                 var numeroServico = e.target.id.split('_')[1];
                 var accao = e.target.value;
 
+                $('#novaDataHora').val('');
+
                 if(accao != 'Selecionar') 
                 {
                     if (accao == 'Remarcado') {
@@ -438,22 +440,27 @@ class MyServices_Utilizador extends React.Component {
                         var div = docPedServicos.data().divisoes;
                         var spanToInvoice_Div = "";
 
-                        for(let i = 0; i < div.length; i++)
+                        if(div != null) 
                         {
-                            switch(div[i]) 
+                            for(let i = 0; i < div.length; i++)
                             {
-                                case "SalaDeEstar":
-                                    spanToInvoice_Div += '<li>Sala de Estar</li>';
-                                    break;
-                                case "SalaDeJantar":
-                                     spanToInvoice_Div += '<li>Sala de Jantar</li>';
-                                     break;
-                                default:
-                                    spanToInvoice_Div += '<li>' + div[i] + '</li>';
-                                    break;
+                                switch(div[i]) 
+                                {
+                                    case "SalaDeEstar":
+                                        spanToInvoice_Div += '<li>Sala de Estar</li>';
+                                        break;
+                                    case "SalaDeJantar":
+                                        spanToInvoice_Div += '<li>Sala de Jantar</li>';
+                                        break;
+                                    default:
+                                        spanToInvoice_Div += '<li>' + div[i] + '</li>';
+                                        break;
+                                }
                             }
                         }
                         $('#inv_DivisoesDaCasa').html(spanToInvoice_Div);
+
+                        $('#inv_NumeroDeHoras').html(docPedServicos.data().numeroHoras);
 
                         $('#inv_DataHoraFim').html(docPedServicos.data().dataHoraFim.replace('T', ' '));
 
@@ -753,6 +760,8 @@ class MyServices_Utilizador extends React.Component {
                                                 <tr class="item last">
                                                     <td>
                                                         <span id="inv_TipoServico"></span> (<span id="inv_DataHoraInicio"></span> - <span id="inv_DataHoraFim"></span>)
+                                                        <br/>
+                                                        <span >Número de horas: <span id="inv_NumeroDeHoras"></span></span>
                                                         <br/>
                                                         <span >Divisões da casa: <span id="inv_DivisoesDaCasa"></span></span>
                                                         </td>
