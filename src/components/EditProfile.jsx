@@ -295,7 +295,7 @@ class EditProfile extends React.Component {
         <form>
 
         <div className="container" style={{
-                position: 'absolute', left: '70%', top: '28%', maxWidth: '90%',
+                position: 'absolute', left: '60%', top: '28%', maxWidth: '90%',
                 transform: 'translate(-50%, -50%)'
               }}>
           <table>
