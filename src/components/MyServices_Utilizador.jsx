@@ -243,19 +243,27 @@ class MyServices_Utilizador extends React.Component {
                     console.log("Error writing document: ", error);
                 });
 
-                SendEmailRequestServic_Avaliacao(
-                                            'Ricardo Jorge Ferreira',
-                                            'rjfae1@iscte-iul.pt',
-                                            serviceId,
-                                            $('#dropDownQuestion1 option:selected').text(),
-                                            $('#dropDownQuestion2 option:selected').text(),
-                                            $('#dropDownQuestion3 option:selected').text(),
-                                            $('#dropDownQuestion4 option:selected').text(),
-                                            $('#textAreaQuestion1').val(),
-                                            $('#textAreaQuestion2').val(),
-                                            $('#textAreaQuestion3').val(),
-                                            $('#textAreaQuestion4').val()
-                                            );
+                db.collection("Prestadores")
+                .where("prestadorId", "==", prestId)
+                .get()
+                .then((querySnapshot) => {
+                    querySnapshot.forEach((doc) => 
+                    {    
+                        SendEmailRequestServic_Avaliacao(
+                                                    doc.data().primeiroNome + ' ' + doc.data().segundoNome,
+                                                    'rjfae1@iscte-iul.pt',
+                                                    serviceId,
+                                                    $('#dropDownQuestion1 option:selected').text(),
+                                                    $('#dropDownQuestion2 option:selected').text(),
+                                                    $('#dropDownQuestion3 option:selected').text(),
+                                                    $('#dropDownQuestion4 option:selected').text(),
+                                                    $('#textAreaQuestion1').val(),
+                                                    $('#textAreaQuestion2').val(),
+                                                    $('#textAreaQuestion3').val(),
+                                                    $('#textAreaQuestion4').val()
+                                                    );
+                        });
+                });
         }
 
         function PreencherLinhasPrestadores(table) {
