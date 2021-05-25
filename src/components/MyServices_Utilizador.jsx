@@ -268,7 +268,7 @@ class MyServices_Utilizador extends React.Component {
                     querySnapshot.forEach((doc) => {
                         table.row.add({
                             "numeroServico": CheckIsNull(doc.data().numeroServico),
-                            "nomePrestador": CheckIsNull(doc.data().prestadorId) + " - Ricardo Jorge Ferreira",
+                            "nomePrestador": CheckIsNull(doc.data().prestadorId) + " - Pedro Sebastião",
                             "contactoPrestador": "910 000 000",
                             "observacoes": CheckIsNull(doc.data().observacoes),
                             "dataDoPedido": CheckIsNull(doc.data().dataPedido),
