@@ -265,28 +265,40 @@ class MyServices_Utilizador extends React.Component {
             db.collection("PedidosServico")
                 .get()
                 .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        table.row.add({
-                            "numeroServico": CheckIsNull(doc.data().numeroServico),
-                            "nomePrestador": CheckIsNull(doc.data().prestadorId) + " - Pedro Sebastião",
-                            "contactoPrestador": "910 000 000",
-                            "observacoes": CheckIsNull(doc.data().observacoes),
-                            "dataDoPedido": CheckIsNull(doc.data().dataPedido),
-                            "dataHoraInicio": CheckIsNull(doc.data().dataHoraInicio).replace('T', '&nbsp;'),
-                            "dataHoraFim": CheckIsNull(doc.data().dataHoraFim).replace('T', '&nbsp;'),
-                            "tipoServico": CheckIsNull(doc.data().tipoServico),
-                            "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
-                            "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estadoUtilizador) + '>' +
-                                '<option ' + Selected(doc.data().estadoUtilizador, "Selecionar") + '>Selecionar</option>' +
-                                '<option ' + Selected(doc.data().estadoUtilizador, "Remarcado") + '>Remarcado</option>' +
-                                '<option ' + Selected(doc.data().estadoUtilizador, "Cancelado P/ prestador") + '>Cancelado P/ prestador</option>' +
-                                '<option ' + Selected(doc.data().estadoUtilizador, "Cancelado P/ utilizador") + '>Cancelado P/ utilizador</option>' +
-                                '<option ' + Selected(doc.data().estadoUtilizador, "Terminado") + '>Terminado</option>' +
-                                '</select>',
-                            "avaliarServico": '<button type="button" id="btnAvaliarServico_' + doc.data().numeroServico + '_' + doc.data().prestadorId + '" class="btn btn-light">Avaliar</button>',
-                            "faturaServico": '<button type="button" id="btnFaturaServico_' + doc.data().numeroServico + '" class="btn btn-light faturaServ">Fatura</button>'
-                        }).draw();
-                        
+                    querySnapshot.forEach((doc) => 
+                    {                    
+                        console.log(doc.data().prestadorId);
+                            
+                        db.collection("Prestadores")
+                        .where("prestadorId", "==", doc.data().prestadorId)
+                        .get()
+                        .then((querySnapshotPres) => 
+                        {
+                            querySnapshotPres.forEach((docPres) => 
+                            {                
+                                table.row.add({
+                                    "numeroServico": CheckIsNull(doc.data().numeroServico),
+                                    "nomePrestador": CheckIsNull(docPres.data().primeiroNome) + ' ' + CheckIsNull(docPres.data().segundoNome),
+                                    "contactoPrestador": CheckIsNull(docPres.data().contactoTelefonico),
+                                    "observacoes": CheckIsNull(doc.data().observacoes),
+                                    "dataDoPedido": CheckIsNull(doc.data().dataPedido),
+                                    "dataHoraInicio": CheckIsNull(doc.data().dataHoraInicio).replace('T', '&nbsp;'),
+                                    "dataHoraFim": CheckIsNull(doc.data().dataHoraFim).replace('T', '&nbsp;'),
+                                    "tipoServico": CheckIsNull(doc.data().tipoServico),
+                                    "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
+                                    "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estadoUtilizador) + '>' +
+                                        '<option ' + Selected(doc.data().estadoUtilizador, "Selecionar") + '>Selecionar</option>' +
+                                        '<option ' + Selected(doc.data().estadoUtilizador, "Remarcado") + '>Remarcado</option>' +
+                                        '<option ' + Selected(doc.data().estadoUtilizador, "Cancelado P/ prestador") + '>Cancelado P/ prestador</option>' +
+                                        '<option ' + Selected(doc.data().estadoUtilizador, "Cancelado P/ utilizador") + '>Cancelado P/ utilizador</option>' +
+                                        '<option ' + Selected(doc.data().estadoUtilizador, "Terminado") + '>Terminado</option>' +
+                                        '</select>',
+                                    "avaliarServico": '<button type="button" id="btnAvaliarServico_' + doc.data().numeroServico + '_' + doc.data().prestadorId + '" class="btn btn-light">Avaliar</button>',
+                                    "faturaServico": '<button type="button" id="btnFaturaServico_' + doc.data().numeroServico + '" class="btn btn-light faturaServ">Fatura</button>'
+                                }).draw();
+                            })
+                        });
+
                     });
                    
                     /*

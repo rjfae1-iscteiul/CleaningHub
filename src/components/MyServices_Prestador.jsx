@@ -216,26 +216,37 @@ class MyServices_Prestador extends React.Component {
                 .where("prestadorId", "==", "l1j9xk")
                 .get()
                 .then((querySnapshot) => {
-                    querySnapshot.forEach((doc) => {
-                        table.row.add({
-                            "numeroServico": CheckIsNull(doc.data().numeroServico),
-                            "nomeCliente": "Ricardo Jorge Ferreira",
-                            "contactoCliente": "910 000 000",
-                            "observacoes": CheckIsNull(doc.data().observacoes),
-                            "dataDoPedido": CheckIsNull(doc.data().dataPedido),
-                            "dataHoraInicio": CheckIsNull(doc.data().dataHoraInicio).replace('T', '&nbsp;'),
-                            "dataHoraFim": CheckIsNull(doc.data().dataHoraFim).replace('T', '&nbsp;'),
-                            "tipoServico": CheckIsNull(doc.data().tipoServico),
-                            "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
-                            "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estadoPrestador) +'>' +
-                                '<option ' + Selected(doc.data().estadoPrestador, "Selecionar") + '>Selecionar</option>' +
-                                '<option ' + Selected(doc.data().estadoPrestador, "Remarcado") + '>Remarcado</option>' +
-                                '<option ' + Selected(doc.data().estadoPrestador, "Cancelado P/ prestador") + '>Cancelado P/ prestador</option>' +
-                                '<option ' + Selected(doc.data().estadoPrestador, "Cancelado P/ utilizador") + '>Cancelado P/ utilizador</option>' +
-                                '<option ' + Selected(doc.data().estadoPrestador, "Terminado") + '>Terminado</option>' +
-                                '</select>',
-                            "obterCoordenadas": '<button type="button" name="btnObterCoordenadas_' + doc.data().utilizadorId + '" class="btn btn-light">Google&nbsp;Maps</button>'
-                        }).draw();
+                    querySnapshot.forEach((doc) => 
+                    {
+                        console.log(doc.data().utilizadorId);
+
+                        db.collection("Utilizadores")
+                        .where("utilizadorId", "==", doc.data().utilizadorId)
+                        .get()
+                        .then((querySnapshotUti) => {
+                            querySnapshotUti.forEach((docUti) => 
+                            {
+                                table.row.add({
+                                    "numeroServico": CheckIsNull(doc.data().numeroServico),
+                                    "nomeCliente": CheckIsNull(docUti.data().primeiroNome) + ' ' + CheckIsNull(docUti.data().segundoNome),
+                                    "contactoCliente": CheckIsNull(docUti.data().contactoTelefonico),
+                                    "observacoes": CheckIsNull(doc.data().observacoes),
+                                    "dataDoPedido": CheckIsNull(doc.data().dataPedido),
+                                    "dataHoraInicio": CheckIsNull(doc.data().dataHoraInicio).replace('T', '&nbsp;'),
+                                    "dataHoraFim": CheckIsNull(doc.data().dataHoraFim).replace('T', '&nbsp;'),
+                                    "tipoServico": CheckIsNull(doc.data().tipoServico),
+                                    "tipoPagamento": CheckIsNull(doc.data().tipoPagamento),
+                                    "acoes": '<select class="form-control" id="actionService_' + CheckIsNull(doc.data().numeroServico) + '"' + ReadOnly(doc.data().estadoPrestador) +'>' +
+                                        '<option ' + Selected(doc.data().estadoPrestador, "Selecionar") + '>Selecionar</option>' +
+                                        '<option ' + Selected(doc.data().estadoPrestador, "Remarcado") + '>Remarcado</option>' +
+                                        '<option ' + Selected(doc.data().estadoPrestador, "Cancelado P/ prestador") + '>Cancelado P/ prestador</option>' +
+                                        '<option ' + Selected(doc.data().estadoPrestador, "Cancelado P/ utilizador") + '>Cancelado P/ utilizador</option>' +
+                                        '<option ' + Selected(doc.data().estadoPrestador, "Terminado") + '>Terminado</option>' +
+                                        '</select>',
+                                    "obterCoordenadas": '<button type="button" name="btnObterCoordenadas_' + doc.data().utilizadorId + '" class="btn btn-light">Google&nbsp;Maps</button>'
+                                }).draw();
+                            });
+                        });
                     });
 
                     /*
