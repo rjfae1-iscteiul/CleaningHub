@@ -194,7 +194,7 @@ class MyServices_Prestador extends React.Component {
             }
 
             SendEmailRequestServic_AltEstServico(
-                'Ricardo Jorge Ferreira',
+                'Pedro Sebastião',
                 'rjfae1@iscte-iul.pt',
                 'prestador',
                 serviceId,

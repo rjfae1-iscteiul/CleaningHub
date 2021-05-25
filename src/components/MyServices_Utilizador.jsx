@@ -383,7 +383,7 @@ class MyServices_Utilizador extends React.Component {
                 novaData = 'Nova data do serviço: ' + newDate;
             }
             SendEmailRequestServic_AltEstServico(
-                'Ricardo Jorge Ferreira',
+                'Ricardo Ferreira',
                 'rjfae1@iscte-iul.pt',
                 'utilizador',
                 serviceId,
