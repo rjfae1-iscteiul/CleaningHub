@@ -294,7 +294,10 @@ class EditProfile extends React.Component {
       <div style={styleDiv} className="EditProfile">
         <form>
 
-
+        <div className="container" style={{
+                position: 'absolute', left: '70%', top: '28%', maxWidth: '90%',
+                transform: 'translate(-50%, -50%)'
+              }}>
           <table>
             <tr>
               <td>
@@ -405,7 +408,7 @@ class EditProfile extends React.Component {
               </td>
             </tr>
           </table>
-
+          </div>
           {/* Modal */}
           <div class="modal" id="modalPayment" style={{ paddingTop: "3%" }} tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
