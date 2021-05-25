@@ -297,53 +297,36 @@ class Services_jquery extends React.Component {
             })
                 .then(() => {
 
-                    /* ENVIO PARA UTILIZADOR */   
-                    db.collection("Utilizadores")
-                    .where("utilizadorId", "==", "g9tgom")
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => 
-                        {
-                            SendEmailRequestServic_Utilizador(
-                                doc.data().primeiroNome + ' ' + doc.data().segundoNome,
-                                doc.data().email,
-                                docPrestadores.data().primeiroNome + " " + docPrestadores.data().segundoNome,
-                                docPrestadores.data().contactoTelefonico,
-                                $('#observations').val(),
-                                $('#houseDivisions').val(),
-                                $('#serviceType option:selected').text(),
-                                $('#hours').val(),
-                                $('#price').val(),
-                                $('#dataHoraInicio').val(),
-                                $('#dataHoraFim').val(),
-                                $('#paymentMethod option:selected').text()
-                            )
-                        });
-                    });
+                    /* ENVIO PARA UTILIZADOR */
+                    SendEmailRequestServic_Utilizador(
+                        "rjfae1@iscte-iul.pt",
+                        docPrestadores.data().primeiroNome + " " + docPrestadores.data().segundoNome,
+                        docPrestadores.data().contactoTelefonico,
+                        $('#observations').val(),
+                        $('#houseDivisions').val(),
+                        $('#serviceType option:selected').text(),
+                        $('#hours').val(),
+                        $('#price').val(),
+                        $('#dataHoraInicio').val(),
+                        $('#dataHoraFim').val(),
+                        $('#paymentMethod option:selected').text()
+                    )
 
                     /* ENVIO PARA PRESTADOR */
-                    db.collection("Prestadores")
-                    .where("prestadorId", "==", $('#idPrestador').val().split(' ')[0])
-                    .get()
-                    .then((querySnapshot) => {
-                        querySnapshot.forEach((doc) => 
-                        {
-                            SendEmailRequestService_Prestador(
-                                doc.data().primeiroNome + ' ' + doc.data().segundoNome,
-                                "rjfae1@iscte-iul.pt",
-                                docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
-                                docUtilizadores.data().contactoTelefonico,
-                                $('#observations').val(),
-                                $('#houseDivisions').val(),
-                                $('#serviceType option:selected').text(),
-                                $('#hours').val(),
-                                $('#price').val(),
-                                $('#dataHoraInicio').val(),
-                                $('#dataHoraFim').val(),
-                                $('#paymentMethod option:selected').text()
-                            )
-                        });
-                    });
+                    SendEmailRequestService_Prestador(
+                        "rjfae1@iscte-iul.pt",
+                        docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
+                        docUtilizadores.data().contactoTelefonico,
+                        $('#observations').val(),
+                        $('#houseDivisions').val(),
+                        $('#serviceType option:selected').text(),
+                        $('#hours').val(),
+                        $('#price').val(),
+                        $('#dataHoraInicio').val(),
+                        $('#dataHoraFim').val(),
+                        $('#paymentMethod option:selected').text()
+                    )
+                    
                     SweetAlert("Sucesso", "Pedido de serviço finalizado. Receberá um e-mail com todos os detalhes do serviço!", "success");
                     ClearFieldsAfterRequest();
                     $('#requestServiceModal').modal('hide');
@@ -390,12 +373,11 @@ class Services_jquery extends React.Component {
             return true;
         }
 
-        function SendEmailRequestServic_Utilizador(var_to_name, var_to_email, noPrestador, coPrestador, obs, divisoes, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
+        function SendEmailRequestServic_Utilizador(var_to_email, noPrestador, coPrestador, obs, divisoes, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
             emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
 
             var templateParams =
             {
-                to_name: var_to_name,
                 to: var_to_email,
                 nomePrestador: noPrestador,
                 contactoPrestador: coPrestador,
@@ -417,12 +399,11 @@ class Services_jquery extends React.Component {
                 });
         }
 
-        function SendEmailRequestService_Prestador(var_to_name, var_to_email, noCliente, coCliente, obs, divisoes, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
+        function SendEmailRequestService_Prestador(var_to_email, noCliente, coCliente, obs, divisoes, tipoSer, numHoras, preco, dahoInicio, dahoFim, tipoPag) {
             emailjs.init("user_4DnQE5ZxKgvIrlmfLcC40");
 
             var templateParams =
             {
-                to_name: var_to_name,
                 to: var_to_email,
                 nomeCliente: noCliente,
                 contactoCliente: coCliente,
