@@ -218,6 +218,8 @@ class MyServices_Prestador extends React.Component {
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => 
                     {
+                        $('#titleTable').html('<u>Ecrã do prestador Pedro Sebastião com pedidos a realizar</u>');
+
                         console.log(doc.data().utilizadorId);
 
                         db.collection("Utilizadores")
@@ -380,7 +382,7 @@ class MyServices_Prestador extends React.Component {
                 position: 'absolute', left: '50%', top: '30%', maxWidth: '90%',
                 transform: 'translate(-50%, -50%)'
               }} >
-                            <span style={{fontSize:'x-large', fontWeight: 'bold'}}><u>Ecrã do prestador com serviços contratados</u></span>
+                            <span style={{fontSize:'x-large', fontWeight: 'bold'}} id="titleTable"><u></u></span>
                             <br/>
                             <br/>
                             <table id="tableInfo">
