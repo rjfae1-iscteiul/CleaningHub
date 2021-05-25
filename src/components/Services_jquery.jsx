@@ -300,8 +300,8 @@ class Services_jquery extends React.Component {
                     /* ENVIO PARA UTILIZADOR */
                     SendEmailRequestServic_Utilizador(
                         "rjfae1@iscte-iul.pt",
-                        docPrestadores.data().primeiroNome + " " + docPrestadores.data().segundoNome,
-                        docPrestadores.data().contactoTelefonico,
+                        'Pedro Sebastião',
+                        "962 232 590",
                         $('#observations').val(),
                         $('#houseDivisions').val(),
                         $('#serviceType option:selected').text(),
@@ -315,8 +315,8 @@ class Services_jquery extends React.Component {
                     /* ENVIO PARA PRESTADOR */
                     SendEmailRequestService_Prestador(
                         "rjfae1@iscte-iul.pt",
-                        docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
-                        docUtilizadores.data().contactoTelefonico,
+                        "Ricardo Ferreira",
+                        "910 242 432",
                         $('#observations').val(),
                         $('#houseDivisions').val(),
                         $('#serviceType option:selected').text(),
