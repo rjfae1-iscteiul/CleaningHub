@@ -297,38 +297,53 @@ class Services_jquery extends React.Component {
             })
                 .then(() => {
 
-                    /* ENVIO PARA UTILIZADOR */
-                    SendEmailRequestServic_Utilizador(
-                        "Ricardo Jorge Ferreira",
-                        "rjfae1@iscte-iul.pt",
-                        docPrestadores.data().primeiroNome + " " + docPrestadores.data().segundoNome,
-                        docPrestadores.data().contactoTelefonico,
-                        $('#observations').val(),
-                        $('#houseDivisions').val(),
-                        $('#serviceType option:selected').text(),
-                        $('#hours').val(),
-                        $('#price').val(),
-                        $('#dataHoraInicio').val(),
-                        $('#dataHoraFim').val(),
-                        $('#paymentMethod option:selected').text()
-                    )
+                    /* ENVIO PARA UTILIZADOR */   
+                    db.collection("Utilizadores")
+                    .where("utilizadorId", "==", "g9tgom")
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => 
+                        {
+                            SendEmailRequestServic_Utilizador(
+                                doc.data().primeiroNome + ' ' + doc.data().segundoNome,
+                                doc.data().email,
+                                docPrestadores.data().primeiroNome + " " + docPrestadores.data().segundoNome,
+                                docPrestadores.data().contactoTelefonico,
+                                $('#observations').val(),
+                                $('#houseDivisions').val(),
+                                $('#serviceType option:selected').text(),
+                                $('#hours').val(),
+                                $('#price').val(),
+                                $('#dataHoraInicio').val(),
+                                $('#dataHoraFim').val(),
+                                $('#paymentMethod option:selected').text()
+                            )
+                        });
+                    });
 
                     /* ENVIO PARA PRESTADOR */
-                    SendEmailRequestService_Prestador(
-                        "Ricardo Jorge Ferreira",
-                        "rjfae1@iscte-iul.pt",
-                        docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
-                        docUtilizadores.data().contactoTelefonico,
-                        $('#observations').val(),
-                        $('#houseDivisions').val(),
-                        $('#serviceType option:selected').text(),
-                        $('#hours').val(),
-                        $('#price').val(),
-                        $('#dataHoraInicio').val(),
-                        $('#dataHoraFim').val(),
-                        $('#paymentMethod option:selected').text()
-                    )
-                    
+                    db.collection("Prestadores")
+                    .where("prestadorId", "==", $('#idPrestador').val().split(' ')[0])
+                    .get()
+                    .then((querySnapshot) => {
+                        querySnapshot.forEach((doc) => 
+                        {
+                            SendEmailRequestService_Prestador(
+                                doc.data().primeiroNome + ' ' + doc.data().segundoNome,
+                                "rjfae1@iscte-iul.pt",
+                                docUtilizadores.data().primeiroNome + " " + docUtilizadores.data().segundoNome,
+                                docUtilizadores.data().contactoTelefonico,
+                                $('#observations').val(),
+                                $('#houseDivisions').val(),
+                                $('#serviceType option:selected').text(),
+                                $('#hours').val(),
+                                $('#price').val(),
+                                $('#dataHoraInicio').val(),
+                                $('#dataHoraFim').val(),
+                                $('#paymentMethod option:selected').text()
+                            )
+                        });
+                    });
                     SweetAlert("Sucesso", "Pedido de serviço finalizado. Receberá um e-mail com todos os detalhes do serviço!", "success");
                     ClearFieldsAfterRequest();
                     $('#requestServiceModal').modal('hide');
