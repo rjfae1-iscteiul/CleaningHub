@@ -516,7 +516,7 @@ class Services_jquery extends React.Component {
 
                             table.row.add({
                                 "": "",
-                                "prestadorNome": CheckIsNull(doc.data().primeiroNome),
+                                "prestadorNome": CheckIsNull(doc.data().primeiroNome) + ' ' + CheckIsNull(doc.data().segundoNome),
                                 "prestadorCodigo": CheckIsNull(doc.data().prestadorId),
                                 "prestadorDataRegisto": CheckIsNull(doc.data().dataRegisto),
                                 "prestadorDataNascimento": CheckIsNull(doc.data().dataNascimento),

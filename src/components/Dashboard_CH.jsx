@@ -63,7 +63,7 @@ class Dashboard_CH extends React.Component {
 
             const db = ReturnInstanceFirebase();
 
-            db.collection("Utilizadores")
+            db.collection("Prestadores")
                 .get()
                 .then((querySnapshot) => {
                     var label = $('#ind_ger_indicator1').html();
