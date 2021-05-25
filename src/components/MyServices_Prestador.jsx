@@ -213,6 +213,7 @@ class MyServices_Prestador extends React.Component {
             const db = ReturnInstanceFirebase();
 
             db.collection("PedidosServico")
+                .where("prestadorId", "==", serviceId)
                 .get()
                 .then((querySnapshot) => {
                     querySnapshot.forEach((doc) => {
