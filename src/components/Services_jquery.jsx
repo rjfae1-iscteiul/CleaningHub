@@ -592,19 +592,21 @@ class Services_jquery extends React.Component {
 
         const styleDiv = {
             fontFamily: "Calibri",
+            fontSize: "large"
         }
 
         const modalRequestDiv = {
             fontFamily: "Calibri",
-            paddingTop: "5%"
+            paddingTop: "5%",
+            fontSize: "large"
         }
 
         const tbody = {
-            fontSize: "smaller"
+            fontSize: "large"
         }
 
         const thead = {
-            fontSize: "smaller",
+            fontSize: "large",
             backgroundColor: "aliceblue"
         }
 

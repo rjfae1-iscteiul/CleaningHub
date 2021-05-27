@@ -357,20 +357,22 @@ class MyServices_Prestador extends React.Component {
     render() {
 
         const styleDiv = {
-            fontFamily: "Calibri"
+            fontFamily: "Calibri",
+            fontSize: "large"
         }
 
         const tbody = {
-            fontSize: "smaller"
+            fontSize: "large"
         }
 
         const thead = {
-            fontSize: "smaller",
+            fontSize: "large",
             backgroundColor: "aliceblue"
         }
 
         const labelWithoutBold = {
-            fontWeight: "normal"
+            fontWeight: "normal",
+            fontSize: "large"
         }
 
         return (
