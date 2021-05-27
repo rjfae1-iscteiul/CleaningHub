@@ -40,6 +40,7 @@ class MyServices_Utilizador extends React.Component {
                     { "data": "avaliarServico" },
                     { "data": "faturaServico" }
                 ],
+                "pageLength": 5,
                 "oLanguage": {
                     "sSearch": ""
                 },

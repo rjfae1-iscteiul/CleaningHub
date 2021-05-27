@@ -70,6 +70,7 @@ class MyServices_Prestador extends React.Component {
                     { "data": "acoes" },
                     { "data": "obterCoordenadas" }
                 ],
+                "pageLength": 5,
                 "oLanguage": {
                     "sSearch": ""
                 },
