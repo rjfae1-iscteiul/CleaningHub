@@ -462,7 +462,7 @@ class Services_jquery extends React.Component {
                     var somaPrecoTotal = 0;
 
                     querySnapshot.forEach((doc) => {
-                        somaPrecoTotal += doc.data().precoTotal;
+                        somaPrecoTotal += parseInt(doc.data().precoTotal);
                     })
 
                     $('#cardPrestadorNome').html(prestadorName);
@@ -476,7 +476,7 @@ class Services_jquery extends React.Component {
 
         function CalculateAveragePrice(totalValue, servicesNumber) 
         {
-            var result = totalValue/servicesNumber;
+            var result = parseInt(totalValue)/parseInt(servicesNumber);
 
             console.log(result);
 
