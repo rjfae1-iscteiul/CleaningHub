@@ -31,16 +31,19 @@ class Login extends React.Component
       
       paddingTop: "5%",
       position: "absolute",
-      paddingLeft: "43%"
+      paddingLeft: "43%",
+      fontSize: "large"
       };
   
       const styleTexBox = {
         height: "24px",
-        fontFamily: "Calibri"
+        fontFamily: "Calibri",
+        fontSize: "large"
       }
       const styleLabel = {
         fontFamily: "Calibri",
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: "large"
       }
         return (
           

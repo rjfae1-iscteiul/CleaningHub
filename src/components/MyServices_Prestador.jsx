@@ -58,13 +58,13 @@ class MyServices_Prestador extends React.Component {
 
             var table = $('#tableInfo').DataTable({
                 "columns": [
-                    { "data": "numeroServico" },
+                    { "data": "numeroServico", "visible" : false },
                     { "data": "nomeCliente" },
                     { "data": "contactoCliente" },
                     { "data": "observacoes" },
-                    { "data": "dataDoPedido" },
-                    { "data": "dataHoraInicio" },
-                    { "data": "dataHoraFim" },
+                    { "data": "dataDoPedido" , "width" : "10%" },
+                    { "data": "dataHoraInicio", "width" : "10%" },
+                    { "data": "dataHoraFim" , "width" : "10%"},
                     { "data": "tipoServico" },
                     { "data": "tipoPagamento" },
                     { "data": "acoes" },
@@ -393,7 +393,7 @@ class MyServices_Prestador extends React.Component {
                                     <tr>
                                         <th>Número&nbsp;Serviço</th>
                                         <th>Nome&nbsp;Cliente</th>
-                                        <th>Contacto&nbsp;Cliente</th>
+                                        <th>Contacto</th>
                                         <th>Observações</th>
                                         <th>Pedido</th>
                                         <th>Inicio</th>

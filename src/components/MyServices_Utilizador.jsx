@@ -27,13 +27,22 @@ class MyServices_Utilizador extends React.Component {
 
             var table = $('#tableInfo').DataTable({
                 "columns": [
-                    { "data": "numeroServico" },
-                    { "data": "nomePrestador" },
+                    { "data": "numeroServico", "visible" : false },
+                    { "data": "nomePrestador", "width": "10%" },
                     { "data": "contactoPrestador" },
                     { "data": "observacoes" },
-                    { "data": "dataDoPedido" },
-                    { "data": "dataHoraInicio" },
-                    { "data": "dataHoraFim" },
+                    { 
+                        "data": "dataDoPedido",
+                        "width" : "10%"
+                    },
+                    { 
+                        "data": "dataHoraInicio",
+                        "width" : "10%"
+                    },
+                    { 
+                        "data": "dataHoraFim",
+                        "width" : "10%"
+                    },
                     { "data": "tipoServico" },
                     { "data": "tipoPagamento" },
                     { "data": "acoes" },
@@ -551,7 +560,7 @@ class MyServices_Utilizador extends React.Component {
                                     <tr>
                                         <th>Número&nbsp;Serviço</th>
                                         <th>Nome&nbsp;Prestador</th>
-                                        <th>Contacto&nbsp;Prestador</th>
+                                        <th>Contacto</th>
                                         <th>Observações</th>
                                         <th>Pedido</th>
                                         <th>Inicio</th>
@@ -572,7 +581,7 @@ class MyServices_Utilizador extends React.Component {
                         </div>
 
                         {/* Action Service */}
-                        <div class="modal fade" id="modalConfirmAction" style={{paddingTop: '4%'}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="modalConfirmAction" style={{paddingTop: '4%', fontSize: 'large'}} tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">

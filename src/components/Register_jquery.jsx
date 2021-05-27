@@ -356,11 +356,13 @@ class Register extends React.Component {
       paddingTop: "5%",
       textAlign: "center",
       fontFamily: "Calibri",
+      fontSize: "large",
       paddingLeft: "40%"
     };
 
     const styleCheckbox = {
-      textAlign: "left"
+      textAlign: "left",
+      fontSize: "large"
     };
 
     const styleRow = {

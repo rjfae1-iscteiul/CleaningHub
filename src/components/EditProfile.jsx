@@ -268,6 +268,7 @@ class EditProfile extends React.Component {
       paddingTop: "8%",
       textAlign: "center",
       fontFamily: "Calibri",
+      fontSize: "large",
       paddingLeft: "30em"
     };
 
@@ -282,11 +283,13 @@ class EditProfile extends React.Component {
 
     const styleLabel = {
       fontFamily: "Calibri",
+      fontSize: "large",
       fontWeight: "bold"
     }
 
     const modalService = {
-      paddingTop: "40px"
+      paddingTop: "40px",
+      fontSize: "large"
     }
 
     return (
