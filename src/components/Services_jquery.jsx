@@ -104,10 +104,9 @@ class Services_jquery extends React.Component {
 
                 $('#modalMoreInformation').modal('show');
                 
-                alert(GetTimeNowStringFormat());
                 GetExpandTableWithOtherServices(row.data().prestadorCodigo, row.data().prestadorNome, row.data().prestadorDataRegisto);
             });
-
+            
             $('#paymentMethod').change(function () {
                 switch ($('#paymentMethod').val()) {
                     case "MBW":
