@@ -217,10 +217,11 @@ class MyServices_Prestador extends React.Component {
                 .where("prestadorId", "==", "l1j9xk")
                 .get()
                 .then((querySnapshot) => {
+
+                    $('#titleTable').html('<u>Ecrã do prestador Pedro Sebastião com pedidos a realizar</u>');
+
                     querySnapshot.forEach((doc) => 
                     {
-                        $('#titleTable').html('<u>Ecrã do prestador Pedro Sebastião com pedidos a realizar</u>');
-
                         console.log(doc.data().utilizadorId);
 
                         db.collection("Utilizadores")
