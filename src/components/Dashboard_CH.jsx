@@ -294,18 +294,18 @@ class Dashboard_CH extends React.Component {
                     })
 
                     var label1 = $('#ind_taxa1').html();
-                    $('#ind_taxa1').html(label1 + ValueIsNan(taxa1) + '€ / ' + ValueIsNan(taxa1*0.075) + '€');
+                    $('#ind_taxa1').html(label1 + ValueIsNan(taxa1) + '€ / ' + ValueIsNan(taxa1*0.075).toFixed(2) + '€');
 
                     var label2 = $('#ind_taxa2').html();
-                    $('#ind_taxa2').html(label2 + ValueIsNan(taxa2) + '€ / ' + ValueIsNan(taxa2*0.10) + '€');
+                    $('#ind_taxa2').html(label2 + ValueIsNan(taxa2) + '€ / ' + ValueIsNan(taxa2*0.10).toFixed(2) + '€');
 
                     var label3 = $('#ind_taxa3').html();
-                    $('#ind_taxa3').html(label3 + ValueIsNan(taxa3) + '€ / ' + ValueIsNan(taxa3*0.125) + '€');
+                    $('#ind_taxa3').html(label3 + ValueIsNan(taxa3) + '€ / ' + ValueIsNan(taxa3*0.125).toFixed(2) + '€');
 
                     var label4 = $('#ind_taxa4').html();
-                    $('#ind_taxa4').html(label4 + ValueIsNan(taxa4) + '€ / ' + ValueIsNan(taxa4*0.15) + '€');
+                    $('#ind_taxa4').html(label4 + ValueIsNan(taxa4) + '€ / ' + ValueIsNan(taxa4*0.15).toFixed(2) + '€');
 
-                    var totalTaxas = ValueIsNan(taxa1*0.075) + ValueIsNan(taxa2*0.10) + ValueIsNan(taxa3*0.1259) + ValueIsNan(taxa4*0.15);
+                    var totalTaxas = (ValueIsNan(taxa1*0.075) + ValueIsNan(taxa2*0.10) + ValueIsNan(taxa3*0.1259) + ValueIsNan(taxa4*0.15)).toFixed(2);
 
                     var labelHeader = $('#cardIdIndicadoresFinanceiros').html();
                     $('#cardIdIndicadoresFinanceiros').html(labelHeader + ' - Total de taxas: ' + ValueIsNan(totalTaxas) + '€');
