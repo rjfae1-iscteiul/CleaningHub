@@ -219,7 +219,7 @@ class MyServices_Utilizador extends React.Component {
 
         function GetTimeNowStringFormat() {
             var m = new Date();
-            return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
+            return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + (m.getUTCHours()+1) + ":" + m.getUTCMinutes();
         }
 
         function InserirAvaliacao(serviceId, prestId) {

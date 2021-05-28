@@ -41,7 +41,7 @@ class Services_jquery extends React.Component {
                         "defaultContent": '<i class="fas fa-plus-circle"></i>'
                     },
                     { "data": "prestadorNome" },
-                    { "data": "prestadorCodigo" },
+                    { "data": "prestadorCodigo", "visible" : false },
                     {
                         "data": "prestadorDataRegisto",
                         visible: false
@@ -55,7 +55,7 @@ class Services_jquery extends React.Component {
                     },
                     { "data": "localidade" },
                     { "data": "rating" },
-                    { "data": "distance" },
+                    { "data": "distance" , "visible" : false },
                     { "data": "priceWithoutProducts" },
                     { "data": "priceWithProducts" },
                     {
@@ -104,6 +104,7 @@ class Services_jquery extends React.Component {
 
                 $('#modalMoreInformation').modal('show');
                 
+                alert(GetTimeNowStringFormat());
                 GetExpandTableWithOtherServices(row.data().prestadorCodigo, row.data().prestadorNome, row.data().prestadorDataRegisto);
             });
 
@@ -338,7 +339,7 @@ class Services_jquery extends React.Component {
 
         function GetTimeNowStringFormat() {
             var m = new Date();
-            return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes();
+            return m.getUTCFullYear() + "-" + (m.getUTCMonth() + 1) + "-" + m.getUTCDate() + " " + (m.getUTCHours() + 1) + ":" + m.getUTCMinutes();
         }
 
         function CheckIBAN() 
